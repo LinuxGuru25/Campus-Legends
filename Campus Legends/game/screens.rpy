@@ -227,48 +227,112 @@ style quick_button_text:
 screen navigation():
 
     fixed:
-        xfill True
-        yfill True
+        #xfill True
+        #yfill True
+
+        # xpos 145
+        # ypos 412
+        # spacing 52
+
+        style_prefix "navigation"
+
+        spacing gui.navigation_spacing
+
+        if main_menu:
+            imagebutton: 
+                auto "gui/button/start_%s.png"
+                focus_mask True
+                action Start()
+        else:
+            textbutton _("History") action ShowMenu("history")
+            textbutton _("Save") action ShowMenu("save")
+
+        imagebutton: 
+            auto "gui/button/load_%s.png"
+            focus_mask True
+            action ShowMenu("load")
+
+        imagebutton: 
+            auto "gui/button/settings_%s.png"
+            focus_mask True
+            action ShowMenu("preferences")
+
+        if main_menu:
+            imagebutton: 
+                auto "gui/button/gallery_%s.png"
+                focus_mask True
+                action ShowMenu("gallery_screen")
+
+            imagebutton:
+                auto "gui/button/replays_%s.png"
+                focus_mask True
+                action ShowMenu("character_select")
+
+        if _in_replay:
+            textbutton _("End Replay") action EndReplay(confirm=True)
+
+        elif not main_menu:
+
+            textbutton "Gallery" action ShowMenu("gallery_screen")
+
+            textbutton _("Main Menu") action MainMenu()
+
+        imagebutton: 
+            auto "gui/button/exit_%s.png"
+            focus_mask True
+            action Quit(confirm=not main_menu)
+
+screen navigation2():
+    vbox:
+        style_prefix "navigation2"
+
+        xpos gui.navigation_xpos
+        yalign 0.5
+
+        spacing gui.navigation_spacing
 
         vbox:
-            xpos 145
-            ypos 412
-            spacing 52
 
             if main_menu:
-                imagebutton:
-                    idle "gui/button/start_idle.png"
-                    hover "gui/button/start_hover.png"
-                    action Start()
+
+                textbutton _("Start") action Start()
+
             else:
+
                 textbutton _("History") action ShowMenu("history")
+
                 textbutton _("Save") action ShowMenu("save")
 
-            imagebutton:
-                idle "gui/button/load_idle.png"
-                hover "gui/button/load_hover.png"
-                action ShowMenu("load")
+            textbutton _("Load") action ShowMenu("load")
 
-            imagebutton:
-                idle "gui/button/settings_idle.png"
-                hover "gui/button/settings_hover.png"
-                action ShowMenu("preferences")
+            textbutton _("Settings") action ShowMenu("preferences")
 
-            if main_menu:
-                imagebutton:
-                    idle "gui/button/gallery_idle.png"
-                    hover "gui/button/gallery_hover.png"
-                    action ShowMenu("gallery_screen")
+            textbutton _("Gallery") action ShowMenu("gallery_screen")
 
-                imagebutton:
-                    idle "gui/button/replays_idle.png"
-                    hover "gui/button/replays_hover.png"
-                    action ShowMenu("character_select")
+            textbutton _("Replays") action ShowMenu("character_select")
 
-            imagebutton:
-                idle "gui/button/exit_idle.png"
-                hover "gui/button/exit_hover.png"
-                action Quit(confirm=not main_menu)
+
+            if _in_replay:
+                
+                textbutton "Gallery" action ShowMenu("gallery_screen")
+                textbutton _("End Replay") action EndReplay(confirm=True)
+
+            elif not main_menu:
+
+                textbutton _("Main Menu") action MainMenu()
+
+        #textbutton _("About") action ShowMenu("about")
+
+        #if renpy.variant("pc") or (renpy.variant("web") and not renpy.variant("mobile")):
+
+            ## Help isn't necessary or relevant to mobile devices.
+            #textbutton _("Help") action ShowMenu("help")
+
+        if renpy.variant("pc"):
+
+            ## The quit button is banned on iOS and unnecessary on Android and
+            ## Web.
+            textbutton _("Quit") action Quit(confirm=not main_menu)
 
 
 style navigation_button is gui_button
@@ -384,7 +448,7 @@ screen game_menu(title, scroll=None, yinitial=0.0, spacing=0):
                 else:
                     transclude
 
-    use navigation
+    use navigation2
 
     textbutton _("Return"):
         style "return_button"

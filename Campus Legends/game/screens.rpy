@@ -354,6 +354,9 @@ screen main_menu():
 
     add gui.main_menu_background
 
+    frame:
+        style "main_menu_frame"
+
     use navigation
 
     if gui.show_name:

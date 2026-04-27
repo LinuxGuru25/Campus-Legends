@@ -5,29 +5,111 @@
 
 define e = Character("Eileen")
 
+define Sienna = Character("Sienna", color= "F54927")
+
+define RTS = Character("Red Tape Studio")
+
+define MCname = Character ("[MCname]")
+
 
 # The game starts here.
 
 label start:
 
-    # Show a background. This uses a placeholder by default, but you can
-    # add a file (named either "bg room.png" or "bg room.jpg") to the
-    # images directory to show it.
-
     scene bg room
+    show eileen phone  # Sienna looking at her phone
 
-    # This shows a character sprite. A placeholder is used, but you can
-    # replace it by adding a file named "eileen happy.png" to the images
-    # directory.
+    # Sienna distracted, dots appear one at a time
+    Sienna ".{w=0.4}.{w=0.4}.{w=0.4}.{w=0.4}.{w=0.4}.{w=0.4}."
 
-    show eileen happy
+pause 0.5
 
-    # These display lines of dialogue.
+# Player shouts her name
+RTS "SIENNA!!!"
 
-    e "You've created a new Ren'Py game."
+# Sound effect AFTER the shout
+play sound "MGS.ogg"
 
-    e "Once you add a story, pictures, and music, you can release it to the world!"
+# Sienna reacts
+show eileen happy
 
-    # This ends the game.
+Sienna "Holy shit dude!!! When did you get here... you scared the shit outta me bro"
 
-    return
+RTS "Wait, Sienna..."
+
+Sienna "Rude ass motha—"
+
+RTS "Sienna, I just want to say thank you to the players for checking out Campus Legends, and we here at Red Tape Studio hope you enjoy the ride!!!"
+
+play sound "FAAAAAAA.ogg"
+
+Sienna "...oh. Well damn, you could’ve led with that."
+
+Sienna "Anywho, I'm Sienna and welcome to Campus Legends!!"
+
+Sienna "Before I let you go on this epic journey, I have a few important questions I gotta ask you."
+
+
+
+
+label get_name:
+
+    $ MCname = renpy.input("What's your name handsome?")
+    $ MCname = MCname.strip()
+
+    # If blank → use default and skip confirmation
+    if not MCname:
+        $ MCname = "Emanuel"
+        jump name_confirmed
+
+    # Otherwise → ask for confirmation
+    "Are you sure you want your name to be [MCname]?"
+
+    menu:
+        "Yep, that's my name.":
+            pass
+
+        "Nah, let me change it.":
+            jump get_name
+
+    jump name_confirmed
+
+
+label name_confirmed:
+
+    Sienna "[MCname], that's cute. Let's move on."
+
+    Sienna "Campus Legends contains adult themes and content that is only for adults 18 years old and over."
+
+    Sienna "Are you at least 18 years old?"
+
+    menu:
+        "Yes, I am 18 or older.":
+            Sienna "Perfect. Then we can continue."
+
+        "No, I'm not 18.":
+            Sienna "Sorry, but you must be 18 or older to play this game."
+
+
+    Sienna "Campus Legends is an epic journey that features highs and lows and choices matterso think before you click sweetie"
+
+
+    # Hype send-off
+    Sienna "Now that you know what ya need to know i'll see you in game handsome!!!"
+
+    # Transition into the actual game
+    scene black with fade
+    pause 0.5
+    jump game_start
+
+
+label game_start:
+
+    scene bg campus_day with dissolve
+
+    "Your first day at Southside University begins..."
+
+return
+
+    # Continue your storreturn
+

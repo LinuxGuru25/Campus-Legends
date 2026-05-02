@@ -30,15 +30,15 @@ image sienna_look_up_movie = Movie(play="Sienna_look_up.avi", loop=False)
 
 # The game starts here.
 
-label start:
+# label start:
 
-    call init_phone
+#     call init_phone
 
-    scene expression "siennaphone.png"
-    # Sienna looking at her phone
+#     scene expression "siennaphone.png"
+#     # Sienna looking at her phone
 
-    # Sienna distracted, dots appear one at a time
-    Sienna ".{w=0.4}.{w=0.4}.{w=0.4}.{w=0.4}.{w=0.4}.{w=0.4}."
+#     # Sienna distracted, dots appear one at a time
+#     Sienna ".{w=0.4}.{w=0.4}.{w=0.4}.{w=0.4}.{w=0.4}.{w=0.4}."
 
 pause 0.5
 
@@ -128,10 +128,15 @@ label name_confirmed:
     pause 0.5
     jump game_start
 
+label start:
+    call init_phone
+    jump game_start
 
 label game_start:
 
     scene bg campus_day with dissolve
+
+    
 
     show screen phone_button
 
@@ -166,6 +171,9 @@ label game_start:
     MCname "Do they have boyfriends?"
 
     $ message(sienna, sienna_m2)
+    $ message(sienna, sienna_m3)
+    $ new_post(sienna_pf, sienna_post1)
+
 
     mystery "Naw, Most guys cant handle Sienna and well Jess is sorta unavailable"
 

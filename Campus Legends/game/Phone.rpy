@@ -2,7 +2,8 @@ init offset = 1
 default force_phone = False
 default viewing_photo = False
 default current_photo = None
-
+default feed_visible = False
+default player_username = f"@{player_name}_123"
 
 init -10 python:
     
@@ -11,6 +12,7 @@ init -10 python:
             self.app_screen = app_screen # What screen will show when the app is clicked
             self.name = name # The app's name
             self.icon = icon # The app's icon
+    
     # Apps in order of index [0] = First app, [1] = Second app, etc.
     apps = [
             App("contacts", "Messages", "images/phone/icon.png"),            
@@ -45,8 +47,6 @@ init -10 python:
             sienna,
             nick,
         ]
-    
-    
     
     class SMS(NoRollback):
         def __init__(self, sender, text="", image=None, is_image=False, from_player=False, resolved=False):
@@ -238,6 +238,102 @@ init -10 python:
 
             renpy.restart_interaction()
 
+    class Profile(NoRollback):
+        def __init__(self, user_id, username, pfp=None, bio="", starting_followers=0, following=0):
+            self.user_id = user_id
+            self.username = username
+            self.pfp = pfp
+            self.bio = bio
+            self.starting_followers = starting_followers
+            self.following = following
+            self.posts = []
+            self.visible = False
+            
+
+        def get_user_id(self):
+            """ Returns user id as a string """
+            return str(self.user_id)
+
+        def get_username(self):
+            """ Adds @ in front of username and returns as string """
+            return (f"@{self.username}")
+
+        def add_post(self, post):
+            """ Adds a post to this post """
+            self.posts.append(post)
+        
+        def get_posts(self):
+            """ Get total number of posts """
+            return len(self.posts)
+        
+        def show_profile(self):
+            self.visible = True
+        
+        def hide_profile(self):
+            self.visible = False
+    
+    class Post(NoRollback):
+        def __init__(self, post_id, author, image, caption="", starting_likes=0):
+            self.post_id = post_id
+            self.author = author
+            self.image = image
+            self.caption = caption
+            self.starting_likes = starting_likes
+            self.player_liked = False
+            self.visible = False
+            self.comments = []
+
+        def toggle_like(self):
+            """Toggles if the player clicks like"""
+            self.player_liked = not self.player_liked
+        
+        def get_post_id(self):
+            """ Returns post id as a string """
+            return str(self.post_id)
+
+        def get_likes(self):
+            return self.starting_likes +(1 if self.player_liked else 0)
+
+        def show_post(self):
+            self.visible = True
+        
+        def hide_post(self):
+            self.visible = False
+
+        def add_comment(self, comment):
+            """ Adds a comment to this post """
+            self.comments.append(comment)
+        
+        def get_comments(self):
+            """ Get total number of comments """
+            return len(self.comments)
+
+    all_posts = []
+
+    class Comment(NoRollback):
+        def __init__(self, comment_id, author, text, pfp=None, starting_likes=0):
+            self.comment_id = comment_id
+            self.author = author
+            self.text = text
+            self.pfp = pfp
+            self.starting_likes = starting_likes
+            self.player_liked = False
+            self.visible = False
+        
+        def toggle_like(self):
+            self.player_liked = not self.player_liked
+        
+        def get_likes(self):
+            return self.starting_likes + (1 if self.player_liked else 0)
+        
+        def show_comment(self):
+            self.visible = True
+        
+        def hide_comment(self):
+            self.visible = False
+
+
+
 # ------------------------------------------------------------
 # FUNCTIONS
 # ------------------------------------------------------------
@@ -303,6 +399,18 @@ init -10 python:
         contact.add_sms(sms)
         sms.show_text()
         sms.show_choices()
+
+    def add_feed(post):
+        all_posts.append(post)
+
+    def new_post(profile, post):
+        profile.show_profile()
+        profile.add_post(post)
+        post.show_post()
+        add_feed(post)
+
+
+    
 # ------------------------------------------------------------
 # STYLES
 # ------------------------------------------------------------
@@ -330,6 +438,37 @@ style blue_photo:
     background "#0066FF"
     padding (5, 5)
 
+style post_bg:
+    xalign 0.5
+    xmaximum 760
+    background "#ffffff"
+    padding (5, 5)
+
+style username:
+    xalign 0.5
+    xmaximum 300
+    idle_color "#000000"
+    hover_color "#646464"
+    size 20
+    background None
+    padding (5, 5)
+
+style like_count:
+    color "#000000"
+    size 25
+
+style comment:
+    color "#000000"
+    size 18
+
+style pl_username:
+    xalign 0.5
+    xmaximum 300
+    idle_color "#000000"
+    hover_color "#646464"
+    size 25
+    bold True
+    padding (5, 5)
 # ------------------------------------------------------------
 # SCREENS
 # ------------------------------------------------------------
@@ -552,4 +691,116 @@ screen photo_viewer():
 
                 fit "contain"
 
+
+screen feed():
+    modal True
+
+    window:
+        xalign 0.5
+        yalign 0.5
+        xysize (600, 1000)
+        background "#1d1d1d"
+
+        text "Feed" size 40 color "#000000" xalign 0.5 yalign 0.07
+
+        viewport:
+                xalign 0.5
+                yalign 0.5
+                xsize 550
+                ysize 950
+                scrollbars "vertical"
+                draggable True
+                mousewheel True
+                add "#ffffff"
+                
+                if feed_visible:
+                    vbox:
+                        # Player profile button
+                        frame:
+                            align (0.0, 0.5)
+                            background None
+                            xfill True
+                            ysize 100
+
+                            hbox:
+                                add player_pf.pfp:
+                                    size (65, 65)
+                                textbutton "Your Profile":
+                                    text_style "pl_username"
+                                    text_font "DejaVuSans.ttf"
+                                    text_outlines [(0, "#000000", 0, 0)]
+                                    action [Show("player_pf"), Hide(screen=None)]
+                            
+                        # Divider
+                        # frame:
+                        #     background "#CCCCCC"
+                        #     xfill True
+                        #     ysize 3
+                        vbox:
+                            xalign 0.5
+                            for post in all_posts:
+                                if post.visible:
+                                    frame:
+                                        style "post_bg"
+                                        vbox:
+                                            spacing 5
+                                            # Posted image (Square images look the best)
+                                            imagebutton:
+                                                idle Transform(post.image, fit="contain", xsize=280, ysize=280)
+                                                hover Transform(post.image, fit="contain", xsize=280, ysize=280)
+                                                action [SetVariable("viewing_photo", True), SetVariable("current_photo", post.image), Show("photo_viewer")]
+                                            xfill True
+
+                                            hbox:
+                                                spacing 10
+                                                xalign 0.0
+                                                # Author pfp and username
+                                                add post.author.pfp:
+                                                    size (65, 65)
+
+                                                textbutton post.author.get_username():
+                                                    padding (5, 5)
+                                                    text_style "username"
+                                                    text_font "DejaVuSans.ttf"
+                                                    text_outlines [(0, "#000000", 0, 0)]
+                                                    action [Show(f"{post.author.user_id}_pf"), Hide(screen=None)]
+                                            hbox:
+                                                
+                                                # Like button
+                                                if post.player_liked:
+                                                    textbutton "❤️ [post.get_likes()]":
+                                                        text_font "DejaVuSans.ttf"
+                                                        text_outlines [(0, "#000000", 0, 0)]
+                                                        text_size 25
+                                                        text_color "#000000"
+                                                        background None
+                                                        action Function(post.toggle_like)
+                                                else:
+                                                    textbutton "🤍 [post.get_likes()]":
+                                                        text_font "DejaVuSans.ttf"
+                                                        text_outlines [(0, "#000000", 0, 0)]
+                                                        text_size 25
+                                                        text_color "#000000"
+                                                        background None
+                                                        action Function(post.toggle_like)
+                                                # Comments button
+                                                textbutton "💬 [post.get_comments()]" :
+                                                    text_font "DejaVuSans.ttf"
+                                                    text_outlines [(0, "#000000", 0, 0)]
+                                                    text_size 25
+                                                    text_color "#000000"        
+                                                    background None
+                                                    action [Show("post_comments", post=post), Hide(screen=None)]
+                                # Divider
+                                null height 5
+                                frame:
+                                    background "#CCCCCC"
+                                    xfill True
+                                    ysize 3
+    vbox:
+        align(0.5, 0.95)
+        textbutton "Back":
+            text_font "DejaVuSans.ttf"
+            text_outlines [(0, "#000000", 0, 0)]
+            action [Show("phone_home"), Hide(screen=None)]
 

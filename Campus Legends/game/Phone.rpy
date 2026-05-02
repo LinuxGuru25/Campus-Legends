@@ -182,10 +182,7 @@ init -10 python:
                             sms.resolve()
 
         def advance_expired(self):
-            """
-            Call when story context advances (end of a scene / time jump / new day).
-            It will expire old optional reply choices.
-            """
+            """ Will expire old optional reply choices """
             global phone_epoch
             phone_epoch +=1
             self.expiry_old_reply_windows()
@@ -522,8 +519,8 @@ screen chat_screen(contact):
                                             action [
                                                 Function(choice.choose, contact), 
                                                 Function(sms.resolve), 
-                                                Function(sms.player_replied),
-                                                Function(renpy.block_rollback)
+                                                Function(sms.player_replied)
+                                                #Function(renpy.block_rollback)
                                             ]
     if viewing_photo:
         use photo_viewer()                               

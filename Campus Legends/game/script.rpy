@@ -3,13 +3,15 @@
 # Declare characters used by this game. The color argument colorizes the
 # name of the character.
 
+default player_name = ""
+
 define e = Character("Eileen")
 
 define Sienna = Character("Sienna", color= "F54927")
 
 define RTS = Character("Red Tape Studio")
 
-define MCname = Character ("[MCname]")
+define MCname = Character ("[player_name]")
 
 define Nick = Character ("Nick", color= "#0033AA" )
 
@@ -29,6 +31,8 @@ image sienna_look_up_movie = Movie(play="Sienna_look_up.avi", loop=False)
 # The game starts here.
 
 label start:
+
+    call init_phone
 
     scene expression "siennaphone.png"
     # Sienna looking at her phone
@@ -76,12 +80,12 @@ Sienna "Before I let you go on this epic journey, I have a few important questio
 
 label get_name:
 
-    $ MCname = renpy.input("What's your name handsome?")
-    $ MCname = MCname.strip()
+    $ player_name = renpy.input("What's your name handsome?")
+    $ player_name = player_name.strip()
 
     # If blank → use default and skip confirmation
-    if not MCname:
-        $ MCname = "Emanuel"
+    if not player_name:
+        $ player_name = "Emanuel"
         jump name_confirmed
 
     # Otherwise → ask for confirmation
@@ -129,6 +133,8 @@ label game_start:
 
     scene bg campus_day with dissolve
 
+    show screen phone_button
+
     "Your first day at Southside University begins..."
 
     MCname "(Damn… it’s been a long journey, but here we are. SSU. Not my first choice, but hey—SVU didn’t want me. Their loss.)"
@@ -158,6 +164,8 @@ label game_start:
     mystery "Sienna is cool asf though, i havent talked to the rest that much though"
 
     MCname "Do they have boyfriends?"
+
+    $ message(sienna, sienna_m2)
 
     mystery "Naw, Most guys cant handle Sienna and well Jess is sorta unavailable"
 

@@ -18,8 +18,8 @@ init -10 python:
     
     # Apps in order of index [0] = First app, [1] = Second app, etc.
     apps = [
-            App("contacts", "Messages", "images/phone/icon.png"),            
-            App("feed", "Twatter", "images/phone/icon.png")
+            App("contacts", "Messages", "images/phone/icons/message_icon.png"),            
+            App("feed", "Twatter", "images/phone/icons/twatter_icon.png")
         ]
     class Contact(NoRollback):
         def __init__(self, contact_id, contact_name, pfp):
@@ -526,7 +526,10 @@ screen phone_home():
                         xysize (100, 100)
                         vbox:
                             add app.icon
-                            text app.name
+                            text app.name:
+                                font "DejaVuSans.ttf"
+                                size 20
+                                outlines [(1, "#000000", 0, 0)]
                         align(0.5, 0.5)
                         action [Show(f"{app.app_screen}"), Hide("phone_home")]
     vbox:
@@ -544,6 +547,8 @@ screen contacts():
         ysize 1000
         background "images/phone/base.png"
         
+        text "Contacts" size 40 color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)] xalign 0.5 yalign 0.07
+
         viewport:
             xalign 0.5
             yalign 0.5
@@ -729,7 +734,7 @@ screen feed():
         ysize 1000
         background "images/phone/base.png"
 
-        text "Feed" size 40 color "#000000" xalign 0.5 yalign 0.07
+        text "Feed" size 40 color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)] xalign 0.5 yalign 0.07
 
         viewport:
                 xalign 0.5

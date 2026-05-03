@@ -6,9 +6,10 @@ default feed_visible = False
 default profile_tile = (120, 120)
 default player_username = f"@{player_name}_123"
 default phone_epoch = 0
+#default phone_initialized = False
 
 init -10 python:
-    
+
     class App(NoRollback):
         def __init__(self, app_screen, name, icon):
             self.app_screen = app_screen # What screen will show when the app is clicked
@@ -28,6 +29,7 @@ init -10 python:
             self.chat = []
             self.has_unread = False
             self.convo_done = False
+            self._initialized = False
 
         def mark_unread(self):
             """ Mark this contact as having unread messages """
@@ -63,6 +65,7 @@ init -10 python:
             self.show_at = None
             self.expires_epoch = None
             self.responded_to = False
+            self.added = False
 
         def show_text(self):
             """ Shows the text """
@@ -250,6 +253,7 @@ init -10 python:
             self.following = following
             self.posts = []
             self.visible = False
+            self._initialized = False
             
 
         def get_user_id(self):
@@ -284,6 +288,7 @@ init -10 python:
             self.player_liked = False
             self.visible = False
             self.comments = []
+            self.added = False
 
         def toggle_like(self):
             """Toggles if the player clicks like"""
@@ -333,8 +338,20 @@ init -10 python:
         
         def hide_comment(self):
             self.visible = False
+    
+    class PhoneState(NoRollback):
+        def __init__(self):
+            self.initialized = False
 
+        def reset(self):
+            self.initialized = False
+            all_posts.clear()
+            for contact in contacts:
+                contact.chat.clear()
+                contact.has_unread = False
+                contact.convo_done = False
 
+    phone_state = PhoneState()
 
 # ------------------------------------------------------------
 # FUNCTIONS
@@ -397,19 +414,23 @@ init -10 python:
     chat_yadj = ui.adjustment()
 
     def message(contact, sms):
-        contact.mark_unread()
-        contact.add_sms(sms)
-        sms.show_text()
-        sms.show_choices()
+        if not sms.added:
+            sms.added = True
+            contact.mark_unread()
+            contact.add_sms(sms)
+            sms.show_text()
+            sms.show_choices()
 
     def add_feed(post):
         all_posts.append(post)
 
     def new_post(profile, post):
-        profile.show_profile()
-        profile.add_post(post)
-        post.show_post()
-        add_feed(post)
+        if not post.added:
+            post.added = True
+            profile.show_profile()
+            profile.add_post(post)
+            post.show_post()
+            add_feed(post)
 
 
     

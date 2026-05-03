@@ -170,8 +170,8 @@ label game_start:
 
     MCname "Do they have boyfriends?"
 
+    $ sienna_m1.advance_expired()
     $ message(sienna, sienna_m2)
-    $ message(sienna, sienna_m3)
     $ new_post(sienna_pf, sienna_post1)
 
 

@@ -509,12 +509,13 @@ screen phone_home():
         yalign 0.5
         xsize 600
         ysize 1000
-        background "#1d1d1d"
+        background "images/phone/base.png"
         
         frame:
             xalign 0.5
             yalign 0.5
-            xysize (550, 950)
+            xsize 450
+            ysize 775
             background "#ffffff"
             grid 4 4:
                 spacing 10
@@ -541,16 +542,17 @@ screen contacts():
         yalign 0.5
         xsize 600
         ysize 1000
-        background "#1d1d1d"
+        background "images/phone/base.png"
         
         viewport:
             xalign 0.5
             yalign 0.5
-            xysize (550, 950)
+            xsize 450
+            ysize 775
             scrollbars "vertical"
             draggable True
             mousewheel True
-            add "#ffffff"
+            
 
             vbox:
                 for contact in contacts:
@@ -596,26 +598,28 @@ screen chat_screen(contact):
     window:
         xalign 0.5
         yalign 0.5
-        xysize (600, 1000)
-        background "#1d1d1d"
+        xsize 600
+        ysize 1000
+        background "images/phone/base.png"
     
-        # python:
-        #     _msg_count = sum(1 for _s in contact.chat if _s.visible)
-        #     if not hasattr(chat_yadj, '_last_count') or chat_yadj._last_count != _msg_count:
-        #         chat_yadj._last_count = _msg_count
-        #         chat_yadj.value = float("inf")
+        python:
+            _msg_count = sum(1 for _s in contact.chat if _s.visible)
+            if not hasattr(chat_yadj, '_last_count') or chat_yadj._last_count != _msg_count:
+                chat_yadj._last_count = _msg_count
+                chat_yadj.value = float("inf")
 
 
 
         viewport:
             xalign 0.5
             yalign 0.5
-            xysize (550, 950)
+            xsize 450
+            ysize 775
             scrollbars "vertical"
             mousewheel True
             draggable True
-            #yadjustment chat_yadj
-            add "#FFFFFF"
+            yadjustment chat_yadj
+            
             vbox:
                 spacing 15
                 xfill True
@@ -647,7 +651,7 @@ screen chat_screen(contact):
                                     style "blue_bg"
                                     vbox:
                                         spacing 15
-                                        text sms.text:
+                                        text sms.text style "default":
                                             size 20
                                             font "DejaVuSans.ttf"
                                             outlines [(0, "#000000", 0, 0)]
@@ -658,7 +662,7 @@ screen chat_screen(contact):
 
                                     vbox:
                                         spacing 15
-                                        text sms.text:
+                                        text sms.text style "default":
                                             size 20
                                             font "DejaVuSans.ttf"
                                             outlines [(0, "#000000", 0, 0)]
@@ -683,7 +687,6 @@ screen chat_screen(contact):
                                                 Function(choice.choose, contact), 
                                                 Function(sms.resolve), 
                                                 Function(sms.player_replied)
-                                                #Function(renpy.block_rollback)
                                             ]
     if viewing_photo:
         use photo_viewer()                               
@@ -722,20 +725,21 @@ screen feed():
     window:
         xalign 0.5
         yalign 0.5
-        xysize (600, 1000)
-        background "#1d1d1d"
+        xsize 600
+        ysize 1000
+        background "images/phone/base.png"
 
         text "Feed" size 40 color "#000000" xalign 0.5 yalign 0.07
 
         viewport:
                 xalign 0.5
                 yalign 0.5
-                xsize 550
-                ysize 950
+                xsize 450
+                ysize 775
                 scrollbars "vertical"
                 draggable True
                 mousewheel True
-                add "#ffffff"
+                
                 
                 if feed_visible:
                     vbox:
@@ -756,10 +760,10 @@ screen feed():
                                     action [Show("profile_screen", profile=player_pf), Hide(screen=None)]
                             
                         # Divider
-                        # frame:
-                        #     background "#CCCCCC"
-                        #     xfill True
-                        #     ysize 3
+                        frame:
+                            background "#CCCCCC"
+                            xfill True
+                            ysize 3
                         vbox:
                             xalign 0.5
                             for post in all_posts:
@@ -846,18 +850,19 @@ screen profile_screen(profile, back_screen="feed"):
     window:
         xalign 0.5
         yalign 0.5
-        xysize (600, 1000)
-        background "#1d1d1d"
+        xsize 600
+        ysize 1000
+        background "images/phone/base.png"
 
         viewport:
             xalign 0.5
             yalign 0.5
-            xysize (550, 950)
+            xsize 450
+            ysize 775
             scrollbars "vertical"
             mousewheel True
             draggable True
-            #yadjustment chat_yadj
-            add "#FFFFFF"
+            
             vbox:
                 spacing 15
                 xfill True
@@ -878,17 +883,18 @@ screen post_comments(post, back_screen="feed"):
     window:
         xalign 0.5
         yalign 0.5
-        xysize (600, 1000)
-        background "#1d1d1d"
+        xsize 600
+        ysize 1000
+        background "images/phone/base.png"
 
         viewport:
             xalign 0.5
             yalign 0.5
-            xysize (550, 950)
+            xsize 450
+            ysize 775
             scrollbars "vertical"
             mousewheel True
             draggable True
-            add "#FFFFFF"
 
             text "Hello"
 

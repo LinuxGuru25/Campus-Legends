@@ -497,8 +497,9 @@ style pl_username:
 # ------------------------------------------------------------
 
 screen phone_button():
-    textbutton "Phone":
-        xalign 1.0
+    imagebutton:
+        auto "phone/Phone_button_%s.png"
+        focus_mask True 
         action [Show("phone_home"), Hide("phone_button")]
 
 screen phone_home():

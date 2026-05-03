@@ -10,6 +10,7 @@ label init_phone:
         sienna_m1 = SMS(sienna, "What's up pussy?")
         sienna.add_sms(sienna_m1)
         sienna_m1.show_text()
+        sienna_m1.can_expire()
 
         player_r1 = sienna_m1.chain("Who you callin pussy?", "You, dumb fuck")
         player_r1a = sienna_m1.chain("Callin me a pussy?", "Who else would I be talkin to?")
@@ -23,12 +24,12 @@ label init_phone:
         player_r3 = player_r2.chain("Keep it coming hoe, you know what I said", "Imma bitch slap the shit outta you")
         player_r3a = player_r2a.chain("Said nobody", "That's right, bitch aint go no friends. my bad.")
 
-        sienna_m3 = SMS(sienna, is_image=True,image="images/phone/jeff.png")
-
+        player_r4 = player_r2.chain("Cap hoe", npc_image="images/phone/jeff.png")
+        player_r4a = player_r2a.chain("Fuck you hoe", npc_image="images/phone/jeff.png")
         
 
         # --------------------------------------------
-        # TEXTS
+        # POSTS
         # --------------------------------------------
 
         feed_visible = True

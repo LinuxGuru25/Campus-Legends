@@ -3,7 +3,9 @@ default force_phone = False
 default viewing_photo = False
 default current_photo = None
 default feed_visible = False
+default profile_tile = (120, 120)
 default player_username = f"@{player_name}_123"
+default phone_epoch = 0
 
 init -10 python:
     
@@ -525,6 +527,7 @@ screen contacts():
             yalign 0.5
             xysize (550, 950)
             scrollbars "vertical"
+            draggable True
             mousewheel True
             add "#ffffff"
 
@@ -729,7 +732,7 @@ screen feed():
                                     text_style "pl_username"
                                     text_font "DejaVuSans.ttf"
                                     text_outlines [(0, "#000000", 0, 0)]
-                                    action [Show("player_pf"), Hide(screen=None)]
+                                    action [Show("profile_screen", profile=player_pf), Hide(screen=None)]
                             
                         # Divider
                         # frame:
@@ -763,7 +766,7 @@ screen feed():
                                                     text_style "username"
                                                     text_font "DejaVuSans.ttf"
                                                     text_outlines [(0, "#000000", 0, 0)]
-                                                    action [Show(f"{post.author.user_id}_pf"), Hide(screen=None)]
+                                                    action [Show("profile_screen", profile=post.author), Hide(screen=None)]
                                             hbox:
                                                 
                                                 # Like button
@@ -790,7 +793,7 @@ screen feed():
                                                     text_size 25
                                                     text_color "#000000"        
                                                     background None
-                                                    action [Show("post_comments", post=post), Hide(screen=None)]
+                                                    action [Show("post_comments", post=post, back_screen="feed"), Hide(screen=None)]
                                 # Divider
                                 null height 5
                                 frame:
@@ -803,4 +806,79 @@ screen feed():
             text_font "DejaVuSans.ttf"
             text_outlines [(0, "#000000", 0, 0)]
             action [Show("phone_home"), Hide(screen=None)]
+
+screen tile_screen(post, back_screen="profile_screen"):
+    frame:
+        xysize profile_tile
+        background None
+        padding (5, 5)
+
+        imagebutton:
+            idle Transform(post.image, fit="cover", xysize=profile_tile)
+            hover Transform(post.image, fit="cover", xysize=profile_tile)
+            action [Show("post_comments", post=post, back_screen=back_screen), Hide(screen=None)]
+
+
+screen profile_screen(profile, back_screen="feed"):
+    modal True
+
+    window:
+        xalign 0.5
+        yalign 0.5
+        xysize (600, 1000)
+        background "#1d1d1d"
+
+        viewport:
+            xalign 0.5
+            yalign 0.5
+            xysize (550, 950)
+            scrollbars "vertical"
+            mousewheel True
+            draggable True
+            #yadjustment chat_yadj
+            add "#FFFFFF"
+            vbox:
+                spacing 15
+                xfill True
+                for post in profile.posts:
+                    if post.visible:
+                        use tile_screen(post, back_screen="profile_screen")
+
+    vbox:
+        align(0.5, 0.95)
+        textbutton "Back":
+            text_font "DejaVuSans.ttf"
+            text_outlines [(0, "#000000", 0, 0)]
+            action [Show("feed"), Hide(screen=None)]
+
+screen post_comments(post, back_screen="feed"):
+    modal True
+
+    window:
+        xalign 0.5
+        yalign 0.5
+        xysize (600, 1000)
+        background "#1d1d1d"
+
+        viewport:
+            xalign 0.5
+            yalign 0.5
+            xysize (550, 950)
+            scrollbars "vertical"
+            mousewheel True
+            draggable True
+            add "#FFFFFF"
+
+            text "Hello"
+
+    vbox:
+        align(0.5, 0.95)
+        textbutton "Back":
+            text_font "DejaVuSans.ttf"
+            text_outlines [(0, "#000000", 0, 0)]
+            action If(
+                back_screen == "profile_screen",
+                [Show("profile_screen", profile=post.author, back_screen="feed"), Hide(screen=None)],
+                [Show(back_screen), Hide(screen=None)]
+            )
 

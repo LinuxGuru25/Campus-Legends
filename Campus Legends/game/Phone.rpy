@@ -325,6 +325,7 @@ init -10 python:
             self.starting_likes = starting_likes
             self.player_liked = False
             self.visible = False
+            self.added = False
         
         def toggle_like(self):
             self.player_liked = not self.player_liked
@@ -430,6 +431,13 @@ init -10 python:
             profile.add_post(post)
             post.show_post()
             add_feed(post)
+
+    def new_comment(post, comment):
+        if not comment.added:
+            comment.added = True
+            comment.show_comment()
+            post.add_comment(comment)
+
 
 
     
@@ -848,6 +856,44 @@ screen tile_screen(post, back_screen="profile_screen"):
             hover Transform(post.image, fit="cover", xysize=profile_tile)
             action [Show("post_comments", post=post, back_screen=back_screen), Hide(screen=None)]
 
+screen profile_info(profile):
+    vbox:
+        xsize 430
+        xalign 0.25
+        yalign 0.25
+        # pfp and bio text
+        vbox:
+            spacing 5
+            frame:
+                background None
+                xfill True
+                yalign 0.5
+                hbox:
+                    add profile.pfp xysize (150,150)
+                    vbox:
+                        if len(profile.posts) > 1 or len(profile.posts) == 0:
+                            text f"{len(profile.posts)}" size 20 color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)]
+                            text "Posts" size 20 color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)]
+                        elif len(profile.posts) == 1:
+                            text f"{len(profile.posts)}" size 20 color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)]
+                            text "Post" size 20 color "#000000"
+                        
+                        
+                    null width 15
+                    vbox:
+                        text f"{profile.starting_followers}"  size 20 color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)]
+                        text "Followers" size 20 color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)]
+                    null width 15
+                    vbox:
+                        text f"{profile.following}" size 20 color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)]
+                        text "Following" size 20 color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)]
+
+            text f"{profile.username}" color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)] size 23
+            text f"{profile.bio}" color "#000000" size 20 font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)]
+        frame:
+            background "#CCCCCC"
+            xfill True
+            ysize 3
 
 screen profile_screen(profile, back_screen="feed"):
     modal True
@@ -871,9 +917,14 @@ screen profile_screen(profile, back_screen="feed"):
             vbox:
                 spacing 15
                 xfill True
-                for post in profile.posts:
-                    if post.visible:
-                        use tile_screen(post, back_screen="profile_screen")
+                
+                if profile.visible:
+                    use profile_info(profile)
+                
+                grid 3 10:
+                    for post in profile.posts:
+                        if post.visible:
+                            use tile_screen(post, back_screen="profile_screen")
 
     vbox:
         align(0.5, 0.95)
@@ -921,27 +972,27 @@ screen post_comments(post, back_screen="feed"):
                             add post.author.pfp:
                                 size (65, 65)
                             
-                        style "post_bg"
-                        vbox:
-                            # align (0.5, 0.5)
-                            text post.author.get_username():
-                                size 20
-                                font "DejaVuSans.ttf"
-                                outlines [(0, "#000000", 0, 0)]
-                                color "#000000"
-                                bold True
+                            style "post_bg"
+                            vbox:
+                                # align (0.5, 0.5)
+                                text post.author.get_username():
+                                    size 20
+                                    font "DejaVuSans.ttf"
+                                    outlines [(0, "#000000", 0, 0)]
+                                    color "#000000"
+                                    bold True
 
-                            imagebutton:
-                                idle Transform(post.image, fit="contain", xsize=280, ysize=280)
-                                hover Transform(post.image, fit="contain", xsize=280, ysize=280)
-                                action [SetVariable("viewing_photo", True), SetVariable("current_photo", post.image), Show("photo_viewer")]
-                            
-                            text post.caption:
-                                xalign 0.0
-                                font "DejaVuSans.ttf"
-                                outlines [(0, "#000000", 0, 0)]
-                                size 20
-                                color "#000000"
+                                imagebutton:
+                                    idle Transform(post.image, fit="contain", xsize=280, ysize=280)
+                                    hover Transform(post.image, fit="contain", xsize=280, ysize=280)
+                                    action [SetVariable("viewing_photo", True), SetVariable("current_photo", post.image), Show("photo_viewer")]
+                                
+                                text post.caption:
+                                    xalign 0.0
+                                    font "DejaVuSans.ttf"
+                                    outlines [(0, "#000000", 0, 0)]
+                                    size 20
+                                    color "#000000"
                         
 
                 # Divider
@@ -976,14 +1027,12 @@ screen post_comments(post, back_screen="feed"):
                                         add comment.author.pfp:
                                             size (50, 50)
                                         
-                                        textbutton comment.author.get_username():
-                                            text_size 18
-                                            text_bold True
-                                            text_font "DejaVuSans.ttf"
-                                            text_outlines [(0, "#000000", 0, 0)]
-                                            text_color "#000000"
-                                            background None
-                                            action [Show("profile_screen", profile=post.author), Hide(screen=None)]
+                                        text comment.author.get_username():
+                                            size 20
+                                            font "DejaVuSans.ttf"
+                                            outlines [(0, "#000000", 0, 0)]
+                                            color "#000000"
+
                                     
                                     hbox:
                                         xalign 1.0
@@ -1007,7 +1056,10 @@ screen post_comments(post, back_screen="feed"):
                                 
                                 # Comment text
                                 text comment.text:
-                                    style "comment"
+                                    font "DejaVuSans.ttf"
+                                    outlines [(0, "#000000", 0, 0)]
+                                    size 20
+                                    color "#000000"
                                     xmaximum 400
 
     vbox:

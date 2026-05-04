@@ -25,7 +25,7 @@ label init_phone:
             player_r2a = sienna_m2.chain("Prob better than you, hoe", "You da bitch ass hoe tho")
 
             player_r3 = player_r2.chain("Keep it coming hoe, you know what I said", "Imma bitch slap the shit outta you")
-            player_r3a = player_r2a.chain("Said nobody", "That's right, bitch aint go no friends. my bad.")
+            player_r3a = player_r2a.chain("Said nobody", "That's right, bitch aint got no friends. my bad.")
 
 
             player_r4 = player_r3.chain("Picture?", npc_image="images/phone/jeff.png")

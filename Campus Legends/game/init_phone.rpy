@@ -40,18 +40,18 @@ label init_phone:
 
             
 
-            player_pf = Profile(f"{player_name}", f"{player_username}", "images/phone/icon.png", None ,282, 53)
+            player_pf = Profile(f"{player_username}", "images/phone/icon.png", None ,282, 53)
             player_pf.show_profile()
 
-            sienna_pf = Profile("sienna", "sienna_username", "images/phone/icon.png","Test", 300, 90)
-            nick_pf = Profile("nick", "nick_username", "images/phone/icon.png","words", 200, 17)
+            sienna_pf = Profile("sienna_username", "images/phone/icon.png","Test", 300, 90)
+            nick_pf = Profile("nick_username", "images/phone/icon.png","words", 200, 17)
 
             sienna_post1 = Post("sienna_post1", sienna_pf, "images/phone/jeff.png", "Lmao", 54)
             sienna_post2 = Post("sienna_post2", sienna_pf, "images/phone/run.png", "2", 45)
             sienna_post3 = Post("sienna_post3", sienna_pf, "images/phone/test2.png", "3", 90)
             sienna_post4 = Post("sienna_post4", sienna_pf, "images/phone/test3.png", "4", 57)
 
-            si_p1_c1 = Comment("si_p1_c1", nick_pf, "comment text", "images/phone/icon.png", 50)
+            si_p1_c1 = Comment(nick_pf, "comment text", "images/phone/icon.png", 50)
 
 
         #renpy.block_rollback()

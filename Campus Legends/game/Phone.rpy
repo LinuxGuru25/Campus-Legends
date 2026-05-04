@@ -21,8 +21,7 @@ init -10 python:
             App("feed", "Twatter", "images/phone/icons/twatter_icon.png")
         ]
     class Contact(NoRollback):
-        def __init__(self, contact_id, contact_name, pfp):
-            self.contact_id = contact_id
+        def __init__(self, contact_name, pfp):
             self.contact_name = contact_name
             self.pfp = pfp
             self.chat = []
@@ -42,8 +41,8 @@ init -10 python:
             """ Add message to the chat """
             self.chat.append(text)
     
-    sienna = Contact("sienna_dm", "Sienna", "images/phone/icon.png")
-    nick = Contact("nick_dm", "Nick", "images/phone/icon.png")
+    sienna = Contact("Sienna", "images/phone/icon.png")
+    nick = Contact("Nick", "images/phone/icon.png")
     
     # Contacts in order of index [0] = First app, [1] = Second contact, etc.
     contacts = [
@@ -243,8 +242,7 @@ init -10 python:
             renpy.restart_interaction()
 
     class Profile(NoRollback):
-        def __init__(self, user_id, username, pfp=None, bio="", starting_followers=0, following=0):
-            self.user_id = user_id
+        def __init__(self, username, pfp=None, bio="", starting_followers=0, following=0):
             self.username = username
             self.pfp = pfp
             self.bio = bio
@@ -254,10 +252,6 @@ init -10 python:
             self.visible = False
             self._initialized = False
             
-
-        def get_user_id(self):
-            """ Returns user id as a string """
-            return str(self.user_id)
 
         def get_username(self):
             """ Adds @ in front of username and returns as string """
@@ -278,8 +272,7 @@ init -10 python:
             self.visible = False
     
     class Post(NoRollback):
-        def __init__(self, post_id, author, image, caption="", starting_likes=0):
-            self.post_id = post_id
+        def __init__(self, author, image, caption="", starting_likes=0):
             self.author = author
             self.image = image
             self.caption = caption
@@ -293,10 +286,6 @@ init -10 python:
             """Toggles if the player clicks like"""
             self.player_liked = not self.player_liked
         
-        def get_post_id(self):
-            """ Returns post id as a string """
-            return str(self.post_id)
-
         def get_likes(self):
             return self.starting_likes +(1 if self.player_liked else 0)
 
@@ -317,8 +306,7 @@ init -10 python:
     all_posts = []
 
     class Comment(NoRollback):
-        def __init__(self, comment_id, author, text, pfp=None, starting_likes=0):
-            self.comment_id = comment_id
+        def __init__(self, author, text, pfp=None, starting_likes=0):
             self.author = author
             self.text = text
             self.pfp = pfp
@@ -499,6 +487,20 @@ style pl_username:
     size 25
     bold True
     padding (5, 5)
+
+style phone_bg:
+    xalign 0.55
+    yalign 0.5
+    xsize 600
+    ysize 1000
+    background "images/phone/base.png"
+
+style screen_frame:
+    xalign 0.09
+    yalign 0.2
+    xsize 450
+    ysize 750
+    background None
 # ------------------------------------------------------------
 # SCREENS
 # ------------------------------------------------------------
@@ -513,18 +515,10 @@ screen phone_home():
     modal True
 
     window:
-        xalign 0.5
-        yalign 0.5
-        xsize 600
-        ysize 1000
-        background "images/phone/base.png"
+        style "phone_bg"
         
         frame:
-            xalign 0.5
-            yalign 0.5
-            xsize 450
-            ysize 775
-            background "#ffffff"
+            style "screen_frame"
             grid 4 4:
                 spacing 10
                 xalign 0.5
@@ -541,7 +535,7 @@ screen phone_home():
                         align(0.5, 0.5)
                         action [Show(f"{app.app_screen}"), Hide("phone_home")]
     vbox:
-        align(0.5, 0.95)
+        align(0.5, 0.9)
         textbutton "Close":
             action [Hide("phone_home"), Show("phone_button")]
 
@@ -549,57 +543,56 @@ screen contacts():
     modal True
 
     window:
-        xalign 0.5
-        yalign 0.5
-        xsize 600
-        ysize 1000
-        background "images/phone/base.png"
-        
-        text "Contacts" size 40 color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)] xalign 0.5 yalign 0.07
+        style "phone_bg"
 
-        viewport:
-            xalign 0.5
-            yalign 0.5
-            xsize 450
-            ysize 775
-            scrollbars "vertical"
-            draggable True
-            mousewheel True
-            
+        vbox: 
+            null height 65
+            spacing 5
+            text "Contacts" size 40 color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)] xalign 0.5 yalign 0.07
 
-            vbox:
-                for contact in contacts:
-                    button:
-                        action [
-                            Show("chat_screen", contact=contact),
-                            Hide(screen=None),
-                            Function(contact.mark_read)
-                        ]
+            viewport:
+                xpos 13
+                yalign 0.3
+                xsize 450
+                ysize 750
+                scrollbars "vertical"
+                draggable True
+                mousewheel True
+                
 
-                        hbox:
-                            spacing 15
-                            xalign 0.0
-                            yalign 0.5
+                vbox:
+                    for contact in contacts:
+                        button:
+                            action [
+                                Show("chat_screen", contact=contact),
+                                Hide(screen=None),
+                                Function(contact.mark_read)
+                            ]
 
-                            add contact.pfp:
-                                size (60,60)
+                            hbox:
+                                spacing 15
+                                xalign 0.0
+                                yalign 0.5
 
-                            vbox:
-                                text contact.contact_name:
-                                    size 28
-                                    font "DejaVuSans.ttf"
-                                    outlines [(0, "#000000", 0, 0)]
-                                    color "#000000"
-                                if contact.has_unread:
-                                    text "New message!" size 18 color "#FF0000" font "DejaVuSans.ttf"
-                            
-                                null height 5
-                                frame:
-                                    background "#CCCCCC"
-                                    xfill True
-                                    ysize 1
+                                add contact.pfp:
+                                    size (60,60)
+
+                                vbox:
+                                    text contact.contact_name:
+                                        size 28
+                                        font "DejaVuSans.ttf"
+                                        outlines [(0, "#000000", 0, 0)]
+                                        color "#000000"
+                                    if contact.has_unread:
+                                        text "New message!" size 18 color "#FF0000" font "DejaVuSans.ttf"
+                                
+                                    null height 5
+                                    frame:
+                                        background "#CCCCCC"
+                                        xfill True
+                                        ysize 1
     vbox:                       
-        align(0.5, 0.95)
+        align(0.5, 0.9)
         textbutton "Back":
             action [Hide(screen=None), Show("phone_home")]
 
@@ -609,11 +602,7 @@ screen chat_screen(contact):
     timer 0.1 repeat True action Function(check_delayed_messages, contact)
 
     window:
-        xalign 0.5
-        yalign 0.5
-        xsize 600
-        ysize 1000
-        background "images/phone/base.png"
+        style "phone_bg"
     
         python:
             _msg_count = sum(1 for _s in contact.chat if _s.visible)
@@ -622,18 +611,19 @@ screen chat_screen(contact):
                 chat_yadj.value = float("inf")
 
 
-
         viewport:
-            xalign 0.5
-            yalign 0.5
+            xpos 13
+            yalign 0.3
             xsize 450
-            ysize 775
+            ysize 750
             scrollbars "vertical"
             mousewheel True
             draggable True
             yadjustment chat_yadj
+        
             
             vbox:
+                
                 spacing 15
                 xfill True
                 for sms in contact.chat:
@@ -705,7 +695,7 @@ screen chat_screen(contact):
         use photo_viewer()                               
     else:
         vbox:
-            align(0.5, 0.95)
+            align(0.5, 0.9)
             button:
                 text "Back":
                     idle_color "#a8a8a8"
@@ -736,19 +726,20 @@ screen feed():
     modal True
 
     window:
-        xalign 0.5
-        yalign 0.5
-        xsize 600
-        ysize 1000
-        background "images/phone/base.png"
+        style "phone_bg"
 
-        text "Feed" size 40 color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)] xalign 0.5 yalign 0.07
+        vbox:
+            
+            null height 65
+            spacing 5
 
-        viewport:
-                xalign 0.5
-                yalign 0.5
+            text "Feed" size 40 color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)] xalign 0.5 yalign 0.07
+
+            viewport:
+                xpos 13
+                yalign 0.3
                 xsize 450
-                ysize 775
+                ysize 750
                 scrollbars "vertical"
                 draggable True
                 mousewheel True
@@ -757,12 +748,19 @@ screen feed():
                 if feed_visible:
                     vbox:
                         # Player profile button
+                        
+                        frame:
+                            background "#CCCCCC"
+                            xalign 0.5
+                            xsize 400
+                            ysize 3
+                        
                         frame:
                             align (0.0, 0.5)
                             background None
                             xfill True
                             ysize 100
-
+                        
                             hbox:
                                 add player_pf.pfp:
                                     size (65, 65)
@@ -775,7 +773,8 @@ screen feed():
                         # Divider
                         frame:
                             background "#CCCCCC"
-                            xfill True
+                            xalign 0.5
+                            xsize 400
                             ysize 3
                         vbox:
                             xalign 0.5
@@ -832,14 +831,15 @@ screen feed():
                                                     text_color "#000000"        
                                                     background None
                                                     action [Show("post_comments", post=post, back_screen="feed"), Hide(screen=None)]
-                                # Divider
-                                null height 5
-                                frame:
-                                    background "#CCCCCC"
-                                    xfill True
-                                    ysize 3
+                                    # Divider
+                                    null height 5
+                                    frame:
+                                        background "#CCCCCC"
+                                        xalign 0.5
+                                        xfill True
+                                        ysize 3
     vbox:
-        align(0.5, 0.95)
+        align(0.5, 0.9)
         textbutton "Back":
             text_font "DejaVuSans.ttf"
             text_outlines [(0, "#000000", 0, 0)]
@@ -899,17 +899,13 @@ screen profile_screen(profile, back_screen="feed"):
     modal True
 
     window:
-        xalign 0.5
-        yalign 0.5
-        xsize 600
-        ysize 1000
-        background "images/phone/base.png"
+        style "phone_bg"
 
         viewport:
-            xalign 0.5
-            yalign 0.5
+            xpos 13
+            yalign 0.3
             xsize 450
-            ysize 775
+            ysize 750
             scrollbars "vertical"
             mousewheel True
             draggable True
@@ -927,7 +923,7 @@ screen profile_screen(profile, back_screen="feed"):
                             use tile_screen(post, back_screen="profile_screen")
 
     vbox:
-        align(0.5, 0.95)
+        align(0.5, 0.9)
         textbutton "Back":
             text_font "DejaVuSans.ttf"
             text_outlines [(0, "#000000", 0, 0)]
@@ -937,17 +933,13 @@ screen post_comments(post, back_screen="feed"):
     modal True
 
     window:
-        xalign 0.5
-        yalign 0.5
-        xsize 600
-        ysize 1000
-        background "images/phone/base.png"
+        style "phone_bg"
 
         viewport:
-            xalign 0.5
-            yalign 0.5
+            xalign 0.2
+            yalign 0.3
             xsize 450
-            ysize 775
+            ysize 750
             draggable True
             scrollbars "vertical"
             mousewheel True
@@ -1063,7 +1055,7 @@ screen post_comments(post, back_screen="feed"):
                                     xmaximum 400
 
     vbox:
-        align(0.5, 0.95)
+        align(0.5, 0.9)
         textbutton "Back":
             text_font "DejaVuSans.ttf"
             text_outlines [(0, "#000000", 0, 0)]

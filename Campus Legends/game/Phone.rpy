@@ -6,7 +6,6 @@ default feed_visible = False
 default profile_tile = (120, 120)
 default player_username = f"@{player_name}_123"
 default phone_epoch = 0
-#default phone_initialized = False
 
 init -10 python:
 
@@ -586,7 +585,7 @@ screen contacts():
                                 if contact.has_unread:
                                     text "New message!" size 18 color "#FF0000" font "DejaVuSans.ttf"
                             
-                                null height 10
+                                null height 5
                                 frame:
                                     background "#CCCCCC"
                                     xfill True
@@ -898,11 +897,118 @@ screen post_comments(post, back_screen="feed"):
             yalign 0.5
             xsize 450
             ysize 775
+            draggable True
             scrollbars "vertical"
             mousewheel True
-            draggable True
+                
+            vbox:
+                spacing 15
+                xalign 0.5
+                
+                # Show the post at the top
+                frame:
+                    xsize 430
+                    background "#ffffff"
+                    padding (10, 10)
+                    
+                    vbox:
+                        spacing 8
+                        
+                        # Post author info
+                        hbox:
+                            spacing 10
+                            
+                            add post.author.pfp:
+                                size (65, 65)
+                            
+                        style "post_bg"
+                        vbox:
+                            # align (0.5, 0.5)
+                            text post.author.get_username():
+                                size 20
+                                font "DejaVuSans.ttf"
+                                outlines [(0, "#000000", 0, 0)]
+                                color "#000000"
+                                bold True
 
-            text "Hello"
+                            imagebutton:
+                                idle Transform(post.image, fit="contain", xsize=280, ysize=280)
+                                hover Transform(post.image, fit="contain", xsize=280, ysize=280)
+                                action [SetVariable("viewing_photo", True), SetVariable("current_photo", post.image), Show("photo_viewer")]
+                            
+                            text post.caption:
+                                xalign 0.0
+                                font "DejaVuSans.ttf"
+                                outlines [(0, "#000000", 0, 0)]
+                                size 20
+                                color "#000000"
+                        
+
+                # Divider
+                frame:
+                    background "#CCCCCC"
+                    xfill True
+                    ysize 3
+                
+                # Comments section
+                if len(post.comments) > 1 or len(post.comments) == 0:
+                    text f"{post.get_comments()} Comments" size 22 color "#666666" xalign 0.0 font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)]
+                elif len(post.comments) == 1:
+                    text f"{post.get_comments()} Comment" size 22 color "#666666" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)] xalign 0.0
+                
+                # Loop through comments
+                for comment in post.comments:
+                    if comment.visible:
+                        frame:
+                            style "comment"
+                            xsize 430
+                            
+                            vbox:
+                                spacing 8
+                            
+                                hbox:
+                                    xfill True
+                                    
+                                    hbox:
+                                        spacing 10
+                                        xalign 0.0
+                                        
+                                        add comment.author.pfp:
+                                            size (50, 50)
+                                        
+                                        textbutton comment.author.get_username():
+                                            text_size 18
+                                            text_bold True
+                                            text_font "DejaVuSans.ttf"
+                                            text_outlines [(0, "#000000", 0, 0)]
+                                            text_color "#000000"
+                                            background None
+                                            action [Show("profile_screen", profile=post.author), Hide(screen=None)]
+                                    
+                                    hbox:
+                                        xalign 1.0
+                                        
+                                        if comment.player_liked:
+                                            textbutton "❤️ [comment.get_likes()]":
+                                                text_size 20
+                                                text_font "DejaVuSans.ttf"
+                                                text_outlines [(0, "#000000", 0, 0)]
+                                                text_color "#000000"
+                                                background None
+                                                action Function(comment.toggle_like)
+                                        else:
+                                            textbutton "🤍 [comment.get_likes()]":
+                                                text_size 20
+                                                text_font "DejaVuSans.ttf"
+                                                text_outlines [(0, "#000000", 0, 0)]
+                                                text_color "#000000"
+                                                background None
+                                                action Function(comment.toggle_like)
+                                
+                                # Comment text
+                                text comment.text:
+                                    style "comment"
+                                    xmaximum 400
 
     vbox:
         align(0.5, 0.95)

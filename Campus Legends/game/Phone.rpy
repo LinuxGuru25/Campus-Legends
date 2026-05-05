@@ -19,7 +19,7 @@ init -10 python:
     apps = [
             App("contacts", "Messages", "images/phone/icons/message_icon.png"),            
             App("feed", "Twatter", "images/phone/icons/twatter_icon.png"),
-            App("phone_stats", "Stats App", "images/phone/icon.png")
+            App("phone_stats", "Stats", "images/phone//icons/stats_icon.png")
         ]
     class Contact(NoRollback):
         def __init__(self, contact_name, pfp):

@@ -124,3 +124,7 @@ screen phone_stats():
                         text "Exclusive with: [excl.capitalize()]" size 22
                     else:
                         text "No exclusive route active" size 22
+    vbox:                       
+        align(0.5, 0.9)
+        textbutton "Back":
+            action [Hide(screen=None), Show("phone_home")]

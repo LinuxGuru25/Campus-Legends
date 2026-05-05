@@ -3,13 +3,15 @@
 # Declare characters used by this game. The color argument colorizes the
 # name of the character.
 
+default player_name = ""
+
 define e = Character("Eileen")
 
 define Sienna = Character("Sienna", color= "F54927")
 
 define RTS = Character("Red Tape Studio")
 
-define MCname = Character ("[MCname]")
+define MCname = Character ("[player_name]")
 
 define Nick = Character ("Nick", color= "#0033AA" )
 

@@ -2,9 +2,16 @@ default rumor_level = 0
 default mc_anxiety = 0
 default mc_depression = 0
 
+python:
+    def check_stats():
+        """Forces the stats screen to re-read relationship data"""
+        renpy.restart_interaction()
+
 screen phone_stats():
 
     modal True
+
+    timer 0.1 repeat True action Function(check_stats)
 
     window:
         style "phone_bg"
@@ -35,10 +42,10 @@ screen phone_stats():
                     $ pdata = get_personality_data()
 
                     text "Personality" size 30 color "#FFD700"
-                    text "Confident: [pdata['Confident']]" size 22
-                    text "Caring: [pdata['Caring']]" size 22
-                    text "Selfish: [pdata['Selfish']]" size 22
-                    text "Dominant: [mc_personality]" size 22
+                    text "Confident: [pdata['Confident']]" style "base_text"
+                    text "Caring: [pdata['Caring']]" style "base_text"
+                    text "Selfish: [pdata['Selfish']]" style "base_text"
+                    text "Dominant: [mc_personality]" style "base_text"
 
                     null height 20
 
@@ -52,9 +59,9 @@ screen phone_stats():
                         $ tier = rel["evolution"]["stage"]
 
                         text "[girl.capitalize()]" size 26 color "#FFFFFF"
-                        text "Affection: [rel['affection']]" size 22
-                        text "Trust: [rel['trust']]" size 22
-                        text "Tier: [tier]" size 22
+                        text "Affection: [rel['affection']]" style "base_text"
+                        text "Trust: [rel['trust']]" style "base_text"
+                        text "Tier: [tier]" style "base_text"
 
                         null height 10
 
@@ -92,7 +99,7 @@ screen phone_stats():
 
                     for girl in ["sienna", "jess", "aubrey", "zoey", "kaia", "misty", "tiffany"]:
                         $ j = relationship_api.get(girl).get("jealousy", 0)
-                        text "[girl.capitalize()]: [j]" size 22
+                        text "[girl.capitalize()]: [j]" style "base_text"
 
                     null height 20
 
@@ -100,7 +107,7 @@ screen phone_stats():
                     # RUMOR LEVEL
                     # -------------------------
                     text "Campus Rumor Level" size 30 color "#FFD700"
-                    text "[rumor_level]" size 22
+                    text "[rumor_level]" style "base_text"
 
                     null height 20
 
@@ -108,8 +115,8 @@ screen phone_stats():
                     # MC EMOTIONAL STATE
                     # -------------------------
                     text "MC Emotional State" size 30 color "#FFD700"
-                    text "Anxiety: [mc_anxiety]" size 22
-                    text "Depression: [mc_depression]" size 22
+                    text "Anxiety: [mc_anxiety]" style "base_text"
+                    text "Depression: [mc_depression]" style "base_text"
 
                     null height 20
 
@@ -121,9 +128,10 @@ screen phone_stats():
                     $ excl = relationship_api.get_global_metadata().get("exclusive_with", None)
 
                     if excl:
-                        text "Exclusive with: [excl.capitalize()]" size 22
+                        text "Exclusive with: [excl.capitalize()]" style "base_text"
                     else:
-                        text "No exclusive route active" size 22
+                        text "No exclusive route active" style "base_text"
+
     vbox:                       
         align(0.5, 0.9)
         textbutton "Back":

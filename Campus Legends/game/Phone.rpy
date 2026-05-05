@@ -496,6 +496,13 @@ style screen_frame:
     xsize 450
     ysize 750
     background None
+
+style base_text:
+    size 22
+    font "DejaVuSans.ttf"
+    color "#000000"
+    outlines [(0, "#000000", 0, 0)]
+
 # ------------------------------------------------------------
 # SCREENS
 # ------------------------------------------------------------

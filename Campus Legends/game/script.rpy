@@ -232,7 +232,6 @@ label meet_sienna_jess:
         "Ask Sienna about Flaunt.":
             $ relationship_api.add_affection("Sienna", +1)
             $ relationship_api.add_trust("Sienna", +1)
-
             Sienna "Why? You thinking about joining?"
             Sienna "Or are you just trying to impress me?"
 

@@ -113,6 +113,7 @@ label name_confirmed:
 
         "No, I'm not 18.":
             Sienna "Sorry, but you must be 18 or older to play this game."
+            return
 
 
     Sienna "Campus Legends is an epic journey that features highs and lows and choices matterso think before you click sweetie"

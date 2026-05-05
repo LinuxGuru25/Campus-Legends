@@ -12,6 +12,7 @@ init python:
     class RelationshipAPI:
 
         def __init__(self):
+            self.characters = {}
             self.global_meta = {}
 
             # Event hooks for other systems (MC emotional system, healing, UI, etc.)

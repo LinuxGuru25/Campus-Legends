@@ -12,7 +12,6 @@ init python:
     class RelationshipAPI:
 
         def __init__(self):
-            self.characters = {}
             self.global_meta = {}
 
             # Event hooks for other systems (MC emotional system, healing, UI, etc.)
@@ -33,30 +32,25 @@ init python:
             Ensures a character exists in the relationship system.
             Creates default values if missing.
             """
-
-            if name not in self.characters:
-                self.characters[name] = {
+            if name not in store.characters:
+                store.characters[name] = {
                     "trust": 0,
                     "affection": 0,
                     "cheated_on": False,
                     "dating": False,
                     "broken_up": False,
                     "severity": 0,
-
                     "personality": {
-                        "volatility": 0.5,   # 0.0 = calm, 1.0 = explosive
+                        "volatility": 0.5,
                         "type": "Neutral",
                     },
-
                     "evolution": {
                         "stage": 0,
                         "history": [],
                     },
-
                     "meta": {},
                 }
-
-            return self.characters[name]
+            return store.characters[name]
 
         ############################################################
         ## BASIC GETTER (REQUIRED FOR STATS APP)

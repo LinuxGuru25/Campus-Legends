@@ -4,6 +4,7 @@
 ## Clean, Modern, Conflict-Free
 ##############################################
 
+default stats_version = 0
 default characters = {}
 
 init python:
@@ -35,12 +36,14 @@ init python:
         Adds affection using the API.
         """
         relationship_api.add_affection(name, amount)
+        store.stats_version += 1
 
     def add_trust(name, amount):
         """
         Adds trust using the API.
         """
         relationship_api.add_trust(name, amount)
+        store.stats_version += 1
 
     def get_affection(name):
         return relationship_api.get_affection(name)

@@ -393,6 +393,8 @@ init -10 python:
 
     chat_yadj = ui.adjustment()
 
+
+
     def message(contact, sms):
         if not sms.added:
             sms.added = True

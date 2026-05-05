@@ -216,7 +216,7 @@ label meet_sienna_jess:
     # First branching flirt/interest choice
     menu:
         "Smile back at Sienna.":
-            $ relationship_api.add_affection("Sienna", +1)
+            $ relationship_api.add_affection("sienna", +1)
             Sienna "Hmm… confident. I like that."
 
         "Greet Jess politely.":
@@ -230,8 +230,8 @@ label meet_sienna_jess:
     # Second choice to deepen the route
     menu:
         "Ask Sienna about Flaunt.":
-            $ relationship_api.add_affection("Sienna", +1)
-            $ relationship_api.add_trust("Sienna", +1)
+            $ relationship_api.add_affection("sienna", +1)
+            $ relationship_api.add_trust("sienna", +1)
             Sienna "Why? You thinking about joining?"
             Sienna "Or are you just trying to impress me?"
 

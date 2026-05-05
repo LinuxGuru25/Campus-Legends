@@ -2,16 +2,11 @@ default rumor_level = 0
 default mc_anxiety = 0
 default mc_depression = 0
 
-python:
-    def check_stats():
-        """Forces the stats screen to re-read relationship data"""
-        renpy.restart_interaction()
-
 screen phone_stats():
 
     modal True
 
-    timer 0.1 repeat True action Function(check_stats)
+    $ _watch = stats_version
 
     window:
         style "phone_bg"

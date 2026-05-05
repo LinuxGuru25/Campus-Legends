@@ -4,7 +4,7 @@ default viewing_photo = False
 default current_photo = None
 default feed_visible = False
 default profile_tile = (120, 120)
-default player_username = f"@{player_name}_123"
+default player_username = f"{player_name}_123"
 default phone_epoch = 0
 
 init -10 python:
@@ -242,7 +242,7 @@ init -10 python:
             renpy.restart_interaction()
 
     class Profile(NoRollback):
-        def __init__(self, username, pfp=None, bio="", starting_followers=0, following=0):
+        def __init__ (self, username, pfp=None, bio="", starting_followers=0, following=0):
             self.username = username
             self.pfp = pfp
             self.bio = bio
@@ -251,56 +251,47 @@ init -10 python:
             self.posts = []
             self.visible = False
             self._initialized = False
-            
 
-        def get_username(self):
-            """ Adds @ in front of username and returns as string """
-            return (f"@{self.username}")
-
-        def add_post(self, post):
-            """ Adds a post to this post """
-            self.posts.append(post)
-        
-        def get_posts(self):
-            """ Get total number of posts """
-            return len(self.posts)
-        
-        def show_profile(self):
-            self.visible = True
-        
         def hide_profile(self):
             self.visible = False
-    
+
+        def show_profile(self):
+            self.visible = True
+
+        def add_post(self, post):
+            self.posts.append(post)
+
+        def get_username(self):
+            return str(f"@{self.username}")
+
     class Post(NoRollback):
-        def __init__(self, author, image, caption="", starting_likes=0):
+        def __init__ (self, author, text="", image=None, starting_likes=0, starting_retwats=0):
             self.author = author
+            self.text = text
             self.image = image
-            self.caption = caption
             self.starting_likes = starting_likes
+            self.starting_retwats = starting_retwats
+            self.comments = []
             self.player_liked = False
             self.visible = False
-            self.comments = []
             self.added = False
 
+        def show_post(self):
+            self.visible = True
+
+        def hide_post(self):
+            self.visible = False
+
         def toggle_like(self):
-            """Toggles if the player clicks like"""
             self.player_liked = not self.player_liked
         
         def get_likes(self):
             return self.starting_likes +(1 if self.player_liked else 0)
 
-        def show_post(self):
-            self.visible = True
-        
-        def hide_post(self):
-            self.visible = False
-
         def add_comment(self, comment):
-            """ Adds a comment to this post """
             self.comments.append(comment)
-        
+
         def get_comments(self):
-            """ Get total number of comments """
             return len(self.comments)
 
     all_posts = []
@@ -426,7 +417,10 @@ init -10 python:
             comment.show_comment()
             post.add_comment(comment)
 
-
+    def add_profile(profile):
+        if not profile._initialized:
+            profile._initialized = True
+            profile.show_profile()      
 
     
 # ------------------------------------------------------------
@@ -459,7 +453,7 @@ style blue_photo:
 style post_bg:
     xalign 0.5
     xmaximum 760
-    background "#ffffff"
+    background None #"#ffffff"
     padding (5, 5)
 
 style username:
@@ -702,6 +696,7 @@ screen chat_screen(contact):
                     hover_color "#0099cc"
                     font "DejaVuSans.ttf"
                 action [Hide(screen=None), Show("contacts")]
+
 screen photo_viewer():
         modal True
         zorder 1000
@@ -721,7 +716,6 @@ screen photo_viewer():
 
                 fit "contain"
 
-
 screen feed():
     modal True
 
@@ -733,167 +727,101 @@ screen feed():
             null height 65
             spacing 5
 
-            text "Feed" size 40 color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)] xalign 0.5 yalign 0.07
-
             viewport:
                 xpos 13
-                yalign 0.3
+                yalign 0.5
                 xsize 450
                 ysize 750
                 scrollbars "vertical"
                 draggable True
                 mousewheel True
                 
-                
                 if feed_visible:
                     vbox:
-                        # Player profile button
-                        
                         frame:
-                            background "#CCCCCC"
-                            xalign 0.5
-                            xsize 400
-                            ysize 3
-                        
-                        frame:
-                            align (0.0, 0.5)
+                            xpos 0.05
+                            yalign 0.5
                             background None
                             xfill True
                             ysize 100
-                        
                             hbox:
-                                add player_pf.pfp:
-                                    size (65, 65)
-                                textbutton "Your Profile":
-                                    text_style "pl_username"
-                                    text_font "DejaVuSans.ttf"
-                                    text_outlines [(0, "#000000", 0, 0)]
+                                button:
+                                    add player_pf.pfp:
+                                        size (75, 75)
                                     action [Show("profile_screen", profile=player_pf), Hide(screen=None)]
+
+                                null width 85
+                                
+                                text "Feed" size 35 color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)] xalign 0.5 yalign 0.5
                             
-                        # Divider
                         frame:
                             background "#CCCCCC"
-                            xalign 0.5
-                            xsize 400
+                            xfill True
                             ysize 3
-                        vbox:
-                            xalign 0.5
-                            for post in all_posts:
-                                if post.visible:
-                                    frame:
-                                        style "post_bg"
+
+                        for post in all_posts:
+                            if post.visible:
+                                $ _author = post.author  # profile object
+
+                                frame:
+                                    style "post_bg"
+                                    
+                                    hbox:
+                                        spacing 10
+
                                         vbox:
-                                            spacing 5
-                                            # Posted image (Square images look the best)
-                                            imagebutton:
-                                                idle Transform(post.image, fit="contain", xsize=280, ysize=280)
-                                                hover Transform(post.image, fit="contain", xsize=280, ysize=280)
-                                                action [SetVariable("viewing_photo", True), SetVariable("current_photo", post.image), Show("photo_viewer")]
-                                            xfill True
+                                            yalign 0.0
+                                            button:
+                                                add _author.pfp:
+                                                    size (60, 60)
+                                                action [Show("profile_screen", profile=_author), Hide(screen=None)]
 
-                                            hbox:
-                                                spacing 10
+
+                                        vbox:
+                                            spacing 8
+                                            xmaximum 370
+
+                                            
+                                            textbutton _author.get_username():
+                                                text_hover_color "#646464"
+                                                text_idle_color "#000000"
+                                                text_font "DejaVuSans.ttf"
+                                                text_outlines [(0, "#000000", 0, 0)]
+                                                text_size 25
                                                 xalign 0.0
-                                                # Author pfp and username
-                                                add post.author.pfp:
-                                                    size (65, 65)
 
-                                                textbutton post.author.get_username():
-                                                    padding (5, 5)
-                                                    text_style "username"
-                                                    text_font "DejaVuSans.ttf"
-                                                    text_outlines [(0, "#000000", 0, 0)]
-                                                    action [Show("profile_screen", profile=post.author), Hide(screen=None)]
-                                            hbox:
-                                                
-                                                # Like button
-                                                if post.player_liked:
-                                                    textbutton "❤️ [post.get_likes()]":
-                                                        text_font "DejaVuSans.ttf"
-                                                        text_outlines [(0, "#000000", 0, 0)]
-                                                        text_size 25
-                                                        text_color "#000000"
-                                                        background None
-                                                        action Function(post.toggle_like)
-                                                else:
-                                                    textbutton "🤍 [post.get_likes()]":
-                                                        text_font "DejaVuSans.ttf"
-                                                        text_outlines [(0, "#000000", 0, 0)]
-                                                        text_size 25
-                                                        text_color "#000000"
-                                                        background None
-                                                        action Function(post.toggle_like)
-                                                # Comments button
-                                                textbutton "💬 [post.get_comments()]" :
-                                                    text_font "DejaVuSans.ttf"
-                                                    text_outlines [(0, "#000000", 0, 0)]
-                                                    text_size 25
-                                                    text_color "#000000"        
-                                                    background None
-                                                    action [Show("post_comments", post=post, back_screen="feed"), Hide(screen=None)]
-                                    # Divider
-                                    null height 5
-                                    frame:
-                                        background "#CCCCCC"
-                                        xalign 0.5
-                                        xfill True
-                                        ysize 3
+                                                action Show("profile_screen", profile=_author), Hide(screen=None)
+
+                                            
+                                            if post.text:
+                                                text post.text:
+                                                    size 20
+                                                    color "#000000"
+                                                    font "DejaVuSans.ttf"
+                                                    outlines [(0, "#000000", 0, 0)]
+
+                                            
+                                            if post.image is not None:
+                                                imagebutton:
+                                                    idle Transform(post.image, fit="contain", xsize=280, ysize=200)
+                                                    hover Transform(post.image, fit="contain", xsize=280, ysize=200)
+                                                    action [
+                                                        SetVariable("viewing_photo", True),
+                                                        SetVariable("current_photo", post.image),
+                                                        Show("photo_viewer")
+                                                    ]
+
+                                frame:
+                                    background "#CCCCCC"
+                                    xfill True
+                                    ysize 3
+
     vbox:
         align(0.5, 0.9)
         textbutton "Back":
             text_font "DejaVuSans.ttf"
             text_outlines [(0, "#000000", 0, 0)]
             action [Show("phone_home"), Hide(screen=None)]
-
-screen tile_screen(post, back_screen="profile_screen"):
-    frame:
-        xysize profile_tile
-        background None
-        padding (5, 5)
-
-        imagebutton:
-            idle Transform(post.image, fit="cover", xysize=profile_tile)
-            hover Transform(post.image, fit="cover", xysize=profile_tile)
-            action [Show("post_comments", post=post, back_screen=back_screen), Hide(screen=None)]
-
-screen profile_info(profile):
-    vbox:
-        xsize 430
-        xalign 0.25
-        yalign 0.25
-        # pfp and bio text
-        vbox:
-            spacing 5
-            frame:
-                background None
-                xfill True
-                yalign 0.5
-                hbox:
-                    add profile.pfp xysize (150,150)
-                    vbox:
-                        if len(profile.posts) > 1 or len(profile.posts) == 0:
-                            text f"{len(profile.posts)}" size 20 color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)]
-                            text "Posts" size 20 color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)]
-                        elif len(profile.posts) == 1:
-                            text f"{len(profile.posts)}" size 20 color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)]
-                            text "Post" size 20 color "#000000"
-                        
-                        
-                    null width 15
-                    vbox:
-                        text f"{profile.starting_followers}"  size 20 color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)]
-                        text "Followers" size 20 color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)]
-                    null width 15
-                    vbox:
-                        text f"{profile.following}" size 20 color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)]
-                        text "Following" size 20 color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)]
-
-            text f"{profile.username}" color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)] size 23
-            text f"{profile.bio}" color "#000000" size 20 font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)]
-        frame:
-            background "#CCCCCC"
-            xfill True
-            ysize 3
 
 screen profile_screen(profile, back_screen="feed"):
     modal True
@@ -914,13 +842,15 @@ screen profile_screen(profile, back_screen="feed"):
                 spacing 15
                 xfill True
                 
+                text "Profile"
+
                 if profile.visible:
-                    use profile_info(profile)
+                    pass
                 
                 grid 3 10:
                     for post in profile.posts:
                         if post.visible:
-                            use tile_screen(post, back_screen="profile_screen")
+                            pass
 
     vbox:
         align(0.5, 0.9)

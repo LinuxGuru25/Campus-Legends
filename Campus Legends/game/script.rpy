@@ -173,11 +173,11 @@ label game_start:
     $ sienna_m1.advance_expired()
     $ message(sienna, sienna_m2)
     $ new_post(sienna_pf, sienna_post1)
-    $ new_comment(sienna_post1, si_p1_c1)
+    # $ new_comment(sienna_post1, si_p1_c1)
 
-    $ new_post(sienna_pf, sienna_post2)
-    $ new_post(sienna_pf, sienna_post3)
-    $ new_post(sienna_pf, sienna_post4)
+    $ new_post(player_pf, player_post)
+    # $ new_post(sienna_pf, sienna_post3)
+    # $ new_post(sienna_pf, sienna_post4)
 
 
     mystery "Naw, Most guys cant handle Sienna and well Jess is sorta unavailable"

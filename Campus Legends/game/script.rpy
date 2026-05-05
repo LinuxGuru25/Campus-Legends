@@ -171,12 +171,13 @@ label campus_intro_choice:
 
     menu:
         "Yeah, why not.":
-            $ change_points("Nick", +1)
+            $ relationship_api.add_affection("Nick", +1)
             jump meet_sienna_jess
 
         "I should really get going and unpack.":
-            $ change_points("Nick", -1)
+            $ relationship_api.add_affection("Nick", -1)
             jump dorm_arrival
+
 
 label meet_sienna_jess:
 
@@ -185,7 +186,7 @@ label meet_sienna_jess:
     Nick "Come on, man. They’re right over here."
 
     show Sienna neutral at left
-    show jess neutral at right
+    show Jess neutral at right
 
     Nick "Ladies! Look who I found wandering around like a lost puppy."
 
@@ -200,42 +201,42 @@ label meet_sienna_jess:
     # First branching flirt/interest choice
     menu:
         "Smile back at Sienna.":
-            $ change_points("Sienna", +1)
+            $ relationship_api.add_affection("Sienna", +1)
             Sienna "Hmm… confident. I like that."
 
         "Greet Jess politely.":
-            $ change_points("Jess", +1)
+            $ relationship_api.add_affection("Jess", +1)
             Jess "Oh— um… hi. Nice to meet you."
 
         "Stay neutral.":
             "You keep it simple. No need to overplay it."
 
+
     # Second choice to deepen the route
     menu:
         "Ask Sienna about Flaunt.":
-            $ change_points("Sienna", +1)
-            $ change_points("Confident", +1)
+            $ relationship_api.add_affection("Sienna", +1)
+            $ relationship_api.add_trust("Sienna", +1)
 
-            Sienna "Why You thinking about joining?"
+            Sienna "Why? You thinking about joining?"
             Sienna "Or are you just trying to impress me?"
 
             MCname "If I wanted to impress you, trust me… you’d know."
 
-            #Confident point awarded *because* of the bold retort
-            $ change_points("Confident", +1)
+            # Confident personality boost
+            $ mc_adjust_personality("Confident", +1)
 
             Sienna "Oh?"
 
         "Ask Jess how long she’s been VP.":
-            $ change_points("Jess", +1)
+            $ relationship_api.add_affection("Jess", +1)
 
-            Jess "I joined as a freshmen and have been VP for around 2 years now give or take"
-            MCname "That’s impressive. You must be one hell of a VP if Sienna’s kept you around"
-            Jess "I… try my best. It means a lot to hear that"
-            
+            Jess "I joined as a freshman and have been VP for around 2 years now give or take."
+            MCname "That’s impressive. You must be one hell of a VP if Sienna’s kept you around."
+            Jess "I… try my best. It means a lot to hear that."
 
         "Talk to Nick instead.":
-            $ change_points("Nick", +1)
+            $ relationship_api.add_affection("Nick", +1)
             Nick "See? I told you they’re cool."
 
 
@@ -245,6 +246,7 @@ label meet_sienna_jess:
 
     jump dorm_arrival
 
+
 label dorm_arrival:
 
     scene dorm_hall with dissolve
@@ -253,15 +255,12 @@ label dorm_arrival:
 
     Nick "Suit yourself, bro. I’ll catch you later."
 
-    # Nick loses a point for skipping
-    # Already applied in the choice above
-
     scene dorm_room with fade
 
     Nick "Yo! You made it. I already claimed the left side."
 
-    # Continue into your dorm scene
     jump dorm_scene_main
+
 
 
 

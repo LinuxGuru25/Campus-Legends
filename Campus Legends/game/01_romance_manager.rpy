@@ -59,6 +59,27 @@ init python:
             return self.characters[name]
 
         ############################################################
+        ## BASIC GETTER (REQUIRED FOR STATS APP)
+        ############################################################
+
+        def get(self, name):
+            """
+            Returns the character data dictionary.
+            Auto‑creates the character if missing.
+            """
+            return self.ensure(name)
+
+        ############################################################
+        ## GLOBAL METADATA ACCESS (REQUIRED FOR STATS APP)
+        ############################################################
+
+        def get_global_metadata(self):
+            """
+            Returns the global metadata dictionary used by the Stats App.
+            """
+            return self.global_meta
+
+        ############################################################
         ## HOOK REGISTRATION
         ############################################################
 
@@ -207,3 +228,5 @@ init python:
 
 init python:
     relationship_api = RelationshipAPI()
+
+

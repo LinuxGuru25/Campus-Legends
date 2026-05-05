@@ -1,17 +1,27 @@
+default rumor_level = 0
+default mc_anxiety = 0
+default mc_depression = 0
+
 screen phone_stats():
 
-    frame:
-        style_prefix "phone"
-        xfill True
-        yfill True
+    modal True
+
+    window:
+        style "phone_bg"
 
         viewport:
+            xpos 13
+            yalign 0.3
+            xsize 450
+            ysize 750
+            scrollbars "vertical"
             draggable True
             mousewheel True
 
             frame:
-                xpadding 20
-                ypadding 20
+                xalign 0.5
+                yalign 0.5
+                background None
 
                 vbox:
                     spacing 20
@@ -39,11 +49,11 @@ screen phone_stats():
 
                     for girl in ["sienna", "jess", "aubrey", "zoey", "kaia", "misty", "tiffany"]:
                         $ rel = relationship_api.get(girl)
-                        $ tier = evolution.get_tier(girl)
+                        $ tier = rel["evolution"]["stage"]
 
                         text "[girl.capitalize()]" size 26 color "#FFFFFF"
-                        text "Affection: [rel.affection]" size 22
-                        text "Trust: [rel.trust]" size 22
+                        text "Affection: [rel['affection']]" size 22
+                        text "Trust: [rel['trust']]" size 22
                         text "Tier: [tier]" size 22
 
                         null height 10
@@ -56,7 +66,7 @@ screen phone_stats():
                     text "Route Status" size 30 color "#FFD700"
 
                     for girl in ["sienna", "jess", "aubrey", "zoey", "kaia", "misty", "tiffany"]:
-                        $ state = relationship_api.get_route_state(girl)
+                        $ state = relationship_api.get(girl).get("route_state", "open")
 
                         if state == "open":
                             $ color = "#00FFAA"
@@ -71,7 +81,7 @@ screen phone_stats():
                         else:
                             $ color = "#FFFFFF"
 
-                        text "[girl.capitalize()]: [state.capitalize()]" size 22 color color
+                        text "[girl.capitalize()]: [state.capitalize()]" size 22
 
                     null height 20
 
@@ -81,7 +91,7 @@ screen phone_stats():
                     text "Jealousy Levels" size 30 color "#FFD700"
 
                     for girl in ["sienna", "jess", "aubrey", "zoey", "kaia", "misty", "tiffany"]:
-                        $ j = jealousy.get(girl)
+                        $ j = relationship_api.get(girl).get("jealousy", 0)
                         text "[girl.capitalize()]: [j]" size 22
 
                     null height 20
@@ -90,7 +100,7 @@ screen phone_stats():
                     # RUMOR LEVEL
                     # -------------------------
                     text "Campus Rumor Level" size 30 color "#FFD700"
-                    text "[rumor.get()]" size 22
+                    text "[rumor_level]" size 22
 
                     null height 20
 
@@ -98,8 +108,8 @@ screen phone_stats():
                     # MC EMOTIONAL STATE
                     # -------------------------
                     text "MC Emotional State" size 30 color "#FFD700"
-                    text "Anxiety: [mc_emotion.get_anxiety()]" size 22
-                    text "Depression: [mc_emotion.get_depression()]" size 22
+                    text "Anxiety: [mc_anxiety]" size 22
+                    text "Depression: [mc_depression]" size 22
 
                     null height 20
 
@@ -108,10 +118,9 @@ screen phone_stats():
                     # -------------------------
                     text "Exclusive Route" size 30 color "#FFD700"
 
-                    if exclusive.exclusive_with:
-                        text "Exclusive with: [exclusive.exclusive_with.capitalize()]" size 22
+                    $ excl = relationship_api.get_global_metadata().get("exclusive_with", None)
+
+                    if excl:
+                        text "Exclusive with: [excl.capitalize()]" size 22
                     else:
                         text "No exclusive route active" size 22
-
-
-

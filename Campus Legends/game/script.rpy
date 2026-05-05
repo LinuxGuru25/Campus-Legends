@@ -30,13 +30,15 @@ image sienna_look_up_movie = Movie(play="Sienna_look_up.avi", loop=False)
 
 # The game starts here.
 
-label start:
+# label start:
 
-    scene expression "siennaphone.png"
-    # Sienna looking at her phone
+#     call init_phone
 
-    # Sienna distracted, dots appear one at a time
-    Sienna ".{w=0.4}.{w=0.4}.{w=0.4}.{w=0.4}.{w=0.4}.{w=0.4}."
+#     scene expression "siennaphone.png"
+#     # Sienna looking at her phone
+
+#     # Sienna distracted, dots appear one at a time
+#     Sienna ".{w=0.4}.{w=0.4}.{w=0.4}.{w=0.4}.{w=0.4}.{w=0.4}."
 
 pause 0.5
 
@@ -78,12 +80,12 @@ Sienna "Before I let you go on this epic journey, I have a few important questio
 
 label get_name:
 
-    $ MCname = renpy.input("What's your name handsome?")
-    $ MCname = MCname.strip()
+    $ player_name = renpy.input("What's your name handsome?")
+    $ player_name = player_name.strip()
 
     # If blank → use default and skip confirmation
-    if not MCname:
-        $ MCname = "Emanuel"
+    if not player_name:
+        $ player_name = "Emanuel"
         jump name_confirmed
 
     # Otherwise → ask for confirmation
@@ -127,10 +129,17 @@ label name_confirmed:
     pause 0.5
     jump game_start
 
+label start:
+    call init_phone
+    jump game_start
 
 label game_start:
 
     scene bg campus_day with dissolve
+
+    
+
+    show screen phone_button
 
     "Your first day at Southside University begins..."
 
@@ -161,6 +170,16 @@ label game_start:
     mystery "Sienna is cool asf though, i havent talked to the rest that much though"
 
     MCname "Do they have boyfriends?"
+
+    $ sienna_m1.advance_expired()
+    $ message(sienna, sienna_m2)
+    $ new_post(sienna_pf, sienna_post1)
+    # $ new_comment(sienna_post1, si_p1_c1)
+
+    $ new_post(player_pf, player_post)
+    # $ new_post(sienna_pf, sienna_post3)
+    # $ new_post(sienna_pf, sienna_post4)
+
 
     mystery "Naw, Most guys cant handle Sienna and well Jess is sorta unavailable"
 

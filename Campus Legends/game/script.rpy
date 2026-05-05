@@ -186,11 +186,11 @@ label campus_intro_choice:
 
     menu:
         "Yeah, why not.":
-            $ relationship_api.add_affection("Nick", +1)
+            $ relationship_api.add_affection("nick", +1)
             jump meet_sienna_jess
 
         "I should really get going and unpack.":
-            $ relationship_api.add_affection("Nick", -1)
+            $ relationship_api.add_affection("nick", -1)
             jump dorm_arrival
 
 
@@ -220,7 +220,7 @@ label meet_sienna_jess:
             Sienna "Hmm… confident. I like that."
 
         "Greet Jess politely.":
-            $ relationship_api.add_affection("Jess", +1)
+            $ relationship_api.add_affection("jess", +1)
             Jess "Oh— um… hi. Nice to meet you."
 
         "Stay neutral.":
@@ -243,14 +243,14 @@ label meet_sienna_jess:
             Sienna "Oh?"
 
         "Ask Jess how long she’s been VP.":
-            $ relationship_api.add_affection("Jess", +1)
+            $ relationship_api.add_affection("jess", +1)
 
             Jess "I joined as a freshman and have been VP for around 2 years now give or take."
             MCname "That’s impressive. You must be one hell of a VP if Sienna’s kept you around."
             Jess "I… try my best. It means a lot to hear that."
 
         "Talk to Nick instead.":
-            $ relationship_api.add_affection("Nick", +1)
+            $ relationship_api.add_affection("nick", +1)
             Nick "See? I told you they’re cool."
 
 

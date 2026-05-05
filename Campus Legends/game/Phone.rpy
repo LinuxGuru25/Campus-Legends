@@ -18,7 +18,8 @@ init -10 python:
     # Apps in order of index [0] = First app, [1] = Second app, etc.
     apps = [
             App("contacts", "Messages", "images/phone/icons/message_icon.png"),            
-            App("feed", "Twatter", "images/phone/icons/twatter_icon.png")
+            App("feed", "Twatter", "images/phone/icons/twatter_icon.png"),
+            App("phone_stats", "Stats App", "images/phone/icon.png")
         ]
     class Contact(NoRollback):
         def __init__(self, contact_name, pfp):

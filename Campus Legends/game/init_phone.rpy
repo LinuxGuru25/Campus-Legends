@@ -15,16 +15,18 @@ label init_phone:
             sienna_m1.show_text()
             sienna_m1.can_expire()
 
-            player_r1 = sienna_m1.chain("Not much", "Nice")
-            player_r1a = sienna_m1.chain("Doing homework", "Sounds fun")
+            player_r1 = sienna_m1.chain("Who you callin pussy?", "You, dumb fuck")
+            player_r1a = sienna_m1.chain("Callin me a pussy?", "Who else would I be talkin to?")
 
-            sienna_m2 = SMS(sienna, "How's it going?")
+            sienna_m2 = SMS(sienna, "How's it going bitch?")
+            
 
-            player_r2 = sienna_m2.chain("Boring, big test", "Sorry to hear that")
-            player_r2a = sienna_m2.chain("Good, I aced my test", "Great to hear")
+            player_r2 = sienna_m2.chain("I see you talkin to yourself again", "EXCUSE ME?")
+            player_r2a = sienna_m2.chain("Prob better than you, hoe", "You da bitch ass hoe tho")
 
-            player_r3 = player_r2.chain("test text", "test text 2")
-            player_r3a = player_r2a.chain("test text 3", "test text 4")
+            player_r3 = player_r2.chain("Keep it coming hoe, you know what I said", "Imma bitch slap the shit outta you")
+            player_r3a = player_r2a.chain("Said nobody", "That's right, bitch aint go no friends. my bad.")
+
 
 
             player_r4 = player_r3.chain("Picture?", npc_image="images/phone/jeff.png")

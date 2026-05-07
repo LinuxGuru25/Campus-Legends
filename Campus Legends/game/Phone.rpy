@@ -6,6 +6,7 @@ default feed_visible = False
 default profile_tile = (120, 120)
 default player_username = f"{player_name}_123"
 default phone_epoch = 0
+default back_post = None
 
 init -10 python:
 
@@ -274,6 +275,7 @@ init -10 python:
             self.starting_retwats = starting_retwats
             self.comments = []
             self.player_liked = False
+            self.player_retwat = False
             self.visible = False
             self.added = False
 
@@ -285,34 +287,48 @@ init -10 python:
 
         def toggle_like(self):
             self.player_liked = not self.player_liked
+
+        def toggle_retwats(self):
+            self.player_retwat = not self.player_retwat
         
         def get_likes(self):
-            return self.starting_likes +(1 if self.player_liked else 0)
+            return str(self.starting_likes +(1 if self.player_liked else 0))
+
+        def get_retwats(self):
+            return str(self.starting_retwats +(1 if self.player_retwat else 0))
 
         def add_comment(self, comment):
             self.comments.append(comment)
 
         def get_comments(self):
-            return len(self.comments)
+            return str(len(self.comments))
 
     all_posts = []
 
     class Comment(NoRollback):
-        def __init__(self, author, text, pfp=None, starting_likes=0):
+        def __init__(self, author, text, pfp=None, starting_likes=0, starting_retwats=0):
             self.author = author
             self.text = text
             self.pfp = pfp
             self.starting_likes = starting_likes
+            self.starting_retwats = starting_retwats
             self.player_liked = False
+            self.player_retwat = False
             self.visible = False
             self.added = False
         
         def toggle_like(self):
             self.player_liked = not self.player_liked
+
+        def toggle_retwats(self):
+            self.player_retwat = not self.player_retwat
         
         def get_likes(self):
-            return self.starting_likes + (1 if self.player_liked else 0)
+            return str(self.starting_likes +(1 if self.player_liked else 0))
         
+        def get_retwats(self):
+            return str(self.starting_retwats +(1 if self.player_retwat else 0))
+
         def show_comment(self):
             self.visible = True
         
@@ -456,7 +472,7 @@ style blue_photo:
 style post_bg:
     xalign 0.5
     xmaximum 760
-    background None #"#ffffff"
+    background "#ffffff"
     padding (5, 5)
 
 style username:
@@ -758,7 +774,7 @@ screen feed():
                                 button:
                                     add player_pf.pfp:
                                         size (75, 75)
-                                    action [Show("profile_screen", profile=player_pf), Hide(screen=None)]
+                                    action [Show("profile_screen", profile=player_pf, back_screen="feed"), Hide(screen=None)]
 
                                 null width 85
                                 
@@ -775,7 +791,7 @@ screen feed():
 
                                 frame:
                                     style "post_bg"
-                                    
+                                    xfill True
                                     hbox:
                                         spacing 10
 
@@ -784,7 +800,7 @@ screen feed():
                                             button:
                                                 add _author.pfp:
                                                     size (60, 60)
-                                                action [Show("profile_screen", profile=_author), Hide(screen=None)]
+                                                action [Show("profile_screen", profile=_author, back_screen="feed"), Hide(screen=None)]
 
 
                                         vbox:
@@ -800,7 +816,7 @@ screen feed():
                                                 text_size 25
                                                 xalign 0.0
 
-                                                action Show("profile_screen", profile=_author), Hide(screen=None)
+                                                action Show("profile_screen", profile=_author, back_screen="feed"), Hide(screen=None)
 
                                             
                                             if post.text:
@@ -820,6 +836,80 @@ screen feed():
                                                         SetVariable("current_photo", post.image),
                                                         Show("photo_viewer")
                                                     ]
+
+                                frame:
+                                    background "#FFFFFF"
+                                    xalign 0.0
+                                    xfill True
+                                    hbox:
+                                        xalign 0.5    
+                                        button:
+                                            hbox:
+                                                add "images/phone/icons/comment_icon.png":
+                                                    size (35, 35)
+
+                                                text [post.get_comments()]:
+                                                    font "DejaVuSans.ttf"
+                                                    outlines [(0, "#000000", 0, 0)]
+                                                    size 25
+                                                    color "#000000"
+                                            action [Show("post_comments", post=post, back_screen="feed"), Hide(screen=None)]
+
+
+                                        if post.player_retwat:
+                                            button:
+                                                hbox:
+                                                    add "images/phone/icons/retwat_icon.png":
+                                                        size (35, 35)
+
+                                                    text [post.get_retwats()]:
+                                                        font "DejaVuSans.ttf"
+                                                        outlines [(0, "#000000", 0, 0)]
+                                                        size 25
+                                                        color "#000000"
+                                                action Function(post.toggle_retwats)
+                                        
+                                        else:
+                                            button:
+                                                hbox:
+                                                    add "images/phone/icons/retwat_icon.png":
+                                                        size (35, 35)
+
+                                                    text [post.get_retwats()]:
+                                                        font "DejaVuSans.ttf"
+                                                        outlines [(0, "#000000", 0, 0)]
+                                                        size 25
+                                                        color "#000000"
+                                                action Function(post.toggle_retwats)
+                                        
+                                        if post.player_liked:
+                                            button:
+                                                hbox:
+                                                    add "images/phone/icons/red_heart_icon.png":
+                                                        size (35, 35)
+
+                                                    text [post.get_likes()]:
+                                                        font "DejaVuSans.ttf"
+                                                        outlines [(0, "#000000", 0, 0)]
+                                                        size 25
+                                                        color "#000000"
+                                                action Function(post.toggle_like)
+                                        
+                                        else:
+                                            button:
+                                                hbox:
+                                                    add "images/phone/icons/white_heart_icon.png":
+                                                        size (35, 35)
+
+                                                    text [post.get_likes()]:
+                                                        font "DejaVuSans.ttf"
+                                                        outlines [(0, "#000000", 0, 0)]
+                                                        size 25
+                                                        color "#000000"
+                                                action Function(post.toggle_like)
+
+
+
 
                                 frame:
                                     background "#CCCCCC"
@@ -867,16 +957,22 @@ screen profile_screen(profile, back_screen="feed"):
         textbutton "Back":
             text_font "DejaVuSans.ttf"
             text_outlines [(0, "#000000", 0, 0)]
-            action [Show("feed"), Hide(screen=None)]
+            action If(
+                back_screen == "post_comments",
+                [Show("post_comments", post=back_post, back_screen="feed"), Hide(screen=None)],
+                [Show(back_screen), Hide(screen=None)]
+            )
 
 screen post_comments(post, back_screen="feed"):
     modal True
+
+    $ _author = post.author
 
     window:
         style "phone_bg"
 
         viewport:
-            xalign 0.2
+            xpos 13
             yalign 0.3
             xsize 450
             ysize 750
@@ -907,38 +1003,109 @@ screen post_comments(post, back_screen="feed"):
                             style "post_bg"
                             vbox:
                                 # align (0.5, 0.5)
-                                text post.author.get_username():
-                                    size 20
-                                    font "DejaVuSans.ttf"
-                                    outlines [(0, "#000000", 0, 0)]
-                                    color "#000000"
-                                    bold True
+                                textbutton post.author.get_username():
+                                    text_size 25
+                                    text_font "DejaVuSans.ttf"
+                                    text_outlines [(0, "#000000", 0, 0)]
+                                    text_hover_color "#646464"
+                                    text_idle_color "#000000"
+                                    action [SetVariable("back_post", post), Show("profile_screen", profile=_author, back_screen="post_comments"), Hide(screen=None)]
 
                                 imagebutton:
                                     idle Transform(post.image, fit="contain", xsize=280, ysize=280)
                                     hover Transform(post.image, fit="contain", xsize=280, ysize=280)
                                     action [SetVariable("viewing_photo", True), SetVariable("current_photo", post.image), Show("photo_viewer")]
                                 
-                                text post.caption:
+                                text post.text:
                                     xalign 0.0
                                     font "DejaVuSans.ttf"
                                     outlines [(0, "#000000", 0, 0)]
                                     size 20
                                     color "#000000"
                         
+                frame:
+                    background None
+                    xalign 0.5
+                    hbox:
+                        xalign 0.5
+                        
+                        button:
+                            hbox:
+                                add "images/phone/icons/comment_icon.png":
+                                    size (35, 35)
 
+                                text [post.get_comments()]:
+                                    font "DejaVuSans.ttf"
+                                    outlines [(0, "#000000", 0, 0)]
+                                    size 25
+                                    color "#000000"
+                            action NullAction()
+
+
+                        if post.player_retwat:
+                            button:
+                                hbox:
+                                    add "images/phone/icons/retwat_icon.png":
+                                        size (35, 35)
+
+                                    text [post.get_retwats()]:
+                                        font "DejaVuSans.ttf"
+                                        outlines [(0, "#000000", 0, 0)]
+                                        size 25
+                                        color "#000000"
+                                action Function(post.toggle_retwats)
+                        
+                        else:
+                            button:
+                                hbox:
+                                    add "images/phone/icons/retwat_icon.png":
+                                        size (35, 35)
+
+                                    text [post.get_retwats()]:
+                                        font "DejaVuSans.ttf"
+                                        outlines [(0, "#000000", 0, 0)]
+                                        size 25
+                                        color "#000000"
+                                action Function(post.toggle_retwats)
+                        
+                        if post.player_liked:
+                            button:
+                                hbox:
+                                    add "images/phone/icons/red_heart_icon.png":
+                                        size (35, 35)
+
+                                    text [post.get_likes()]:
+                                        font "DejaVuSans.ttf"
+                                        outlines [(0, "#000000", 0, 0)]
+                                        size 25
+                                        color "#000000"
+                                action Function(post.toggle_like)
+                                        
+                        else:
+                            button:
+                                hbox:
+                                    add "images/phone/icons/white_heart_icon.png":
+                                        size (35, 35)
+
+                                    text [post.get_likes()]:
+                                        font "DejaVuSans.ttf"
+                                        outlines [(0, "#000000", 0, 0)]
+                                        size 25
+                                        color "#000000"
+                                action Function(post.toggle_like)
+                
+                # # Comments section
+                # if len(post.comments) > 1 or len(post.comments) == 0:
+                #     text f"{post.get_comments()} Comments" size 22 color "#666666" xalign 0.0 font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)]
+                # elif len(post.comments) == 1:
+                #     text f"{post.get_comments()} Comment" size 22 color "#666666" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)] xalign 0.0
+                
                 # Divider
                 frame:
                     background "#CCCCCC"
                     xfill True
                     ysize 3
-                
-                # Comments section
-                if len(post.comments) > 1 or len(post.comments) == 0:
-                    text f"{post.get_comments()} Comments" size 22 color "#666666" xalign 0.0 font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)]
-                elif len(post.comments) == 1:
-                    text f"{post.get_comments()} Comment" size 22 color "#666666" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)] xalign 0.0
-                
+
                 # Loop through comments
                 for comment in post.comments:
                     if comment.visible:
@@ -948,52 +1115,95 @@ screen post_comments(post, back_screen="feed"):
                             
                             vbox:
                                 spacing 8
-                            
+                                xfill True
                                 hbox:
-                                    xfill True
+                                    spacing 10
+                                    xalign 0.0
                                     
-                                    hbox:
-                                        spacing 10
+                                    add comment.author.pfp:
+                                        size (50, 50)
+                                    
+                                    textbutton comment.author.get_username():
+                                        text_hover_color "#646464"
+                                        text_idle_color "#000000"
+                                        text_font "DejaVuSans.ttf"
+                                        text_outlines [(0, "#000000", 0, 0)]
+                                        text_size 25
                                         xalign 0.0
-                                        
-                                        add comment.author.pfp:
-                                            size (50, 50)
-                                        
-                                        text comment.author.get_username():
-                                            size 20
-                                            font "DejaVuSans.ttf"
-                                            outlines [(0, "#000000", 0, 0)]
-                                            color "#000000"
 
-                                    
-                                    hbox:
-                                        xalign 1.0
-                                        
-                                        if comment.player_liked:
-                                            textbutton "❤️ [comment.get_likes()]":
-                                                text_size 20
-                                                text_font "DejaVuSans.ttf"
-                                                text_outlines [(0, "#000000", 0, 0)]
-                                                text_color "#000000"
-                                                background None
-                                                action Function(comment.toggle_like)
-                                        else:
-                                            textbutton "🤍 [comment.get_likes()]":
-                                                text_size 20
-                                                text_font "DejaVuSans.ttf"
-                                                text_outlines [(0, "#000000", 0, 0)]
-                                                text_color "#000000"
-                                                background None
-                                                action Function(comment.toggle_like)
+                                        action [SetVariable("back_post", post), Show("profile_screen", profile=_author, back_screen="post_comments"), Hide(screen=None)]
                                 
                                 # Comment text
                                 text comment.text:
+                                    xpos 75
                                     font "DejaVuSans.ttf"
                                     outlines [(0, "#000000", 0, 0)]
                                     size 20
                                     color "#000000"
                                     xmaximum 400
 
+
+                                hbox:
+                                    xalign 0.5
+                                    
+                                    
+                                    if comment.player_retwat:
+                                        
+                                        button:
+                                            hbox:
+                                                add "images/phone/icons/retwat_icon.png":
+                                                    size (35, 35)
+
+                                                text [comment.get_retwats()]:
+                                                    font "DejaVuSans.ttf"
+                                                    outlines [(0, "#000000", 0, 0)]
+                                                    size 25
+                                                    color "#000000"
+                                            action Function(comment.toggle_retwats)
+                                    
+                                    else:
+                                        button:
+                                            hbox:
+                                                add "images/phone/icons/retwat_icon.png":
+                                                    size (35, 35)
+
+                                                text [comment.get_retwats()]:
+                                                    font "DejaVuSans.ttf"
+                                                    outlines [(0, "#000000", 0, 0)]
+                                                    size 25
+                                                    color "#000000"
+                                            action Function(comment.toggle_retwats)
+                                    
+                                    if comment.player_liked:
+                                        button:
+                                            hbox:
+                                                add "images/phone/icons/red_heart_icon.png":
+                                                    size (35, 35)
+
+                                                text [comment.get_likes()]:
+                                                    font "DejaVuSans.ttf"
+                                                    outlines [(0, "#000000", 0, 0)]
+                                                    size 25
+                                                    color "#000000"
+                                            action Function(comment.toggle_like)
+                                                    
+                                    else:
+                                        button:
+                                            hbox:
+                                                add "images/phone/icons/white_heart_icon.png":
+                                                    size (35, 35)
+
+                                                text [comment.get_likes()]:
+                                                    font "DejaVuSans.ttf"
+                                                    outlines [(0, "#000000", 0, 0)]
+                                                    size 25
+                                                    color "#000000"
+                                            action Function(comment.toggle_like)
+                        # Divider
+                        frame:
+                            background "#CCCCCC"
+                            xfill True
+                            ysize 3
     vbox:
         align(0.5, 0.9)
         textbutton "Back":

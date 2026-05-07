@@ -48,6 +48,8 @@ label init_phone:
 
             sienna_post1 = Post(sienna_pf, "What's up yall?", None, 70, 52)
             player_post = Post(player_pf, "Player text", "images/phone/jeff.png", 30, 24)
+
+            comment_test = Comment(nick_pf, "This big DICK", "images/phone/icon.png", 20, 12)
             
 
 

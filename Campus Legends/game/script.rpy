@@ -31,6 +31,9 @@ image sienna_look_up_movie = Movie(play="Sienna_look_up.avi", loop=False)
 # The game starts here.
 
 label start:
+    
+    jump game_start
+    
     scene expression "siennaphone.png"
     # Sienna looking at her phone
 
@@ -132,7 +135,15 @@ label game_start:
 
     scene bg campus_day with dissolve
 
+    $ new_post(sienna_pf, sienna_post1)
+
+    $ new_post(player_pf, player_post)
+
+    $ new_comment(sienna_post1, comment_test)
+
     show screen phone_button
+
+
 
     "Your first day at Southside University begins..."
 
@@ -166,12 +177,7 @@ label game_start:
 
     $ sienna_m1.advance_expired()
     $ message(sienna, sienna_m2)
-    $ new_post(sienna_pf, sienna_post1)
-    # $ new_comment(sienna_post1, si_p1_c1)
-
-    $ new_post(player_pf, player_post)
-    # $ new_post(sienna_pf, sienna_post3)
-    # $ new_post(sienna_pf, sienna_post4)
+    
 
 
     mystery "Naw, Most guys cant handle Sienna and well Jess is sorta unavailable"

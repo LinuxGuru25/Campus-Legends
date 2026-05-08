@@ -32,8 +32,6 @@ image sienna_look_up_movie = Movie(play="Sienna_look_up.avi", loop=False)
 
 label start:
     
-    jump game_start
-    
     scene expression "siennaphone.png"
     # Sienna looking at her phone
 

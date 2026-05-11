@@ -47,7 +47,9 @@ label init_phone:
             nick_pf = Profile("nick_username", "images/phone/icon.png", "words", 200, 17)
 
             sienna_post1 = Post(sienna_pf, "What's up yall?", None, 70, 52)
+            sienna_post2 = Post(sienna_pf, "Bitches be crazy", None, 80, 50)
             player_post = Post(player_pf, "Player text", "images/phone/jeff.png", 30, 24)
+            nick_post1 = Post(nick_pf, "Nick was here", None, 90, 76)
 
             comment_test = Comment(nick_pf, "This big DICK", "images/phone/icon.png", 20, 12)
             

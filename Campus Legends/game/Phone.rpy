@@ -944,7 +944,7 @@ screen profile_screen(profile, back_screen="feed"):
                         xalign 0.0
                         yalign 0.5
                         xfill True
-                        background "#414141"
+                        background "#F2F2F2"
                         
                         vbox:
 

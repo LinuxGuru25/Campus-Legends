@@ -1,13 +1,33 @@
 ﻿################################################################################
+## Campus Legends Choice Menu Animations (Staggered)
+################################################################################
+
+transform cl_choice_fadein(delay=0.0):
+    alpha 0.0
+    pause delay
+    linear 0.25 alpha 1.0
+
+transform cl_choice_slideup(delay=0.0):
+    yoffset 40
+    pause delay
+    linear 0.25 yoffset 0
+
+transform cl_choice_glow:
+    on hover:
+        alpha 1.0
+        linear 0.15 alpha 1.0
+    on idle:
+        alpha 0.85
+        linear 0.15 alpha 0.85
+
+
+
+################################################################################
 ## Initialization
 ################################################################################
 
 init offset = -1
 
-
-################################################################################
-## Styles
-################################################################################
 
 style default:
     properties gui.text_properties()
@@ -159,16 +179,22 @@ screen choice(items):
     style_prefix "choice"
 
     vbox:
-        for i in items:
-            textbutton i.caption action i.action
+        for i, choice in enumerate(items):
+            $ d = i * 0.05
+            textbutton choice.caption action choice.action substitute False style "cl_choice_button" text_style "cl_choice_button_text" at cl_choice_fadein(d), cl_choice_slideup(d), cl_choice_glow
+
+
+
+
+
 
 style choice_vbox is vbox
 style choice_button is button
 style choice_button_text is button_text
 
 style choice_vbox:
-    xalign 0.5
-    ypos 405
+    xalign 1.0
+    ypos 805
     yanchor 0.5
     spacing gui.choice_spacing
 
@@ -346,57 +372,62 @@ style navigation_button_text:
     properties gui.text_properties("navigation_button")
 
 
-## Main Menu screen ############################################################
+style navigation_button_text:
+    properties gui.text_properties("navigation_button")
+
+    ## Main Menu screen ############################################################
 
 screen main_menu():
+    
+        tag menu
+    
+        add gui.main_menu_background
 
-    tag menu
-
-    add gui.main_menu_background
-
-    frame:
-        style "main_menu_frame"
-
-    use navigation
-
-    if gui.show_name:
-
-        vbox:
-            style "main_menu_vbox"
-
-            text "[config.name!t]":
-                style "main_menu_title"
-
-            text "[config.version]":
-                style "main_menu_version"
-
-
-style main_menu_frame is empty
-style main_menu_vbox is vbox
-style main_menu_text is gui_text
-style main_menu_title is main_menu_text
-style main_menu_version is main_menu_text
-
+        on "show" action Play("music", "audio/Convicted.ogg", loop=True)
+    
+        on "hide" action Stop("music", fadeout=1.0)
+    
+        frame:
+            style "main_menu_frame"
+    
+        use navigation
+    
+        if gui.show_name:
+    
+            vbox:
+                style "main_menu_vbox"
+    
+                text "[config.name!t]":
+                    style "main_menu_title"
+    
+                text "[config.version]":
+                    style "main_menu_version"
+    
+    
 style main_menu_frame:
-    xsize 420
-    yfill True
-    background "gui/overlay/main_menu.png"
-
+        xsize 420
+        yfill True
+        background "gui/overlay/main_menu.png"
+    
 style main_menu_vbox:
-    xalign 1.0
-    xoffset -30
-    xmaximum 1200
-    yalign 1.0
-    yoffset -30
-
+        xalign 1.0
+        xoffset -30
+        xmaximum 1200
+        yalign 1.0
+        yoffset -30
+    
 style main_menu_text:
-    properties gui.text_properties("main_menu", accent=True)
-
+        properties gui.text_properties("main_menu", accent=True)
+    
 style main_menu_title:
-    properties gui.text_properties("title")
-
+        properties gui.text_properties("title")
+    
 style main_menu_version:
-    properties gui.text_properties("version")
+        properties gui.text_properties("version")
+    
+                
+                
+    
 
 
 ## Game Menu screen ############################################################
@@ -734,6 +765,11 @@ screen preferences():
                     textbutton _("After Choices") action Preference("after choices", "toggle")
                     textbutton _("Transitions") action InvertSelected(Preference("transitions", "toggle"))
 
+                vbox:
+                    style_prefix "check"
+                    label _("Persistence")
+                    textbutton _("Clear Persistence") action Show("warning_screen")
+
                 ## Additional vboxes of type "radio_pref" or "check_pref" can be
                 ## added here, to add additional creator-defined preferences.
 
@@ -788,6 +824,31 @@ screen preferences():
                             action Preference("all mute", "toggle")
                             style "mute_all_button"
 
+
+screen warning_screen():
+    modal True
+
+    frame:
+        xalign 0.5
+        yalign 0.5
+        padding (40, 40)
+        background "#dbdbdb"
+
+        vbox:
+            spacing 20
+
+            text "WARNING!" size 30 color "#FF0000" font "DejaVuSans.ttf" xalign 0.5 bold True
+            text "This action cannot be undone. Are you sure you want to proceed?" size 20 color "#000000" font "DejaVuSans.ttf" xalign 0.5
+
+            hbox:
+                xalign 0.5
+                spacing 40
+                textbutton "Yes":
+                    text_font "DejaVuSans.ttf"
+                    action [Hide("warning_screen"), persistent._clear]
+                textbutton "No":
+                    text_font "DejaVuSans.ttf"
+                    action Hide("warning_screen")
 
 style pref_label is gui_label
 style pref_label_text is gui_label_text

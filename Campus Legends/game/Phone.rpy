@@ -2,433 +2,160 @@ init offset = 1
 default force_phone = False
 default viewing_photo = False
 default current_photo = None
-default feed_visible = False
-default profile_tile = (120, 120)
-default player_username = f"{player_name}_123"
-default phone_epoch = 0
 
 init -10 python:
 
-    class App(NoRollback):
-        def __init__(self, app_screen, name, icon):
-            self.app_screen = app_screen # What screen will show when the app is clicked
-            self.name = name # The app's name
-            self.icon = icon # The app's icon
-    
-    # Apps in order of index [0] = First app, [1] = Second app, etc.
-    apps = [
-            App("contacts", "Messages", "images/phone/icons/message_icon.png"),            
-            App("feed", "Twatter", "images/phone/icons/twatter_icon.png"),
-            App("phone_stats", "Stats", "images/phone//icons/stats_icon.png")
-        ]
-    class Contact(NoRollback):
-        def __init__(self, contact_name, pfp):
-            self.contact_name = contact_name
-            self.pfp = pfp
-            self.chat = []
-            self.has_unread = False
-            self.convo_done = False
-            self._initialized = False
+#====================================
+# CLASSES
+#==================================== 
 
-        def mark_unread(self):
-            """ Mark this contact as having unread messages """
-            self.has_unread = True
-        
-        def mark_read(self):
-            """ Mark this contact's messages as read """
-            self.has_unread = False
-        
-        def add_sms(self, text):
-            """ Add message to the chat """
-            self.chat.append(text)
-    
-    sienna = Contact("Sienna", "images/phone/icon.png")
-    nick = Contact("Nick", "images/phone/icon.png")
-    
-    # Contacts in order of index [0] = First app, [1] = Second contact, etc.
-    contacts = [
-            sienna,
-            nick,
-        ]
-    
-    class SMS(NoRollback):
-        def __init__(self, sender, text="", image=None, is_image=False, from_player=False, resolved=False):
-            self.sender = sender
-            self.text = text
-            self.image = image
-            self.is_image = is_image
-            self.choices = []
-            self.from_player = from_player
-            self.resolved = resolved
-            self.visible = False
-            self.show_at = None
-            self.expires_epoch = None
-            self.responded_to = False
-            self.added = False
-
-        def show_text(self):
-            """ Shows the text """
-            self.visible = True
-        
-        def hide_text(self):
-            """ Hides the text """
-            self.visible = False
-
-        def add_choice(self, choice):
-            """ Adds a choice """
-            self.choices.append(choice)
-        
-        def resolve(self):
-            self.resolved = True
-
-        def player_replied(self):
-            """ Marks that the player has replied to this message """
-            self.responded_to = True
-
-        def show_choices(self):
-            for choice in self.choices:
-                if not choice.chosen:
-                    choice.show_choice()
-
-        def can_expire(self):
-            """
-            Example:
-                [message set up]
-                msg.show_text()
-                msg.can_expire()
-
-                [Message Choices]
-
-                works with chaining as well
-            """
-            self.expires_epoch = phone_epoch
-
-        def chain(self, player_text, npc_text=None, npc_image=None):
-            """
-            Example:
-                msg = SMS(sender, "message text")
-                sender.add_sms(msg)
-                msg.show_text()
-                
-                level2 = msg.chain("player response", "Npc follow-up")
-                level3 = level2.chain("Player response", "Npc follow-up")
-                level4 = level3.chain("Player response", "Npc follow-up")
-                level5 = level4.chain("Player response", npc_image="path/to/image.png")
-            """
-            if npc_image:
-                npc_response = SMS(self.sender, image=npc_image, is_image=True)
-            else:
-                npc_response = SMS(self.sender, npc_text)
-            
-            player_choice = Choice(player_text, npc_text or "", response_sms=npc_response)
-            self.add_choice(player_choice)
-            
-            if self.visible:
-                player_choice.show_choice()
-
-            return npc_response
-
-        def chain_end(self, player_text, npc_response=None, followup_npc_text=None, followup_npc_image=None, followup_choices=None, npc_response_image=None):
-            """
-            Args:
-                player_text: What player says
-                npc_response: NPC's immediate text response (optional if using image)
-                followup_npc_text: NPC's follow-up text message (optional if using image)
-                followup_npc_image: NPC's follow-up image path (optional)
-                followup_choices: List of (player_text, npc_text) for final choices
-                npc_response_image: NPC's immediate image response (optional)
-            """
-            if npc_response_image:
-                npc_response_sms = SMS(self.sender, image=npc_response_image, is_image=True)
-            else:
-                npc_response_sms = SMS(self.sender, npc_response or "")
-            
-            player_choice = Choice(player_text, npc_response or "", response_sms=npc_response_sms)
-            
-
-            if followup_npc_image:
-                player_choice.followup_is_image = True
-                player_choice.followup_image = followup_npc_image
-                player_choice.followup_text = ""
-            else:
-                player_choice.followup_is_image = False
-                player_choice.followup_text = followup_npc_text or ""
-            
-            player_choice.followup_choices = followup_choices or []
-            
-            self.add_choice(player_choice)
-            if self.visible:
-                player_choice.show_choice()
-            
-            return npc_response_sms
-
-        
-
-        def expiry_old_reply_windows(self):
-            """
-            Hides choices on messages that are now "too old" to reply to,
-            and marks those SMS as resolved so they don't block anything.
-            """
-            for contact in contacts:
-                for sms in contact.chat:
-                    if not sms.visible:
-                        continue
-                    if sms.resolved:
-                        continue
-                    if not sms.choices:
-                        continue
-
-                    # if this SMS was meant to expire and it's from an older epoch
-                    if getattr(sms, "expires_epoch", None) is not None:
-                        if phone_epoch >= sms.expires_epoch:
-                            for choice in sms.choices:
-                                choice.hide_choice()
-                            sms.resolve()
-
-        def advance_expired(self):
-            """ Will expire old optional reply choices """
-            global phone_epoch
-            phone_epoch +=1
-            self.expiry_old_reply_windows()
-
-    class Choice(NoRollback):
-        def __init__(self, text, response, response_sms=None, chosen=False):
-            self.text = text
-            self.response = response
-            self.response_sms = response_sms
-            self.chosen = chosen
-            self.visible = False
-
-        def show_choice(self):
-            """ Shows the choice """
-            self.visible = True
-        
-        def hide_choice(self):
-            """ Hides the choice """
-            self.visible = False
-        
-        def choose(self, contact):
-            self.chosen = True
-            player_reply = SMS(None, self.text, from_player=True)
-            
-            if hasattr(self, 'response_sms') and self.response_sms:
-                npc_response = self.response_sms
-                if not npc_response.text:
-                    npc_response.text = self.response
-            else:
-                npc_response = SMS(contact, self.response)
-            
-            contact.add_sms(player_reply)
-            contact.add_sms(npc_response)
-            player_reply.show_text()
-            
-            import time
-            npc_response.show_at = time.time() + 1.0
-            
-            if hasattr(self, 'followup_text') or hasattr(self, 'followup_image'):
-                npc_response.has_followup = True
-                
-                # Check if follow-up is an image or text
-                if hasattr(self, 'followup_is_image') and self.followup_is_image:
-                    npc_response.followup_is_image = True
-                    npc_response.followup_image = getattr(self, 'followup_image', None)
-                    npc_response.followup_text = ""
-                else:
-                    npc_response.followup_is_image = False
-                    npc_response.followup_text = getattr(self, 'followup_text', "")
-                
-                npc_response.followup_choices = getattr(self, 'followup_choices', [])
-                npc_response.followup_sender = contact
-
-            renpy.restart_interaction()
-
-    class Profile(NoRollback):
-        def __init__ (self, username, pfp=None, bio="", starting_followers=0, following=0):
-            self.username = username
-            self.pfp = pfp
-            self.bio = bio
-            self.starting_followers = starting_followers
-            self.following = following
-            self.posts = []
-            self.visible = False
-            self._initialized = False
-
-        def hide_profile(self):
-            self.visible = False
-
-        def show_profile(self):
-            self.visible = True
-
-        def add_post(self, post):
-            self.posts.append(post)
-
-        def get_username(self):
-            return str(f"@{self.username}")
-
-    class Post(NoRollback):
-        def __init__ (self, author, text="", image=None, starting_likes=0, starting_retwats=0):
-            self.author = author
-            self.text = text
-            self.image = image
-            self.starting_likes = starting_likes
-            self.starting_retwats = starting_retwats
-            self.comments = []
-            self.player_liked = False
-            self.visible = False
-            self.added = False
-
-        def show_post(self):
-            self.visible = True
-
-        def hide_post(self):
-            self.visible = False
-
-        def toggle_like(self):
-            self.player_liked = not self.player_liked
-        
-        def get_likes(self):
-            return self.starting_likes +(1 if self.player_liked else 0)
-
-        def add_comment(self, comment):
-            self.comments.append(comment)
-
-        def get_comments(self):
-            return len(self.comments)
-
-    all_posts = []
-
-    class Comment(NoRollback):
-        def __init__(self, author, text, pfp=None, starting_likes=0):
-            self.author = author
-            self.text = text
-            self.pfp = pfp
-            self.starting_likes = starting_likes
-            self.player_liked = False
-            self.visible = False
-            self.added = False
-        
-        def toggle_like(self):
-            self.player_liked = not self.player_liked
-        
-        def get_likes(self):
-            return self.starting_likes + (1 if self.player_liked else 0)
-        
-        def show_comment(self):
-            self.visible = True
-        
-        def hide_comment(self):
-            self.visible = False
-    
     class PhoneState(NoRollback):
         def __init__(self):
             self.initialized = False
+            self.apps = []
+            self.contacts = []
 
         def reset(self):
             self.initialized = False
-            all_posts.clear()
-            for contact in contacts:
-                contact.chat.clear()
-                contact.has_unread = False
-                contact.convo_done = False
+            self.apps = []
+            self.contacts = []
 
-    phone_state = PhoneState()
+    class App(NoRollback):
+        def __init__(self, name, screen, icon=None):
+            self.name = name
+            self.screen = screen
+            self.icon = icon
 
-# ------------------------------------------------------------
-# FUNCTIONS
-# ------------------------------------------------------------
-    def has_any_unread_messages():
-        """ Checks if any messages are unread """
-        return any(contact.has_unread for contact in contacts)
-    
-    def not_responded():
-        """ Checks if any messages are waiting for a response """
-        for contact in contacts:
-            for sms in contact.chat:
-                if sms.visible and not sms.resolved and len(sms.choices) > 0:
-                    return True
-        return False
-
-    def view_photo(photo_path):
-        """Open a photo in fullscreen view"""
-        global viewing_photo, current_photo
-        viewing_photo = True
-        current_photo = photo_path
-
-    def close_photo():
-        """Close the photo view"""
-        global viewing_photo, current_photo
-        viewing_photo = False
-        current_photo = None
-        renpy.hide_screen("photo_viewer")
-
-    def check_delayed_messages(contact):
-        """Check if any messages should be revealed based on their show_at timestamp"""
-        import time
-        current_time = time.time()
-
-        for sms in contact.chat:
-            if not sms.visible and sms.show_at and current_time >= sms.show_at:
-                sms.show_text()
-                sms.show_at = None
-
-                for choice in sms.choices:
-                    choice.show_choice()
+    class Contact:
+        def __init__(self, name, pfp="images/phone/icon.png"):
+            self.name = name
+            self.pfp = pfp
+            self.chat = []
+            self.has_unread = False
+            self.visible = False
+            self.added = False
         
-                if hasattr(sms, 'has_followup') and sms.has_followup:
-                    if hasattr(sms, 'followup_is_image') and sms.followup_is_image:
-                        followup = SMS(sms.followup_sender, image=sms.followup_image, is_image=True)
-                    else:
-                        followup = SMS(sms.followup_sender, sms.followup_text)
-                    
-                    contact.add_sms(followup)
-                    followup.show_at = time.time() + 1.0
-                    
-                    for choice_text, choice_response in sms.followup_choices:
-                        choice = Choice(choice_text, choice_response)
-                        followup.add_choice(choice)
-                    
-                    sms.has_followup = False
-                
-                renpy.restart_interaction()
+        def show_contact(self):
+            self.visible = True
 
+        def mark_read(self):
+            self.has_unread = False
+        
+        def mark_unread(self):
+            self.has_unread = True
+
+        def kill_choices(self):
+            for sms in self.chat:
+                sms.mark_resolved()
+                sms.hide_choices()
+
+    class SMS:
+        def __init__(self, sender=None, text="", image=None, follow_up=None, from_player=False):
+            self.sender = sender
+            self.text = text
+            self.image = image
+            self.follow_up = follow_up
+            self.from_player = from_player
+            self.choices = []
+            self.visible = False
+            self.resolved = False
+            self.replied_to = False
+            self.delay = None
+
+            def reveal(self, contact):
+                self.visible = True
+                self.show_choices()
+                self.delay = None
+                self.schedule_follow_up(contact)
+            
+            def schedule_follow_up(self, contact):
+                if self.follow_up:
+                    contact.chat.append(self.follow_up)
+                    self.follow_up.delay = 1.0
+            
+            def show_choices(self):
+                for choice in self.choices:
+                    if self.resolved:
+                        choice.hide_choices()
+
+            def player_replied(self):
+                self.replied_to = True
+            
+            def mark_resolved(self):
+                self.resolved = True
+            
+            def show_text(self):
+                self.visible = True
+
+            def add_choice(self, choice):
+                self.choices.append(choice)
+            
+            def chain(self, player_text=None, npc_text=None, player_image=None, npc_image=None):
+                if npc_image:
+                    npc_response = SMS(self.sender, image=npc_image)
+                else:
+                    npc_response = SMS(self.sender, text=npc_text)
+
+                if player_image:
+                    player_choice = Choice(image=player_image, response=npc_response)
+                else:
+                    player_choice = Choice(text=player_text, response=npc_response)
+
+                if player_text:
+                    self.add_choice(player_choice)
+
+                    if self.visible:
+                        player_choice.show_choice()
+                else:
+                    self.follow_up = npc_response
+                
+                return npc_response
+
+    class Choice:
+        def __init__(self, text="", response=None, image=None):
+            self.text = text
+            self.image = image
+            self.response = response
+            self.chosen = False
+            self.visible = False
+
+        def show_choice(self):
+            self.visible = True
+        
+        def hide_choice(self):
+            self.visible = False
+
+        def choose(self, contact):
+            self.chosen = True
+            player_reply = new_sms(contact, None, self.text, self.image)
+            player_reply.visible = True
+            contact.chat.append(self.response)
+            self.response.delay = 1.0
+
+#====================================
+# FUNCTIONS
+#====================================
+    
+    def phone_open():
+        config.rollback_enabled = False
+    
+    def phone_close():
+        config.rollback_enabled = True
+    
     chat_yadj = ui.adjustment()
 
-
-
-    def message(contact, sms):
-        if not sms.added:
-            sms.added = True
+    def new_sms(contact, sender, text=None, image=None):
+        from_player = sender is None
+        sms = SMS(sender=sender, text=text, image=image, from_player=from_player)
+        contact.chat.append(sms)
+        sms.reveal(contact)
+        if not from_player:
             contact.mark_unread()
-            contact.add_sms(sms)
-            sms.show_text()
-            sms.show_choices()
+        return sms
 
-    def add_feed(post):
-        all_posts.append(post)
-
-    def new_post(profile, post):
-        if not post.added:
-            post.added = True
-            profile.show_profile()
-            profile.add_post(post)
-            post.show_post()
-            add_feed(post)
-
-    def new_comment(post, comment):
-        if not comment.added:
-            comment.added = True
-            comment.show_comment()
-            post.add_comment(comment)
-
-    def add_profile(profile):
-        if not profile._initialized:
-            profile._initialized = True
-            profile.show_profile()      
-
-    
-# ------------------------------------------------------------
+#====================================
 # STYLES
-# ------------------------------------------------------------
+#====================================
 style gray_bg:
     xalign 0.0
     xmaximum 400
@@ -440,18 +167,6 @@ style blue_bg:
     xmaximum 400
     background "#0066FF"
     padding(15,10)
-
-style gray_photo:
-    xalign 0.0
-    xmaximum 400
-    background "#DDDDDD"
-    padding (5, 5)
-
-style blue_photo:
-    xalign 1.0
-    xmaximum 400
-    background "#0066FF"
-    padding (5, 5)
 
 style post_bg:
     xalign 0.5
@@ -486,18 +201,18 @@ style pl_username:
     padding (5, 5)
 
 style phone_bg:
-    xalign 0.55
+    xalign 0.5
     yalign 0.5
-    xsize 600
-    ysize 1000
+    xsize 476
+    ysize 970
     background "images/phone/base.png"
 
-style screen_frame:
-    xalign 0.09
-    yalign 0.2
+style phone_screen:
+    xalign 0.5
+    yalign 0.5
     xsize 450
-    ysize 750
-    background None
+    ysize 800
+    background "#FFFFFF"
 
 style base_text:
     size 22
@@ -505,9 +220,9 @@ style base_text:
     color "#000000"
     outlines [(0, "#000000", 0, 0)]
 
-# ------------------------------------------------------------
+#====================================
 # SCREENS
-# ------------------------------------------------------------
+#====================================
 
 screen phone_button():
     imagebutton:
@@ -515,197 +230,193 @@ screen phone_button():
         focus_mask True 
         action [Show("phone_home"), Hide("phone_button")]
 
+
 screen phone_home():
     modal True
 
+    on "show" action Function(phone_open)
+    on "hide" action Function(phone_close)
+
+    button:
+        xfill True
+        yfill True
+        background "#00000080"
+        action NullAction()
+
     window:
         style "phone_bg"
-        
+
         frame:
-            style "screen_frame"
-            grid 4 4:
-                spacing 10
-                xalign 0.5
-                yalign 0.5
-                for app in apps:
-                    button:
-                        xysize (100, 100)
-                        vbox:
+            style "phone_screen"
+
+            vbox:
+                align (0.5, 0.5)
+
+                grid 4 4:
+                    for app in phone_state.apps:
+                        button:
                             add app.icon
-                            text app.name:
-                                font "DejaVuSans.ttf"
-                                size 20
-                                outlines [(1, "#000000", 0, 0)]
-                        align(0.5, 0.5)
-                        action [Show(f"{app.app_screen}"), Hide("phone_home")]
+                            action [Show(screen=app.screen), Hide(screen=None)]
+    
     vbox:
-        align(0.5, 0.9)
+        align (0.5, 0.93)
         textbutton "Close":
-            action [Hide("phone_home"), Show("phone_button")]
+            action [Hide(screen=None), Show("phone_button")]
 
 screen contacts():
     modal True
 
+    on "show" action Function(phone_open)
+    on "hide" action Function(phone_close)
+
+    button:
+        xfill True
+        yfill True
+        background "#00000080"
+        action NullAction()
+
     window:
         style "phone_bg"
 
-        vbox: 
-            null height 65
-            spacing 5
-            text "Contacts" size 40 color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)] xalign 0.5 yalign 0.07
+        frame:
+            style "phone_screen"
 
-            viewport:
-                xpos 13
-                yalign 0.3
-                xsize 450
-                ysize 750
-                scrollbars "vertical"
-                draggable True
-                mousewheel True
-                
+            vbox:
+                xalign 0.5
+                spacing 15
 
-                vbox:
-                    for contact in contacts:
+                for contact in phone_state.contacts:
+                    if contact.visible:
                         button:
-                            action [
-                                Show("chat_screen", contact=contact),
-                                Hide(screen=None),
-                                Function(contact.mark_read)
-                            ]
-
+                            xfill True
+                            action [Show("chat_screen", contact=contact), Hide(screen=None), Function(contact.mark_read)]
                             hbox:
-                                spacing 15
-                                xalign 0.0
-                                yalign 0.5
-
                                 add contact.pfp:
-                                    size (60,60)
-
-                                vbox:
-                                    text contact.contact_name:
-                                        size 28
-                                        font "DejaVuSans.ttf"
-                                        outlines [(0, "#000000", 0, 0)]
-                                        color "#000000"
+                                size (60, 60)
+                                text contact.name:
                                     if contact.has_unread:
-                                        text "New message!" size 18 color "#FF0000" font "DejaVuSans.ttf"
-                                
-                                    null height 5
-                                    frame:
-                                        background "#CCCCCC"
-                                        xfill True
-                                        ysize 1
-    vbox:                       
-        align(0.5, 0.9)
+                                        color "#cc0000"
+                                        bold True
+                                    else:
+                                        color "#000000"
+                                    
+                                    size 24
+                                    yalign 0.5
+                        
+                        frame:
+                            background "#CCCCCC"
+                            xfill True
+                            ysize 1
+
+    vbox:
+        align (0.5, 0.93)
         textbutton "Back":
-            action [Hide(screen=None), Show("phone_home")]
+            action[Show("phone_home"), Hide(screen=None)]
 
 screen chat_screen(contact):
     modal True
+    on "show" action Function(phone_open)
+    on "hide" action Function(phone_close)
 
-    timer 0.1 repeat True action Function(check_delayed_messages, contact)
+    button:
+        xfill True
+        yfill True
+        background "#00000080"
+        action NullAction()
 
     window:
         style "phone_bg"
-    
+
         python:
-            _msg_count = sum(1 for _s in contact.chat if _s.visible)
-            if not hasattr(chat_yadj, '_last_count') or chat_yadj._last_count != _msg_count:
+            _msg_count = sum(1 for _s in contact.chat)
+            if not hasattr(chat_yadj, "_las_count") or chat_yadj._last_count != _msg_count:
                 chat_yadj._last_count = _msg_count
                 chat_yadj.value = float("inf")
 
+        frame:
+            style "phone_screen"
 
-        viewport:
-            xpos 13
-            yalign 0.3
-            xsize 450
-            ysize 750
-            scrollbars "vertical"
-            mousewheel True
-            draggable True
-            yadjustment chat_yadj
-        
-            
-            vbox:
-                
-                spacing 15
-                xfill True
-                for sms in contact.chat:
-                    if sms.visible:
-                        if sms.is_image:
-                            if sms.from_player:
-                                frame:
-                                    style "blue_bg"
-                                    vbox:
-                                        spacing 5
-                                        imagebutton:
-                                            idle Transform(sms.image, fit="contain", xsize=280, ysize=200)
-                                            hover Transform(sms.image, fit="contain", xsize=280, ysize=200)
-                                            action [SetVariable("viewing_photo", True), SetVariable("current_photo", sms.image)]
-                            else:
-                                frame:
-                                    style "gray_bg"
-                                    vbox:
-                                        spacing 5
-                                        imagebutton:
-                                            idle Transform(sms.image, fit="contain", xsize=280, ysize=200)
-                                            hover Transform(sms.image, fit="contain", xsize=280, ysize=200)
-                                            action [SetVariable("viewing_photo", True), SetVariable("current_photo", sms.image)]
+            viewport:
+                xalign 0.5
+                yalign 0.5
+                xsize 450
+                ysize 800
+                scrollbars "vertical"
+                mousewheel True
+                draggable True
+                yadjustment chat_yadj
 
-                        elif sms.text:
-                            if sms.from_player:
-                                frame:
-                                    style "blue_bg"
-                                    vbox:
-                                        spacing 15
-                                        text sms.text style "default":
-                                            size 20
-                                            font "DejaVuSans.ttf"
-                                            outlines [(0, "#000000", 0, 0)]
-                                            color "#FFFFFF"
-                            else:
-                                frame:
-                                    style "gray_bg"
+                hbox:
+                    vbox:
+                        spacing 15
+                        xfill True
 
-                                    vbox:
-                                        spacing 15
-                                        text sms.text style "default":
-                                            size 20
-                                            font "DejaVuSans.ttf"
-                                            outlines [(0, "#000000", 0, 0)]
-                                            color "#000000"
+                        for sms in contact.chat:
 
-                    
-                        for choice in sms.choices:
-                            if choice.visible and not sms.resolved and not choice.chosen:
-                                frame:
-                                    xalign 0.5
-                                    xmaximum 400
-                                    background "#0066FF"
-                                    padding (5, 5)
-                                    vbox:
-                                        button:
-                                            text choice.text:
+                            if sms.delay is not None and not sms.visible:
+                                timer sms.delay action Function(sms.reveal, contact)
+
+                            $ bubble_style = "blue_bg" if sms.from_player else "gray_bg"
+                            $ text_color = "#FFFFFF" if sms.from_player else "#000000"
+
+                            if sms.visible:
+                                
+                                if sms.image:
+                                    frame:
+                                        style bubble_style
+
+                                        vbox:
+                                            spacing 5
+                                            imagebutton:
+                                                idle Transform(sms.image, fit="contain", xsize=280, ysize=200)
+                                                hover Transform(sms.image, fit="contain", xsize=280, ysize=200)
+                                                action [SetVariable("viewing_photo", True), SetVariable("current_photo", sms.image)]
+                                
+                                elif sms.text:        
+                                    frame:
+                                        style bubble_style
+                                        vbox:
+                                            spacing 15
+                                            text sms.text style "default":
                                                 size 20
-                                                font "DejaVuSans.ttf"
-                                                idle_color "#FFFFFF"
-                                                hover_color "#6d6d6d"
-                                            action [
-                                                Function(choice.choose, contact), 
-                                                Function(sms.resolve), 
-                                                Function(sms.player_replied)
-                                            ]
+                                                color text_color
+
     if viewing_photo:
-        use photo_viewer()                               
-    else:
+        use photo_viewer()
+
+    vbox:
+        align(0.5, 0.93)
+        textbutton "Back":
+            action [Show("contacts"), Hide(screen=None)]
+    
+    frame:
+        xpos 1230
+        yalign 0.5
+        xsize 450
+        ysize 800
+        background None
+        padding (20, 20)
+
         vbox:
-            align(0.5, 0.9)
-            button:
-                text "Back":
-                    idle_color "#a8a8a8"
-                    hover_color "#0099cc"
-                    font "DejaVuSans.ttf"
-                action [Hide(screen=None), Show("contacts")]
+            spacing 15
+            for sms in contact.chat:
+                for choice in sms.choices:
+                    if choice.visible:
+                        button:
+                            xfill True
+                            hover_background "#0066FF"
+                            idle_background "#999999"
+                            padding (10, 10)
+                            text choice.text:
+                                size 20
+                                idle_color "#000000"
+                                hover_color "#FFFFFF"
+                            action [
+                                Function(choice.choose, contact),
+                                Function(sms.mark_resolved),
+                                Function(sms.hide_choices),
+                                Function(sms.player_replied)
+                            ]
 
 screen photo_viewer():
         modal True

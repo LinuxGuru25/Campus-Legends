@@ -439,76 +439,76 @@ menu:
         prof "If you already knew everything you wanted to learn, you wouldn't need college."
 
 
-    prof "Good."
+prof "Good."
 
-    prof "Here's one thing you'll discover over the next few months."
+prof "Here's one thing you'll discover over the next few months."
 
-    prof "Everyone wants to be understood."
+prof "Everyone wants to be understood."
 
-    prof "Very few people know how to understand someone else."
+prof "Very few people know how to understand someone else."
 
-    prof "Pay attention in here, and you might learn something useful."
+prof "Pay attention in here, and you might learn something useful."
 
-    MCname "{i}(She's definitely more interesting than I expected.){/i}"
+MCname "{i}(She's definitely more interesting than I expected.){/i}"
 
-    if get_points("Confident") >= 3:
+if get_points("Confident") >= 3:
 
-        prof "Confidence opens doors."
+    prof "Confidence opens doors."
 
-        prof "Arrogance closes them."
+    prof "Arrogance closes them."
 
-        MCname "{i}(...Was that aimed at me?){/i}"
+    MCname "{i}(...Was that aimed at me?){/i}"
 
-    elif get_points("Anxiety") >= 3:
+elif get_points("Anxiety") >= 3:
 
-        prof "And if public speaking makes you nervous..."
+    prof "And if public speaking makes you nervous..."
 
-        prof "Congratulations."
+    prof "Congratulations."
 
-        prof "You're human."
+    prof "You're human."
 
-        MCname "{i}(...That actually makes me feel a little better.){/i}"
+    MCname "{i}(...That actually makes me feel a little better.){/i}"
 
-    elif get_points("Depression") >= 3:
+elif get_points("Depression") >= 3:
 
-        prof "If you're exhausted already..."
+    prof "If you're exhausted already..."
 
-        prof "Don't assume you're the only one."
+    prof "Don't assume you're the only one."
 
-        prof "College is an adjustment."
+    prof "College is an adjustment."
 
-        MCname "{i}(Huh... that's surprisingly reassuring.){/i}"
+    MCname "{i}(Huh... that's surprisingly reassuring.){/i}"
 
-    prof "That's enough philosophy for one morning."
+prof "That's enough philosophy for one morning."
 
-    prof "Your syllabus and first assignment will be online tonight."
+prof "Your syllabus and first assignment will be online tonight."
 
-    prof "Read them."
+prof "Read them."
 
-    prof "Unlike most professors..."
+prof "Unlike most professors..."
 
-    prof "...I can tell when you didn't."
+prof "...I can tell when you didn't."
 
-    prof "Now I'm going to pass around a small quiz to evaluate your level of understanding."
+prof "Now I'm going to pass around a small quiz to evaluate your level of understanding."
 
-    prof "You have until the end of class to finish."
+prof "You have until the end of class to finish."
 
-    # MC receives his test
-    "Your professor hands you the test."
+# MC receives his test
+"Your professor hands you the test."
 
-    if mini_games_enabled:
-        call english_comp_quiz1
-    else:
-        "You skip the diagnostic quiz."
+if mini_games_enabled:
+    call english_comp_quiz1
+else:
+    "You skip the diagnostic quiz."
 
 
-    prof "See you Wednesday."
+prof "See you Wednesday."
 
-    MCname "{i}(Well... that could've gone a lot worse.){/i}"
+MCname "{i}(Well... that could've gone a lot worse.){/i}"
 
-    MCname "{i}(One class down. Only... a few hundred more to go.){/i}"
+MCname "{i}(One class down. Only... a few hundred more to go.){/i}"
 
-    jump campus_after_class
+jump campus_after_class
 
 
 

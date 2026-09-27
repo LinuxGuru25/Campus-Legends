@@ -5,25 +5,34 @@ default mc_depression = 0
 screen phone_stats():
 
     modal True
+    on "show" action Function(phone_open)
+    on "hide" action Function(phone_close)
+
+    button:
+        xfill True
+        yfill True
+        background "#00000080"
+        action NullAction()
 
     $ _watch = stats_version
 
     window:
         style "phone_bg"
 
-        viewport:
-            xpos 13
-            yalign 0.3
-            xsize 450
-            ysize 750
-            scrollbars "vertical"
-            draggable True
-            mousewheel True
 
-            frame:
+        frame:
+            style "phone_screen"
+
+            viewport:
                 xalign 0.5
                 yalign 0.5
-                background None
+                xsize 450
+                ysize 800
+                scrollbars "vertical"
+                draggable True
+                mousewheel True
+
+                
 
                 vbox:
                     spacing 20
@@ -128,6 +137,6 @@ screen phone_stats():
                         text "No exclusive route active" style "base_text"
 
     vbox:                       
-        align(0.5, 0.9)
+        align(0.5, 0.93)
         textbutton "Back":
             action [Hide(screen=None), Show("phone_home")]

@@ -435,23 +435,22 @@ screen feed():
                 draggable True
                 mousewheel True
                 
-                if feed_visible:
-                    vbox:
-                        frame:
-                            xpos 0.05
-                            yalign 0.5
-                            background None
-                            xfill True
-                            ysize 100
-                            hbox:
-                                button:
-                                    add player_pf.pfp:
-                                        size (75, 75)
-                                    action [Show("profile_screen", profile=player_pf), Hide(screen=None)]
+                vbox:
+                    frame:
+                        xpos 0.05
+                        yalign 0.5
+                        background None
+                        xfill True
+                        ysize 100
+                        hbox:
+                            button:
+                                add player_pf.pfp:
+                                    size (75, 75)
+                                action [Show("profile_screen", profile=player_pf), Hide(screen=None)]
 
-                                null width 85
-                                
-                                text "Feed" size 35 color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)] xalign 0.5 yalign 0.5
+                            null width 85
+                            
+                            text "Feed" size 35 color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)] xalign 0.5 yalign 0.5
                             
                         frame:
                             background "#CCCCCC"

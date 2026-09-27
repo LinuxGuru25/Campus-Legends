@@ -1,5 +1,3 @@
-init offset = 1
-default force_phone = False
 default viewing_photo = False
 default current_photo = None
 
@@ -7,7 +5,7 @@ init -10 python:
 
 #====================================
 # CLASSES
-#==================================== 
+#====================================
 
     class PhoneState(NoRollback):
         def __init__(self):
@@ -33,21 +31,24 @@ init -10 python:
             self.chat = []
             self.has_unread = False
             self.visible = False
-            self.added = False
-        
+
         def show_contact(self):
             self.visible = True
-
+        
         def mark_read(self):
             self.has_unread = False
-        
+
         def mark_unread(self):
             self.has_unread = True
-
+        
+        def add_sms(self, sms):
+            self.chat.append(sms)
+        
         def kill_choices(self):
             for sms in self.chat:
                 sms.mark_resolved()
                 sms.hide_choices()
+
 
     class SMS:
         def __init__(self, sender=None, text="", image=None, follow_up=None, from_player=False):
@@ -59,57 +60,62 @@ init -10 python:
             self.choices = []
             self.visible = False
             self.resolved = False
-            self.replied_to = False
+            self.replied_to  = False
             self.delay = None
 
-            def reveal(self, contact):
-                self.visible = True
-                self.show_choices()
-                self.delay = None
-                self.schedule_follow_up(contact)
-            
-            def schedule_follow_up(self, contact):
-                if self.follow_up:
-                    contact.chat.append(self.follow_up)
-                    self.follow_up.delay = 1.0
-            
-            def show_choices(self):
-                for choice in self.choices:
-                    if self.resolved:
-                        choice.hide_choices()
+        def reveal(self, contact): # make message appear
+            self.visible = True
+            self.show_choices()
+            self.delay = None
+            self.schedule_follow_up(contact)
 
-            def player_replied(self):
-                self.replied_to = True
+        def schedule_follow_up(self, contact): # prepare next automatic message
+            if self.follow_up:
+                contact.chat.append(self.follow_up)
+                self.follow_up.delay = 1.0
+
+        def player_replied(self):
+            self.replied_to = True
+
+        def show_choices(self):
+            for choice in self.choices:
+                if not choice.chosen:
+                    choice.show_choice()
+        
+        def hide_choices(self):
+            for choice in self.choices:
+                if self.resolved:
+                    choice.hide_choice()
+        
+        def mark_resolved(self):
+            self.resolved = True
+
+        def show_text(self):
+            self.visible = True
+        
+        def add_choice(self, choice):
+            self.choices.append(choice)
+        
+        def chain(self, player_text=None, npc_text=None, player_image=None, npc_image=None): # connect messages together
+            if npc_image:
+                npc_response = SMS(self.sender, image=npc_image)
+            else:
+                npc_response = SMS(self.sender, text=npc_text)
             
-            def mark_resolved(self):
-                self.resolved = True
-            
-            def show_text(self):
-                self.visible = True
-
-            def add_choice(self, choice):
-                self.choices.append(choice)
-            
-            def chain(self, player_text=None, npc_text=None, player_image=None, npc_image=None):
-                if npc_image:
-                    npc_response = SMS(self.sender, image=npc_image)
-                else:
-                    npc_response = SMS(self.sender, text=npc_text)
-
-                if player_image:
-                    player_choice = Choice(image=player_image, response=npc_response)
-                else:
-                    player_choice = Choice(text=player_text, response=npc_response)
-
-                if player_text:
-                    self.add_choice(player_choice)
-
-                    if self.visible:
-                        player_choice.show_choice()
-                else:
-                    self.follow_up = npc_response
+            if player_image:
+                player_choice = Choice(image=player_image, response=npc_response)
+            else:
+                player_choice = Choice(text=player_text, response=npc_response)
                 
-                return npc_response
+            if player_text:
+                self.add_choice(player_choice)
+                
+                if self.visible:
+                    player_choice.show_choice()
+            else:
+                self.follow_up = npc_response
+
+            return npc_response
 
     class Choice:
         def __init__(self, text="", response=None, image=None):
@@ -121,7 +127,7 @@ init -10 python:
 
         def show_choice(self):
             self.visible = True
-        
+
         def hide_choice(self):
             self.visible = False
 
@@ -135,16 +141,16 @@ init -10 python:
 #====================================
 # FUNCTIONS
 #====================================
-    
+
     def phone_open():
         config.rollback_enabled = False
-    
+
     def phone_close():
         config.rollback_enabled = True
-    
+
     chat_yadj = ui.adjustment()
 
-    def new_sms(contact, sender, text=None, image=None):
+    def new_sms(contact, sender, text=None, image=None): # Create/start a conversation
         from_player = sender is None
         sms = SMS(sender=sender, text=text, image=image, from_player=from_player)
         contact.chat.append(sms)
@@ -156,50 +162,6 @@ init -10 python:
 #====================================
 # STYLES
 #====================================
-style gray_bg:
-    xalign 0.0
-    xmaximum 400
-    background "#DDDDDD"
-    padding(15,10)
-
-style blue_bg:
-    xalign 1.0
-    xmaximum 400
-    background "#0066FF"
-    padding(15,10)
-
-style post_bg:
-    xalign 0.5
-    xmaximum 760
-    background None #"#ffffff"
-    padding (5, 5)
-
-style username:
-    xalign 0.5
-    xmaximum 300
-    idle_color "#000000"
-    hover_color "#646464"
-    size 20
-    background None
-    padding (5, 5)
-
-style like_count:
-    color "#000000"
-    size 25
-
-style comment:
-    color "#000000"
-    size 18
-
-style pl_username:
-    xalign 0.5
-    xmaximum 300
-    idle_color "#000000"
-    hover_color "#646464"
-    size 25
-    bold True
-    padding (5, 5)
-
 style phone_bg:
     xalign 0.5
     yalign 0.5
@@ -214,20 +176,34 @@ style phone_screen:
     ysize 800
     background "#FFFFFF"
 
-style base_text:
-    size 22
-    font "DejaVuSans.ttf"
-    color "#000000"
-    outlines [(0, "#000000", 0, 0)]
+style gray_bg:
+    xalign 0.0
+    xmaximum 400
+    yfill False
+    xfill False
+    yminimum 0
+    xminimum 0
+    background "#DDDDDD"
+    padding(15,10)
+
+style blue_bg:
+    xalign 1.0
+    xmaximum 400
+    yfill False
+    xfill False
+    yminimum 0
+    xminimum 0
+    background "#0066FF"
+    padding(15,10)
 
 #====================================
 # SCREENS
 #====================================
 
 screen phone_button():
-    imagebutton:
-        auto "phone/Phone_button_%s.png"
-        focus_mask True 
+
+    imagebutton auto "phone/phone_button_%s.png":
+        focus_mask True
         action [Show("phone_home"), Hide("phone_button")]
 
 
@@ -257,7 +233,7 @@ screen phone_home():
                         button:
                             add app.icon
                             action [Show(screen=app.screen), Hide(screen=None)]
-    
+
     vbox:
         align (0.5, 0.93)
         textbutton "Close":
@@ -280,9 +256,10 @@ screen contacts():
 
         frame:
             style "phone_screen"
-
+            
             vbox:
                 xalign 0.5
+
                 spacing 15
 
                 for contact in phone_state.contacts:
@@ -292,17 +269,17 @@ screen contacts():
                             action [Show("chat_screen", contact=contact), Hide(screen=None), Function(contact.mark_read)]
                             hbox:
                                 add contact.pfp:
-                                size (60, 60)
+                                    size (60, 60)
                                 text contact.name:
                                     if contact.has_unread:
                                         color "#cc0000"
                                         bold True
                                     else:
                                         color "#000000"
-                                    
                                     size 24
                                     yalign 0.5
-                        
+
+
                         frame:
                             background "#CCCCCC"
                             xfill True
@@ -329,7 +306,7 @@ screen chat_screen(contact):
 
         python:
             _msg_count = sum(1 for _s in contact.chat)
-            if not hasattr(chat_yadj, "_las_count") or chat_yadj._last_count != _msg_count:
+            if not hasattr(chat_yadj, "_last_count") or chat_yadj._last_count != _msg_count:
                 chat_yadj._last_count = _msg_count
                 chat_yadj.value = float("inf")
 
@@ -420,6 +397,8 @@ screen chat_screen(contact):
 
 screen photo_viewer():
         modal True
+        on "show" action Function(phone_open)
+        on "hide" action Function(phone_close)
         zorder 1000
 
         button:
@@ -435,8 +414,7 @@ screen photo_viewer():
                 xsize 1280
                 ysize 720
 
-                fit "contain"
-
+                fit "contain"  
 screen feed():
     modal True
 

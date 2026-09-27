@@ -40,4 +40,5 @@ label init_phone:
             ]
 
 
-        #renpy.block_rollback()
+        renpy.block_rollback()
+    return

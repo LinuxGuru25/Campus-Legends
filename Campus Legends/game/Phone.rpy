@@ -1,5 +1,7 @@
 default viewing_photo = False
 default current_photo = None
+default feed = []
+default back_post = None
 
 init -10 python:
 
@@ -12,11 +14,14 @@ init -10 python:
             self.initialized = False
             self.apps = []
             self.contacts = []
+            self.all_profiles = []
 
         def reset(self):
             self.initialized = False
             self.apps = []
             self.contacts = []
+            self.feed = []
+            self.all_profiles = []
 
     class App(NoRollback):
         def __init__(self, name, screen, icon=None):
@@ -40,9 +45,6 @@ init -10 python:
 
         def mark_unread(self):
             self.has_unread = True
-        
-        def add_sms(self, sms):
-            self.chat.append(sms)
         
         def kill_choices(self):
             for sms in self.chat:
@@ -137,6 +139,64 @@ init -10 python:
             player_reply.visible = True
             contact.chat.append(self.response)
             self.response.delay = 1.0
+#====================================
+# TWATTER CLASSES
+#====================================
+    
+    class Profile:
+        def __init__(self, username, initial_followers=0, initial_following=0, pfp="images/phone/icon.png"):
+            self.username = username
+            self.initial_followers = initial_followers
+            self.initial_following = initial_following
+            self.pfp = pfp
+            self.posts = []
+            self.visible = False
+            self.added = False
+
+        def show_profile(self):
+            self.visible = True
+    
+    
+    class Post:
+        def __init__(self, owner=None, text=None, image=None, initial_likes=0, initial_retwats=0, from_player=False):
+            self.owner = owner
+            self.text = text
+            self.image = image
+            self.initial_likes = initial_likes
+            self.initial_retwats = initial_retwats
+            self.from_player = from_player
+            self.comments = []
+            self.player_liked = False
+            self.player_retwat = False
+            self.visible = False
+            self.added = False
+
+        def toggle_likes(self):
+            self.player_liked = not self.player_liked
+        
+        def toggle_retwats(self):
+            self.player_retwat = not self.player_retwat
+        
+        def get_likes(self):
+            return str(self.initial_likes +(1 if self.player_liked else 0))
+
+        def get_retwats(self):
+            return str(self.initial_retwats +(1 if self.player_retwat else 0))
+        
+        def get_comments(self):
+            return str(len(self.comments))
+
+        def new_comment(self, owner, text=None, image=None):
+            from_player = owner is None
+            comment = Comment(owner=owner, text=text, image=image, from_player=from_player)
+            self.comments.append(comment)
+            comment.visible = True
+            return comment
+
+    class Comment(Post):
+        def show_comment(self):
+            self.visible = True
+
 
 #====================================
 # FUNCTIONS
@@ -159,6 +219,15 @@ init -10 python:
             contact.mark_unread()
         return sms
 
+    def new_post(owner, text=None, image=None):
+        from_player = owner is None
+        post = Post(owner=owner, text=text, image=image, from_player=from_player)   
+        owner.posts.append(post)   
+        feed.append(post)
+        post.visible = True
+        return post
+
+    
 #====================================
 # STYLES
 #====================================
@@ -195,6 +264,22 @@ style blue_bg:
     xminimum 0
     background "#0066FF"
     padding(15,10)
+
+style post_bg:
+    xalign 0.5
+    yalign 0.5
+    xfill True
+    yfill False
+    yminimum 0
+    xminimum 0
+    background "#FFFFFF"
+    padding(15,10)
+
+style readable:
+    font "DejaVuSans.ttf"
+    color "#000000"
+    size 20
+    outlines [(0, "#000000", 0, 0)]
 
 #====================================
 # SCREENS
@@ -354,7 +439,7 @@ screen chat_screen(contact):
                                         style bubble_style
                                         vbox:
                                             spacing 15
-                                            text sms.text style "default":
+                                            text sms.text style "readable":
                                                 size 20
                                                 color text_color
 
@@ -385,7 +470,7 @@ screen chat_screen(contact):
                             idle_background "#999999"
                             padding (10, 10)
                             text choice.text:
-                                size 20
+                                style "readable"
                                 idle_color "#000000"
                                 hover_color "#FFFFFF"
                             action [
@@ -415,281 +500,533 @@ screen photo_viewer():
                 ysize 720
 
                 fit "contain"  
+
 screen feed():
     modal True
+    
+    on "show" action Function(phone_open)
+    on "hide" action Function(phone_close)
+
+    button: 
+        xfill True
+        yfill True
+        background "#00000080"
+        action NullAction()
+
 
     window:
         style "phone_bg"
 
-        vbox:
-            
-            null height 65
-            spacing 5
+        frame:
+            style "phone_screen"
 
             viewport:
-                xpos 13
+                xalign 0.5
                 yalign 0.5
                 xsize 450
-                ysize 750
+                ysize 800
                 scrollbars "vertical"
-                draggable True
                 mousewheel True
-                
+                draggable True
+
                 vbox:
-                    frame:
-                        xpos 0.05
-                        yalign 0.5
-                        background None
+                    xalign 0.5
+                    yalign 0.5
+                    spacing 5
+                    button:
                         xfill True
-                        ysize 100
+                        background "#dddddd"
+                        action [Show("profile_screen", profile=player_profile), Hide(screen=None)]
                         hbox:
-                            button:
-                                add player_pf.pfp:
-                                    size (75, 75)
-                                action [Show("profile_screen", profile=player_pf), Hide(screen=None)]
-
-                            null width 85
+                            add player_profile.pfp:
+                                size (60, 60)
+                            text player_profile.username:
+                                color "#000000"
+                                size 24
+                                yalign 0.5
+                    frame:
+                        background "#CCCCCC"
+                        xfill True
+                        ysize 1
+                    
+                    for post in feed:
+                        if post.visible and (post.owner is player_profile or post.owner.visible):
+                            vbox:     
+                                hbox:
+                                    button:
+                                        xfill True
+                                        background "#FFFFFF"
+                                        action [Show("profile_screen", profile=post.owner), Hide(screen=None)]
+                                        hbox:
+                                            add post.owner.pfp:
+                                                size (40, 40)
+                                            text post.owner.username:
+                                                color "#000000"
+                                                size 24
+                                                yalign 0.5
+                                        
+                                if post.image and not post.text:
+                                    frame:
+                                        style "post_bg"
                             
-                            text "Feed" size 35 color "#000000" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)] xalign 0.5 yalign 0.5
-                            
-                        frame:
-                            background "#CCCCCC"
-                            xfill True
-                            ysize 3
-
-                        for post in all_posts:
-                            if post.visible:
-                                $ _author = post.author  # profile object
-
-                                frame:
-                                    style "post_bg"
-                                    
-                                    hbox:
-                                        spacing 10
+                                        vbox:
+                                            spacing 5
+                                            xalign 0.5
+                                            imagebutton:
+                                                idle Transform(post.image, fit="contain", xsize=280, ysize=200)
+                                                hover Transform(post.image, fit="contain", xsize=280, ysize=200)
+                                                action [SetVariable("viewing_photo", True), SetVariable("current_photo", post.image)]
+                                            
+                                elif post.text and not post.image:        
+                                    frame:
+                                        style "post_bg"
+                                        
+                                        vbox:
+                                            spacing 15
+                                            xalign 0.5
+                                            text post.text style "readable"
+                                                        
+                                        
+                                elif post.text and post.image:
+                                    frame:
+                                        style "post_bg"
 
                                         vbox:
-                                            yalign 0.0
-                                            button:
-                                                add _author.pfp:
-                                                    size (60, 60)
-                                                action [Show("profile_screen", profile=_author), Hide(screen=None)]
-
-
-                                        vbox:
-                                            spacing 8
-                                            xmaximum 370
-
-                                            
-                                            textbutton _author.get_username():
-                                                text_hover_color "#646464"
-                                                text_idle_color "#000000"
-                                                text_font "DejaVuSans.ttf"
-                                                text_outlines [(0, "#000000", 0, 0)]
-                                                text_size 25
-                                                xalign 0.0
-
-                                                action Show("profile_screen", profile=_author), Hide(screen=None)
-
-                                            
-                                            if post.text:
-                                                text post.text:
-                                                    size 20
-                                                    color "#000000"
-                                                    font "DejaVuSans.ttf"
-                                                    outlines [(0, "#000000", 0, 0)]
-
-                                            
-                                            if post.image is not None:
+                                            xalign 0.5
+                                            text post.text style "readable":
+                                                xalign 0.5
+                                                    
+                                            vbox:
+                                                spacing 5
+                                                xalign 0.5
                                                 imagebutton:
                                                     idle Transform(post.image, fit="contain", xsize=280, ysize=200)
                                                     hover Transform(post.image, fit="contain", xsize=280, ysize=200)
-                                                    action [
-                                                        SetVariable("viewing_photo", True),
-                                                        SetVariable("current_photo", post.image),
-                                                        Show("photo_viewer")
-                                                    ]
+                                                    action [SetVariable("viewing_photo", True), SetVariable("current_photo", post.image)]
 
+                                frame:
+                                    style "post_bg"
+                                    hbox:
+                                        xalign 0.5
+                                        button:
+                                            hbox:
+                                                add "images/phone/icons/comment_icon.png":
+                                                    size (35,35)
+                                                        
+                                                text [post.get_comments()]:
+                                                    style "readable"
+                                            action [Show("post_comments", post=post, back_screen="feed"), Hide(screen=None)]
+
+                                        if post.player_retwat:
+                                            button:
+                                                hbox:
+                                                    add "images/phone/icons/retwat_icon.png":
+                                                        size (35, 35)
+
+                                                    text [post.get_retwats()]:
+                                                        style "readable"
+                                                action Function(post.toggle_retwats)
+
+                                        else:
+                                            button:
+                                                hbox:
+                                                    add "images/phone/icons/retwat_icon.png":
+                                                        size (35, 35)
+
+                                                    text [post.get_retwats()]:
+                                                        style "readable"
+                                                action Function(post.toggle_retwats)
+                                                
+                                        if post.player_liked:
+                                            button:
+                                                hbox:
+                                                    add "images/phone/icons/red_heart_icon.png":
+                                                        size (35, 35)
+
+                                                    text [post.get_likes()]:
+                                                        style "readable"
+                                                action Function(post.toggle_likes)
+                                                
+                                        else:
+                                            button:
+                                                hbox:
+                                                    add "images/phone/icons/white_heart_icon.png":
+                                                        size (35, 35)
+
+                                                    text [post.get_likes()]:
+                                                        style "readable"
+                                                action Function(post.toggle_likes)
+
+                                        
+                            frame:
+                                background "#CCCCCC"
+                                xfill True
+                                ysize 1
+
+    if viewing_photo:
+        use photo_viewer
+
+    vbox:
+        align(0.5, 0.93)
+        textbutton "Back":
+            action [Show("phone_home"), Hide(screen=None)]
+
+screen profile_screen(profile, back_screen="feed", back_args=None):
+    modal True
+    
+    on "show" action Function(phone_open)
+    on "hide" action Function(phone_close)
+
+    button: 
+        xfill True
+        yfill True
+        background "#00000080"
+        action NullAction()
+
+
+    window:
+        style "phone_bg"
+
+        frame:
+            style "phone_screen"
+
+            viewport:
+                xalign 0.5
+                yalign 0.5
+                xsize 450
+                ysize 800
+                scrollbars "vertical"
+                mousewheel True
+                draggable True
+
+                vbox:
+                    xalign 0.5
+                    yalign 0.5
+                    spacing 5
+
+                    frame:
+                        xfill True
+                        background "#dddddd"
+
+                        hbox:
+                            spacing 5
+                            add profile.pfp:
+                                size (75,75)
+                            
+                            text profile.username:
+                                style "readable"
+                                yalign 0.5
+                    
+                    for post in profile.posts:
+                        if post.visible:
+                            vbox:
+                                
+                                hbox:
+                                    button:
+                                        xfill True
+                                        background "#FFFFFF"
+                                        action NullAction()
+                                        hbox:
+                                            add profile.pfp:
+                                                size (40, 40)
+                                            text profile.username:
+                                                color "#000000"
+                                                size 24
+                                                yalign 0.5
+                                
+                                if post.image and not post.text:
+                                            frame:
+                                                style "post_bg"
+                            
+                                                vbox:
+                                                    spacing 5
+                                                    xalign 0.5
+                                                    imagebutton:
+                                                        idle Transform(post.image, fit="contain", xsize=280, ysize=200)
+                                                        hover Transform(post.image, fit="contain", xsize=280, ysize=200)
+                                                        action [SetVariable("viewing_photo", True), SetVariable("current_photo", post.image)]
+                                            
+                                elif post.text and not post.image:        
+                                    frame:
+                                        style "post_bg"
+                                
+                                        vbox:
+                                            spacing 15
+                                            xalign 0.5
+                                            text post.text style "readable"
+                                                
+                                
+                                elif post.text and post.image:
+                                    frame:
+                                        style "post_bg"
+
+                                        vbox:
+                                            xalign 0.5
+                                            text post.text style "readable":
+                                                xalign 0.5
+                                            
+                                            vbox:
+                                                spacing 5
+                                                xalign 0.5
+                                                imagebutton:
+                                                    idle Transform(post.image, fit="contain", xsize=280, ysize=200)
+                                                    hover Transform(post.image, fit="contain", xsize=280, ysize=200)
+                                                    action [SetVariable("viewing_photo", True), SetVariable("current_photo", post.image)]
+
+                                frame:
+                                    style "post_bg"
+                                    hbox:
+                                        xalign 0.5
+                                        button:
+                                            hbox:
+                                                add "images/phone/icons/comment_icon.png":
+                                                    size (35,35)
+                                                
+                                                text [post.get_comments()]:
+                                                    style "readable"
+                                            action [Show("post_comments", post=post, back_screen="profile_screen", back_args={"profile": profile, "back_screen": back_screen, "back_args": back_args}), Hide(screen=None)]
+
+                                        if post.player_retwat:
+                                            button:
+                                                hbox:
+                                                    add "images/phone/icons/retwat_icon.png":
+                                                        size (35, 35)
+
+                                                    text [post.get_retwats()]:
+                                                        style "readable"
+                                                action Function(post.toggle_retwats)
+
+                                        else:
+                                            button:
+                                                hbox:
+                                                    add "images/phone/icons/retwat_icon.png":
+                                                        size (35, 35)
+
+                                                    text [post.get_retwats()]:
+                                                        style "readable"
+                                                action Function(post.toggle_retwats)
+                                        
+                                        if post.player_liked:
+                                            button:
+                                                hbox:
+                                                    add "images/phone/icons/red_heart_icon.png":
+                                                        size (35, 35)
+
+                                                    text [post.get_likes()]:
+                                                        style "readable"
+                                                action Function(post.toggle_likes)
+                                        
+                                        else:
+                                            button:
+                                                hbox:
+                                                    add "images/phone/icons/white_heart_icon.png":
+                                                        size (35, 35)
+
+                                                    text [post.get_likes()]:
+                                                        style "readable"
+                                                action Function(post.toggle_likes)
+
+                                        
                                 frame:
                                     background "#CCCCCC"
                                     xfill True
-                                    ysize 3
+                                    ysize 1
+
+    if viewing_photo:
+        use photo_viewer
 
     vbox:
-        align(0.5, 0.9)
+        align(0.5, 0.93)
         textbutton "Back":
-            text_font "DejaVuSans.ttf"
-            text_outlines [(0, "#000000", 0, 0)]
-            action [Show("phone_home"), Hide(screen=None)]
+            action [Show(back_screen, **(back_args or {})), Hide(screen=None)]
 
-screen profile_screen(profile, back_screen="feed"):
+screen post_comments(post, back_screen="feed", back_args=None):
     modal True
+    
+    on "show" action Function(phone_open)
+    on "hide" action Function(phone_close)
+
+    button: 
+        xfill True
+        yfill True
+        background "#00000080"
+        action NullAction()
+
 
     window:
         style "phone_bg"
 
-        viewport:
-            xpos 13
-            yalign 0.3
-            xsize 450
-            ysize 750
-            scrollbars "vertical"
-            mousewheel True
-            draggable True
-            
-            vbox:
-                spacing 15
-                xfill True
-                
-                text "Profile"
+        frame:
+            style "phone_screen"
 
-                if profile.visible:
-                    pass
-                
-                grid 3 10:
-                    for post in profile.posts:
-                        if post.visible:
-                            pass
-
-    vbox:
-        align(0.5, 0.9)
-        textbutton "Back":
-            text_font "DejaVuSans.ttf"
-            text_outlines [(0, "#000000", 0, 0)]
-            action [Show("feed"), Hide(screen=None)]
-
-screen post_comments(post, back_screen="feed"):
-    modal True
-
-    window:
-        style "phone_bg"
-
-        viewport:
-            xalign 0.2
-            yalign 0.3
-            xsize 450
-            ysize 750
-            draggable True
-            scrollbars "vertical"
-            mousewheel True
-                
-            vbox:
-                spacing 15
+            viewport:
                 xalign 0.5
-                
-                # Show the post at the top
-                frame:
-                    xsize 430
-                    background "#ffffff"
-                    padding (10, 10)
+                yalign 0.5
+                xsize 450
+                ysize 800
+                scrollbars "vertical"
+                mousewheel True
+                draggable True
+
+                vbox:
+                    xalign 0.5
+                    yalign 0.5
+                    spacing 5
+
+                    frame:
+                        style "post_bg"
+
+                        if post.visible:
+                            vbox:
+                                if post.image and not post.text:
+                                    frame:
+                                        style "post_bg"
                     
-                    vbox:
-                        spacing 8
-                        
-                        # Post author info
-                        hbox:
-                            spacing 10
-                            
-                            add post.author.pfp:
-                                size (65, 65)
-                            
-                            style "post_bg"
-                            vbox:
-                                # align (0.5, 0.5)
-                                text post.author.get_username():
-                                    size 20
-                                    font "DejaVuSans.ttf"
-                                    outlines [(0, "#000000", 0, 0)]
-                                    color "#000000"
-                                    bold True
-
-                                imagebutton:
-                                    idle Transform(post.image, fit="contain", xsize=280, ysize=280)
-                                    hover Transform(post.image, fit="contain", xsize=280, ysize=280)
-                                    action [SetVariable("viewing_photo", True), SetVariable("current_photo", post.image), Show("photo_viewer")]
+                                        vbox:
+                                            spacing 5
+                                            xalign 0.5
+                                            imagebutton:
+                                                idle Transform(post.image, fit="contain", xsize=280, ysize=200)
+                                                hover Transform(post.image, fit="contain", xsize=280, ysize=200)
+                                                action [SetVariable("viewing_photo", True), SetVariable("current_photo", post.image)]
+                                            
+                                elif post.text and not post.image:        
+                                    frame:
+                                        style "post_bg"
                                 
-                                text post.caption:
-                                    xalign 0.0
-                                    font "DejaVuSans.ttf"
-                                    outlines [(0, "#000000", 0, 0)]
-                                    size 20
-                                    color "#000000"
-                        
+                                        vbox:
+                                            spacing 15
+                                            xalign 0.5
+                                            text post.text style "readable"
+                                                
+                                
+                                elif post.text and post.image:
+                                    frame:
+                                        style "post_bg"
 
-                # Divider
-                frame:
-                    background "#CCCCCC"
-                    xfill True
-                    ysize 3
-                
-                # Comments section
-                if len(post.comments) > 1 or len(post.comments) == 0:
-                    text f"{post.get_comments()} Comments" size 22 color "#666666" xalign 0.0 font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)]
-                elif len(post.comments) == 1:
-                    text f"{post.get_comments()} Comment" size 22 color "#666666" font "DejaVuSans.ttf" outlines [(0, "#000000", 0, 0)] xalign 0.0
-                
-                # Loop through comments
-                for comment in post.comments:
-                    if comment.visible:
-                        frame:
-                            style "comment"
-                            xsize 430
-                            
-                            vbox:
-                                spacing 8
-                            
-                                hbox:
-                                    xfill True
-                                    
-                                    hbox:
-                                        spacing 10
-                                        xalign 0.0
-                                        
-                                        add comment.author.pfp:
-                                            size (50, 50)
-                                        
-                                        text comment.author.get_username():
-                                            size 20
-                                            font "DejaVuSans.ttf"
-                                            outlines [(0, "#000000", 0, 0)]
-                                            color "#000000"
+                                        vbox:
+                                            xalign 0.5
+                                            text post.text style "readable":
+                                                xalign 0.5
+                                            
+                                            vbox:
+                                                spacing 5
+                                                xalign 0.5
+                                                imagebutton:
+                                                    idle Transform(post.image, fit="contain", xsize=280, ysize=200)
+                                                    hover Transform(post.image, fit="contain", xsize=280, ysize=200)
+                                                    action [SetVariable("viewing_photo", True), SetVariable("current_photo", post.image)]
 
-                                    
+                                frame:
+                                    style "post_bg"
                                     hbox:
-                                        xalign 1.0
-                                        
-                                        if comment.player_liked:
-                                            textbutton "❤️ [comment.get_likes()]":
-                                                text_size 20
-                                                text_font "DejaVuSans.ttf"
-                                                text_outlines [(0, "#000000", 0, 0)]
-                                                text_color "#000000"
-                                                background None
-                                                action Function(comment.toggle_like)
+                                        xalign 0.5
+                                        button:
+                                            hbox:
+                                                add "images/phone/icons/comment_icon.png":
+                                                    size (35,35)
+                                                
+                                                text [post.get_comments()]:
+                                                    style "readable"
+                                            action NullAction()
+
+                                        if post.player_retwat:
+                                            button:
+                                                hbox:
+                                                    add "images/phone/icons/retwat_icon.png":
+                                                        size (35, 35)
+
+                                                    text [post.get_retwats()]:
+                                                        style "readable"
+                                                action Function(post.toggle_retwats)
+
                                         else:
-                                            textbutton "🤍 [comment.get_likes()]":
-                                                text_size 20
-                                                text_font "DejaVuSans.ttf"
-                                                text_outlines [(0, "#000000", 0, 0)]
-                                                text_color "#000000"
-                                                background None
-                                                action Function(comment.toggle_like)
-                                
-                                # Comment text
-                                text comment.text:
-                                    font "DejaVuSans.ttf"
-                                    outlines [(0, "#000000", 0, 0)]
-                                    size 20
-                                    color "#000000"
-                                    xmaximum 400
+                                            button:
+                                                hbox:
+                                                    add "images/phone/icons/retwat_icon.png":
+                                                        size (35, 35)
+
+                                                    text [post.get_retwats()]:
+                                                        style "readable"
+                                                action Function(post.toggle_retwats)
+                                        
+                                        if post.player_liked:
+                                            button:
+                                                hbox:
+                                                    add "images/phone/icons/red_heart_icon.png":
+                                                        size (35, 35)
+
+                                                    text [post.get_likes()]:
+                                                        style "readable"
+                                                action Function(post.toggle_likes)
+                                        
+                                        else:
+                                            button:
+                                                hbox:
+                                                    add "images/phone/icons/white_heart_icon.png":
+                                                        size (35, 35)
+
+                                                    text [post.get_likes()]:
+                                                        style "readable"
+                                                action Function(post.toggle_likes)
+  
+                                frame:
+                                    background "#CCCCCC"
+                                    xfill True
+                                    ysize 1
+
+                                for comment in post.comments:
+                                    if comment.visible:
+                                        frame:
+                                            style "post_bg"
+                                            vbox:
+                                                xfill True
+                                                spacing 5
+                                            
+                                                    
+                                                button:
+                                                    action [Show("profile_screen", profile=(player_profile if comment.from_player else comment.owner), back_screen="post_comments", back_args={"post": post, "back_screen": back_screen, "back_args": back_args}), Hide(screen=None)]
+                                                    hbox:
+                                                        $ profile_picture = player_profile.pfp if comment.from_player else comment.owner.pfp
+                                                        $ profile_username = player_profile.username if comment.from_player else comment.owner.username
+                                                        
+                                                        add profile_picture:
+                                                            size (75,75)
+                                                        
+                                                        text profile_username:
+                                                            style "readable"
+                                                            yalign 0.5
+                                                
+
+                                                if comment.text and not comment.image:
+                                                    text comment.text:
+                                                        style "readable"
+                                                
+                                                elif comment.image and not comment.text:
+                                                    imagebutton:
+                                                        idle Transform(comment.image, fit="contain", xsize=280, ysize=200)
+                                                        hover Transform(comment.image, fit="contain", xsize=280, ysize=200)
+                                                        action [SetVariable("viewing_photo", True), SetVariable("current_photo", comment.image)]
+                                                
+                                                elif comment.text and comment.image:
+                                                    text comment.text:
+                                                        style "readable"
+                                                    
+                                                    imagebutton:
+                                                        idle Transform(comment.image, fit="contain", xsize=280, ysize=200)
+                                                        hover Transform(comment.image, fit="contain", xsize=280, ysize=200)
+                                                        action [SetVariable("viewing_photo", True), SetVariable("current_photo", comment.image)]
+
+                                        frame:
+                                            background "#CCCCCC"
+                                            xfill True
+                                            ysize 1
+
+
+    if viewing_photo:
+        use photo_viewer
 
     vbox:
-        align(0.5, 0.9)
+        align(0.5, 0.93)
         textbutton "Back":
-            text_font "DejaVuSans.ttf"
-            text_outlines [(0, "#000000", 0, 0)]
-            action If(
-                back_screen == "profile_screen",
-                [Show("profile_screen", profile=post.author, back_screen="feed"), Hide(screen=None)],
-                [Show(back_screen), Hide(screen=None)]
-            )
-
+            action [Show(back_screen, **(back_args or {})), Hide(screen=None)]

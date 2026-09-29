@@ -12,11 +12,15 @@ label init_phone:
                 App("Relationships", "phone_stats", "images/phone/icons/stats_icon.png"),
                 App("Twatter", "feed", "images/phone/icons/twatter_icon.png")
             ]
-            
+
+            feed = []
+
             #====================================
             # OBJECT INSTANCES
             #====================================
             sms = SMS()
+            post = Post()
+            
 
             # will add pfp images later
             aubrey_contact = Contact("Aubrey")
@@ -39,6 +43,29 @@ label init_phone:
                 tiffany_contact
             ]
 
+            # will add pfp images later
+            player_profile = Profile("new_student", 0, 0)
+            aubrey_profile = Profile("Aubrey_username", 0, 0)
+            jess_profile = Profile("Jess_username", 0, 0)
+            kaia_profile = Profile("kaia_username", 0, 0)
+            malik_profile = Profile("malik_username", 0, 0)
+            misty_profile = Profile("misty_username", 0, 0)
+            norah_profile = Profile("Norah_username", 0, 0)
+            sienna_profile = Profile("Sienna_username", 0, 0)
+            tiffany_profile = Profile("Tiffany_username", 0, 0)
+
+
+            phone_state.all_profiles = [
+                player_profile,
+                aubrey_profile,
+                jess_profile,
+                kaia_profile,
+                malik_profile,
+                misty_profile,
+                norah_profile, 
+                sienna_profile,
+                tiffany_profile
+            ]
 
         renpy.block_rollback()
     return

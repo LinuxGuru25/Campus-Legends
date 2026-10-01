@@ -58,7 +58,7 @@ init python:
     for character, items in GALLERY_DATA.items():
         for button_name, image_file in items:
             gallery.button(button_name)
-            gallery.unlock_image(image_file.replace(".webp", ""))
+            gallery.image(image_file.replace(".webp", ""))
             gallery.condition(f"persistent.gallery_unlocks.get('{button_name}', False)")
 
 ###############################################
@@ -67,7 +67,18 @@ init python:
 
 init python:
     def unlock_gallery(button_name):
+        if persistent.gallery_unlocks is None:
+            persistent.gallery_unlocks = {}
         persistent.gallery_unlocks[button_name] = True
+        renpy.save_persistent()
+
+    def unlock_all():
+        if persistent.gallery_unlocks is None:
+            persistent.gallery_unlocks = {}
+        for character, items in GALLERY_DATA.items():
+            for button_name, image_file in items:
+                persistent.gallery_unlocks[button_name] = True
+        renpy.save_persistent()
 
 ###############################################
 # MAIN GALLERY SCREEN 
@@ -84,6 +95,9 @@ screen gallery_screen():
         for character in GALLERY_DATA.keys():
             textbutton character:
                 action ShowMenu("gallery_character", character=character)
+
+        textbutton "Unlock All":
+            action Function(unlock_all)
 
         textbutton "Return":
             action Return()

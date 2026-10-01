@@ -112,11 +112,20 @@ screen character_select():
 
                         text character size 20 xalign 0.5 yalign 1.0
     
-    textbutton "Return":
-        text_size 40
-        xalign 0.05
+    vbox:
+        xalign 0.0
         yalign 0.95
-        action Return()
+        textbutton "Unlock All":
+            text_size 40
+            xalign 0.95
+            yalign 0.95
+            action Function(unlock_all_replays)
+
+        textbutton "Return":
+            text_size 40
+            xalign 0.05
+            yalign 0.95
+            action Return()
 
     textbutton "Change Name":
         text_size 40  
@@ -163,18 +172,8 @@ screen replay_screen(character):
                         yalign 0.5
                         action NullAction()
 
-    vbox:
-        xalign 0.0
+    textbutton "Back":
+        text_size 40
+        xalign 0.05
         yalign 0.95
-        textbutton "Unlock All":
-            text_size 40
-            xalign 0.95
-            yalign 0.95
-            action Function(unlock_all_replays)
-
-
-        textbutton "Back":
-            text_size 40
-            xalign 0.05
-            yalign 0.95
-            action ShowMenu("character_select"), Hide("replay_screen")
+        action ShowMenu("character_select"), Hide("replay_screen")

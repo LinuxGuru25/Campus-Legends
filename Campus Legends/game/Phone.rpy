@@ -109,7 +109,7 @@ init -10 python:
             else:
                 player_choice = Choice(text=player_text, response=npc_response)
                 
-            if player_text:
+            if player_text or player_image:
                 self.add_choice(player_choice)
                 
                 if self.visible:
@@ -135,8 +135,7 @@ init -10 python:
 
         def choose(self, contact):
             self.chosen = True
-            player_reply = new_sms(contact, None, self.text, self.image)
-            player_reply.visible = True
+            new_sms(contact, None, self.text, self.image)
             contact.chat.append(self.response)
             self.response.delay = 1.0
 #====================================
@@ -144,11 +143,12 @@ init -10 python:
 #====================================
     
     class Profile:
-        def __init__(self, username, initial_followers=0, initial_following=0, pfp="images/phone/icon.png"):
+        def __init__(self, username, followers=0, following=0, pfp="images/phone/icon.png", description=None):
             self.username = username
-            self.initial_followers = initial_followers
-            self.initial_following = initial_following
+            self.followers = followers
+            self.following = following
             self.pfp = pfp
+            self.description = description
             self.posts = []
             self.visible = False
             self.added = False
@@ -158,18 +158,23 @@ init -10 python:
     
     
     class Post:
-        def __init__(self, owner=None, text=None, image=None, initial_likes=0, initial_retwats=0, from_player=False):
+        def __init__(self, owner=None, text=None, image=None, follow_up=None, initial_likes=0, initial_retwats=0, from_player=False):
             self.owner = owner
             self.text = text
             self.image = image
+            self.follow_up = follow_up
             self.initial_likes = initial_likes
             self.initial_retwats = initial_retwats
             self.from_player = from_player
             self.comments = []
+            self.comment_choices = []
             self.player_liked = False
             self.player_retwat = False
+            self.resolved = False
             self.visible = False
-            self.added = False
+
+        def mark_resolved(self):
+            self.resolved = True
 
         def toggle_likes(self):
             self.player_liked = not self.player_liked
@@ -185,17 +190,67 @@ init -10 python:
         
         def get_comments(self):
             return str(len(self.comments))
-
+        
         def new_comment(self, owner, text=None, image=None):
             from_player = owner is None
-            comment = Comment(owner=owner, text=text, image=image, from_player=from_player)
+            comment = Comment(owner=owner, text=text, image=image, from_player=from_player)       
             self.comments.append(comment)
-            comment.visible = True
+            comment.show_comment()
+
             return comment
 
+        def show_comment_choices(self):
+            for comment in self.comment_choices:
+                if not comment.chosen:
+                    comment.show_comment()
+        
+        def hide_comment_choices(self):
+            for comment in self.comment_choices:
+                if self.resolved:
+                    comment.hide_comment()
+
+        def comment_chain(self, player_text=None, npc_text=None, player_image=None, npc_image=None):
+            if npc_image:
+                npc_response = Comment(self.owner, image=npc_image)
+            else:
+                npc_response = Comment(self.owner, text=npc_text)
+            
+            if player_image:
+                player_comment = Comment(owner=None, image=player_image, response=npc_response)
+            else:
+                player_comment = Comment(owner=None, text=player_text,  response=npc_response)
+
+            if player_text or player_image:
+                self.comment_choices.append(player_comment)    
+
+                if self.visible:
+                    player_comment.show_comment()
+            else:
+                self.follow_up = npc_response
+
+            return npc_response
+        
+
     class Comment(Post):
+        def __init__(self, owner=None, text=None, image=None, from_player=False, response=None):
+            super().__init__(owner=owner, text=text, image=image, from_player=from_player)
+            self.response = response
+            self.chosen = False
+
+        def hide_comment(self):
+            self.visible = False
+        
         def show_comment(self):
             self.visible = True
+
+
+        def choose(self, post):
+            self.chosen = True
+            post.new_comment(owner=self.owner, text=self.text, image=self.image)
+            if self.response:
+                post.comments.append(self.response)
+                self.response.visible = True
+            
 
 
 #====================================
@@ -443,9 +498,6 @@ screen chat_screen(contact):
                                                 size 20
                                                 color text_color
 
-    if viewing_photo:
-        use photo_viewer()
-
     vbox:
         align(0.5, 0.93)
         textbutton "Back":
@@ -465,20 +517,29 @@ screen chat_screen(contact):
                 for choice in sms.choices:
                     if choice.visible:
                         button:
+                            action [
+                            Function(choice.choose, contact),
+                            Function(sms.mark_resolved),
+                            Function(sms.player_replied),
+                            Function(sms.hide_choices)
+                            ]
                             xfill True
                             hover_background "#0066FF"
                             idle_background "#999999"
                             padding (10, 10)
-                            text choice.text:
-                                style "readable"
-                                idle_color "#000000"
-                                hover_color "#FFFFFF"
-                            action [
-                                Function(choice.choose, contact),
-                                Function(sms.mark_resolved),
-                                Function(sms.hide_choices),
-                                Function(sms.player_replied)
-                            ]
+                            
+                            if choice.text and not choice.image:
+                                text choice.text:
+                                    style "readable"
+                                    idle_color "#000000"
+                                    hover_color "#FFFFFF"
+                            
+                            elif choice.image and not choice.text: 
+                                add choice.image:
+                                    size (280, 200)
+    if viewing_photo:
+        use photo_viewer()
+                        
 
 screen photo_viewer():
         modal True
@@ -663,13 +724,13 @@ screen feed():
                                 xfill True
                                 ysize 1
 
-    if viewing_photo:
-        use photo_viewer
-
     vbox:
         align(0.5, 0.93)
         textbutton "Back":
             action [Show("phone_home"), Hide(screen=None)]
+    
+    if viewing_photo:
+        use photo_viewer
 
 screen profile_screen(profile, back_screen="feed", back_args=None):
     modal True
@@ -706,17 +767,37 @@ screen profile_screen(profile, back_screen="feed", back_args=None):
 
                     frame:
                         xfill True
+                        yfill False
                         background "#dddddd"
-
-                        hbox:
-                            spacing 5
-                            add profile.pfp:
-                                size (75,75)
+                        vbox:
+                            spacing 15
+                            hbox:
+                                spacing 5
+                                add profile.pfp:
+                                    size (75,75)
+                                
+                                text profile.username:
+                                    style "readable"
+                                    yalign 0.5
                             
-                            text profile.username:
-                                style "readable"
-                                yalign 0.5
+                            if profile.description:
+                                text profile.description:
+                                    style "readable"
+
+                            hbox:
+                                spacing 15
+
+                                text f"{profile.following} Following":
+                                    style "readable"
+                                
+                                text f"{profile.followers} Followers":
+                                    style "readable"
                     
+                    frame:
+                        background "#CCCCCC"
+                        xfill True
+                        ysize 1
+
                     for post in profile.posts:
                         if post.visible:
                             vbox:
@@ -832,13 +913,13 @@ screen profile_screen(profile, back_screen="feed", back_args=None):
                                     xfill True
                                     ysize 1
 
-    if viewing_photo:
-        use photo_viewer
-
     vbox:
         align(0.5, 0.93)
         textbutton "Back":
             action [Show(back_screen, **(back_args or {})), Hide(screen=None)]
+
+    if viewing_photo:
+        use photo_viewer
 
 screen post_comments(post, back_screen="feed", back_args=None):
     modal True
@@ -1022,11 +1103,45 @@ screen post_comments(post, back_screen="feed", back_args=None):
                                             xfill True
                                             ysize 1
 
-
-    if viewing_photo:
-        use photo_viewer
-
     vbox:
         align(0.5, 0.93)
         textbutton "Back":
             action [Show(back_screen, **(back_args or {})), Hide(screen=None)]
+
+    frame:
+        xpos 1230
+        yalign 0.5
+        xsize 450
+        ysize 800
+        background None
+        padding (20, 20)
+
+        vbox:
+            spacing 15
+            for comment in post.comment_choices:
+                if comment.visible:
+                    button:
+                        action [
+                            Function(comment.choose, post),
+                            Function(post.mark_resolved),
+                            Function(post.hide_comment_choices)
+                                
+                            ]
+                        xfill True
+                        hover_background "#0066FF"
+                        idle_background "#999999"
+                        padding (10, 10)
+   
+                        if comment.text and not comment.image:
+                            text comment.text:
+                                style "readable"
+                                idle_color "#000000"
+                                hover_color "#FFFFFF"
+                            
+                        elif comment.image and not comment.text:
+                            
+                            add comment.image:
+                                size (280, 200)
+
+    if viewing_photo:
+        use photo_viewer                        

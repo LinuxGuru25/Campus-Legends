@@ -48,7 +48,7 @@ label init_phone:
             aubrey_profile = Profile("Aubrey_username", 0, 0)
             jess_profile = Profile("Jess_username", 0, 0)
             kaia_profile = Profile("kaia_username", 0, 0)
-            malik_profile = Profile("malik_username", 0, 0)
+            malik_profile = Profile("malik_username", 0, 0, description="This is a description")
             misty_profile = Profile("misty_username", 0, 0)
             norah_profile = Profile("Norah_username", 0, 0)
             sienna_profile = Profile("Sienna_username", 0, 0)

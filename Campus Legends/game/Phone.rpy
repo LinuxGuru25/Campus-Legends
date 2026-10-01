@@ -212,15 +212,19 @@ init -10 python:
         def comment_chain(self, player_text=None, npc_text=None, player_image=None, npc_image=None):
             if npc_image:
                 npc_response = Comment(self.owner, image=npc_image)
-            else:
+            elif npc_text:
                 npc_response = Comment(self.owner, text=npc_text)
+            elif npc_text and npc_image:
+                npc_response = Comment(self.owner, text=npc_text, image=npc_image)
             
             if player_image:
                 player_comment = Comment(owner=None, image=player_image, response=npc_response)
-            else:
+            elif player_text:
                 player_comment = Comment(owner=None, text=player_text,  response=npc_response)
+            elif player_text and player_image:
+                player_comment = Comment(owner=None, text=player_text, image=player_image, response=npc_response)
 
-            if player_text or player_image:
+            if player_text or player_image or player_text and player_image:
                 self.comment_choices.append(player_comment)    
 
                 if self.visible:
@@ -250,8 +254,6 @@ init -10 python:
             if self.response:
                 post.comments.append(self.response)
                 self.response.visible = True
-            
-
 
 #====================================
 # FUNCTIONS
@@ -1120,28 +1122,40 @@ screen post_comments(post, back_screen="feed", back_args=None):
             spacing 15
             for comment in post.comment_choices:
                 if comment.visible:
-                    button:
-                        action [
-                            Function(comment.choose, post),
-                            Function(post.mark_resolved),
-                            Function(post.hide_comment_choices)
+                    vbox:
+                        spacing 5
+                        button:
+                            action [
+                                Function(comment.choose, post),
+                                Function(post.mark_resolved),
+                                Function(post.hide_comment_choices)
+                                    
+                                ]
+                            xfill True
+                            hover_background "#0066FF"
+                            idle_background "#999999"
+                            padding (10, 10)
+    
+                            if comment.text and not comment.image:
+                                text comment.text:
+                                    style "readable"
+                                    idle_color "#000000"
+                                    hover_color "#FFFFFF"
                                 
-                            ]
-                        xfill True
-                        hover_background "#0066FF"
-                        idle_background "#999999"
-                        padding (10, 10)
-   
-                        if comment.text and not comment.image:
-                            text comment.text:
-                                style "readable"
-                                idle_color "#000000"
-                                hover_color "#FFFFFF"
+                            elif comment.image and not comment.text:
+                                
+                                add comment.image:
+                                    size (280, 200)
                             
-                        elif comment.image and not comment.text:
-                            
-                            add comment.image:
-                                size (280, 200)
+                            elif comment.text and comment.image:
+                                
+                                text comment.text:
+                                    style "readable"
+                                    idle_color "#000000"
+                                    hover_color "#FFFFFF"
+                                
+                                add comment.image:
+                                    size (280, 200)
 
     if viewing_photo:
         use photo_viewer                        

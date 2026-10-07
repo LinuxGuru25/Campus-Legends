@@ -20,7 +20,6 @@ init -10 python:
             self.initialized = False
             self.apps = []
             self.contacts = []
-            self.feed = []
             self.all_profiles = []
 
     class App(NoRollback):

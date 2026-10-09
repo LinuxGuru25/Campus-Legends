@@ -3,7 +3,7 @@
 ## Unified Romance Engine — Campus Legends
 ##############################################
 
-default characters = {}
+#default characters = {}
 
 
 default relationship_points = {

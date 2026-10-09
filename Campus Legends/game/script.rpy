@@ -82,8 +82,72 @@ default walkthrough_enabled = False
 ###############################################
 # START OF GAME
 ###############################################
-
 label start:
+
+    call init_phone
+
+    scene white with dissolve
+
+    show screen phone_button
+
+    MCname "Test text"
+
+    Malik "What's up dude"
+
+    MCname "Not much, you?"
+
+    Malik "Same here."
+    Malik "Here's my number"
+
+    $ malik_contact.show_contact()
+    $ malik_profile.show_profile()
+
+    MCname "Awesome"
+
+    python:
+
+        malik_test = new_sms(malik_contact, malik_contact, image="images/phone/jeff.png")
+
+        malik_s1_0 = new_sms(malik_contact, malik_contact, "Hey bro")
+
+        malik_s1_1 = malik_s1_0.chain("what's up man", "Just making sure you gave me the right number")
+        malik_s1_2 = malik_s1_1.chain("Why would I give you a fake number?", "I don't know, you give me introvert vibes lol")
+        malik_s1_3 = malik_s1_2.chain(None, npc_text="What? It's true.")
+        malik_s1_4 = malik_s1_3.chain("Asshole", None)
+
+        malik_s1_1a = malik_s1_0.chain("Hey", "Howdy")
+        malik_s1_2a = malik_s1_1a.chain("There's a snake in my boot", "Okay calm down Woody")
+        malik_s1_3a = malik_s1_2a.chain("You started it.", "Whatever.")
+        mailk_s1_4a = malik_s1_3a.chain(player_image="images/phone/jeff.png", npc_text="Nice image")
+
+        test = new_post(malik_profile, text="Hello", image="images/phone/jeff.png")
+        new_post(malik_profile, text="What's up", image=None)
+        new_post(malik_profile, text=None, image="images/phone/jeff.png")
+
+        test.new_comment(owner=aubrey_profile, text="This is a comment")
+        test.comment_chain(player_text="test", player_image="images/phone/jeff.png", npc_text="Malik was here")
+    Malik "Well, I should go say hi to those ladies over there."
+
+    MCname "Yeah, sounds like a plan."
+
+    Malik "Lets go, dude."
+
+    menu:
+        "Okay":
+            MCname "Okay"
+
+            Malik "Follow me"
+
+        "Not now":
+            MCname "Not now"
+
+            Malik "Suit yourself"
+
+    pause
+
+    return
+
+label start_2:
 
     "Welcome to Campus Legends."
 

@@ -128,6 +128,14 @@ default preferences.text_cps = 0
 
 default preferences.afm_time = 15
 
+default persistent.text_outline = 1
+
+default persistent.text_outline_color = "#000000"
+
+define persistent.dialogueBoxOpacity = 0.3
+
+default persistent.pref_text_size = gui.text_size
+
 
 ## Save directory ##############################################################
 ##

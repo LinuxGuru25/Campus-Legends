@@ -1659,6 +1659,67 @@ style slider_slider:
     variant "small"
     xsize 900
 
+screen rush_objectives():
+
+    frame:
+        xalign 0.02
+        yalign 0.05
+        background "#0008"
+        padding 15
+
+        vbox:
+            text "Rush Week Objectives" size 28 color "#ffffff"
+
+            # Get a blowie
+            if rush_obj_blowie == "done":
+                text "✔ Get a blowie" color "#00ff00"
+            elif rush_obj_blowie == "active":
+                text "• Get a blowie" color "#ffffff"
+            else:
+                text "✘ Get a blowie" color "#ff4444"
+
+            # Get a handjob
+            if rush_obj_handjob == "done":
+                text "✔ rush_obj_handjob" color "#00ff00"
+            elif rush_obj_handjob == "active":
+                text "• rush_obj_handjob" color "#ffffff"
+            else:
+                text "✘ rush_obj_handjob" color "#ff4444"
+
+            # Get a kiss
+            if rush_obj_kiss == "done":
+                text "✔ Get a kiss" color "#00ff00"
+            elif rush_obj_kiss == "active":
+                text "• Get a kiss" color "#ffffff"
+            else:
+                text "✘ Get a kiss" color "#ff4444"
+
+            # Find some panties
+            if rush_obj_panties == "done":
+                text "✔ Find some panties" color "#00ff00"
+            elif rush_obj_panties == "active":
+                text "• Find some panties" color "#ffffff"
+            else:
+                text "✘ Find some panties" color "#ff4444"
+
+            # Drink 5 shots
+            if rush_obj_drink_5_shots == "done":
+                text "✔ Drink 5 shots" color "#00ff00"
+            elif rush_obj_drink_5_shots == "active":
+                text "• Drink 5 shots" color "#ffffff"
+            else:
+                text "✘ Drink 5 shots" color "#ff4444"
+
+            vbox:
+                if rush_obj_have_sex == "done":
+                    text "Have sex: done"
+                elif rush_obj_have_sex == "active":
+                    text "Have sex: active"
+                else:
+                    text "Have sex: not started"
+      
+
+
 
 
 

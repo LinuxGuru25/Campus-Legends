@@ -1,6 +1,8 @@
 default rumor_level = 0
 default mc_anxiety = 0
 default mc_depression = 0
+default stats_version = 1
+
 
 screen phone_stats():
 
@@ -49,7 +51,7 @@ screen phone_stats():
                     # -------------------------
                     text "Relationships" size 30 color "#FFD700"
 
-                    for girl in ["sienna", "jess", "aubrey", "zoey", "kaia", "misty", "tiffany"]:
+                    for girl in ["Sienna", "Jess", "Aubrey", "Zoey", "Kaia", "Misty", "Tiffany"]:
                         $ rel = relationship_api.get(girl)
                         $ tier = rel["evolution"]["stage"]
 
@@ -67,7 +69,7 @@ screen phone_stats():
                     # -------------------------
                     text "Route Status" size 30 color "#FFD700"
 
-                    for girl in ["sienna", "jess", "aubrey", "zoey", "kaia", "misty", "tiffany"]:
+                    for girl in ["Sienna", "Jess", "Aubrey", "Zoey", "Kaia", "Misty", "Tiffany"]:
                         $ state = relationship_api.get(girl).get("route_state", "open")
 
                         if state == "open":
@@ -92,7 +94,7 @@ screen phone_stats():
                     # -------------------------
                     text "Jealousy Levels" size 30 color "#FFD700"
 
-                    for girl in ["sienna", "jess", "aubrey", "zoey", "kaia", "misty", "tiffany"]:
+                    for girl in ["Sienna", "Jess", "Aubrey", "Zoey", "Kaia", "Misty", "Tiffany"]:
                         $ j = relationship_api.get(girl).get("jealousy", 0)
                         text "[girl.capitalize()]: [j]" style "base_text"
 

@@ -15,12 +15,14 @@ init -10 python:
             self.apps = []
             self.contacts = []
             self.all_profiles = []
+            self.bios = []
 
         def reset(self):
             self.initialized = False
             self.apps = []
             self.contacts = []
             self.all_profiles = []
+            self.bios = []
 
     class App(NoRollback):
         def __init__(self, name, screen, icon=None):

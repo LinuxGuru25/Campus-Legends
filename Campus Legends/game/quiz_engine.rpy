@@ -6,18 +6,20 @@ label run_quiz(questions, score_var):
     while index < len(questions):
 
         $ q = questions[index]
+        $ quiz_question = q["q"]
+        $ quiz_answer_a = q["a"][0]
+        $ quiz_answer_b = q["a"][1]
+        $ quiz_answer_c = q["a"][2]
+        $ quiz_answer_d = q["a"][3]
 
-        "[q['q']]"
+        "[quiz_question]"
 
-        menu:
-            "A: [q['a'][0]]":
-                $ choice = 0
-            "B: [q['a'][1]]":
-                $ choice = 1
-            "C: [q['a'][2]]":
-                $ choice = 2
-            "D: [q['a'][3]]":
-                $ choice = 3
+        $ choice = renpy.display_menu([
+            ("A: " + quiz_answer_a, 0),
+            ("B: " + quiz_answer_b, 1),
+            ("C: " + quiz_answer_c, 2),
+            ("D: " + quiz_answer_d, 3)
+        ])
 
         if choice == q["correct"]:
             "Correct!"

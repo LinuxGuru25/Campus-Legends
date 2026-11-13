@@ -1,3 +1,129 @@
+###############################################
+# EPISODE 1 IMAGES
+###############################################
+default talked_sj = False
+default talked_norah = False
+default talked_Malik = False
+
+image e1_tm_1 = "images/e1_tm_1.webp"
+image e1_tm_2 = "images/e1_tm_2.webp"
+image e1_tm_2a = "images/e1_tm_2a.webp"
+image ep1_lfst_1 = "images/ep1_lfst_1.webp"
+image ep1_lfst_2 = "images/ep1_lfst_2.webp"
+image Sienna mouth open = "images/ep1_lfst_3a.webp"
+image ep1_lfst_3 = "images/ep1_lfst_3.webp"
+image ep1_lfst_4 = "images/ep1_lfst_4.webp"
+image ep1_lfst_4a = "images/ep1_lfst_4a.webp"
+image ep1_lfst_4b = "images/ep1_lfst_4b.webp"
+image ep1_lfst_4c = "images/ep1_lfst_4c.webp"
+image ep1_lfst_4d = "images/ep1_lfst_4d.webp"
+image ep1_lfst_4e = "images/ep1_lfst_4e.webp"
+image ep1_lfst_7a = "images/ep1_lfst_7a.webp"
+image ep1_lfst_7 = "images/ep1_lfst_7.webp"
+image ep1_lfst_6 = "images/ep1_lfst_6.webp"
+image ep1_lfst_6a = "images/ep1_lfst_6a.webp"
+image ep1_lfst_8 = "images/ep1_lfst_8.webp"
+image ep1_lfst_3b = "images/ep1_lfst_3b.webp"
+image ep1_lfst_3c = "images/ep1_lfst_3c.webp"
+image ep1_lfst_5 = "images/ep1_lfst_5.webp"
+image ep1_lfst_5a = "images/ep1_lfst_5a.webp"
+image ep1_lfst_5b = "images/ep1_lfst_5b.webp"
+image ep1_lfst_5c = "images/ep1_lfst_5c.webp"
+image ep1_lfst_5d = "images/ep1_lfst_5d.webp"
+image ep1_lfst_6b = "images/ep1_lfst_6b.webp"
+image ep1_lfst_6c = "images/ep1_lfst_6c.webp"
+image ep1_lfst_6d = "images/ep1_lfst_6d.webp"
+image ep1_lfst_6e = "images/ep1_lfst_6e.webp"
+image ep1_lfst_6f = "images/ep1_lfst_6f.webp"
+image ep1_lfst_6g = "images/ep1_lfst_6g.webp"
+image ep1_lfst_6h = "images/ep1_lfst_6h.webp"
+image ep1_lfjt_1 = "images/ep1_lfjt_1.webp"
+image ep1_lfjt_2 = "images/ep1_lfjt_2.webp"
+image ep1_lfjt_3 = "images/ep1_lfjt_3.webp"
+image ep1_lfjt_4 = "images/ep1_lfjt_4.webp"
+image ep1_lfjt_4a = "images/ep1_lfjt_4a.webp"
+image ep1_lfjt_4b = "images/ep1_lfjt_4b.webp"
+image ep1_lfjt_4c = "images/ep1_lfjt_4c.webp"
+image ep1_lfjt_4d = "images/ep1_lfjt_4d.webp"
+image ep1_lfjt_5 = "images/ep1_lfjt_5.webp"
+image ep1_ci_1 = "images/ep1_ci_1.webp"
+image ep1_ci_1a = "images/ep1_ci_1a.webp"
+image ep1_ci_1b = "images/ep1_ci_1b.webp"
+image ep1_ci_2 = "images/ep1_ci_2.webp"
+image ep1_ci_3 = "images/ep1_ci_3.webp"
+image ep1_ci_4 = "images/ep1_ci_4.webp"
+image ep1_ci_5 = "images/ep1_ci_5.webp"
+image ep1_ci_5a = "images/ep1_ci_5a.webp"
+image ep1_ci_5b = "images/ep1_ci_5b.webp"
+image ep1_ci_5c = "images/ep1_ci_5c.webp"
+image ep1_ci_5d = "images/ep1_ci_5d.webp"
+image ep1_ci_5e = "images/ep1_ci_5e.webp"
+image ep1_ci_6 = "images/ep1_ci_6.webp"
+image ep1_cac_1 = "images/ep1_cac_1.webp"
+image ep1_eodt_1 = "images/ep1_eodt_1.webp"
+image ep1_hfr_screen = "images/ep1_hfr_screen.webp"
+image ep1_hfr_sj_1 = "images/ep1_hfr_sj_1.webp"
+image ep1_hfr_sj_2 = "images/ep1_hfr_sj_2.webp"
+image ep1_hfr_sj_3 = "images/ep1_hfr_sj_3.webp"
+image ep1_hfr_sj_4 = "images/ep1_hfr_sj_4.webp"
+image ep1_hfr_sj_5 = "images/ep1_hfr_sj_5.webp"
+image ep1_hfr_sj_5a = "images/ep1_hfr_sj_5a.webp"
+image ep1_hfr_sj_5b = "images/ep1_hfr_sj_5b.webp"
+image ep1_hfr_sj_5c = "images/ep1_hfr_sj_5c.webp"
+image ep1_hfr_sj_5d = "images/ep1_hfr_sj_5d.webp"
+image ep1_hfr_sj_5e = "images/ep1_hfr_sj_5e.webp"
+image ep1_hfr_sj_5f = "images/ep1_hfr_sj_5f.webp"
+image ep1_hfr_sj_5g = "images/ep1_hfr_sj_5g.webp"
+image ep1_hfr_sj_6 = "images/ep1_hfr_sj_6.webp"
+image ep1_hfr_sj_6a = "images/ep1_hfr_sj_6a.webp"
+image ep1_hfr_sj_6b = "images/ep1_hfr_sj_6b.webp"
+image ep1_hfr_sj_6c = "images/ep1_hfr_sj_6c.webp"
+image ep1_hfr_sj_6d = "images/ep1_hfr_sj_6d.webp"
+image ep1_hfr_sj_6e = "images/ep1_hfr_sj_6e.webp"
+image ep1_hfr_sj_6f = "images/ep1_hfr_sj_6f.webp"
+image ep1_hfr_sj_6g = "images/ep1_hfr_sj_6g.webp"
+image ep1_hfr_sj_6h = "images/ep1_hfr_sj_6h.webp"
+image ep1_hfr_sj_7 = "images/ep1_hfr_sj_7.webp"
+image ep1_hfr_sj_7a = "images/ep1_hfr_sj_7a.webp"
+image ep1_hfr_sj_8 = "images/ep1_hfr_sj_8.webp"
+image ep1_hfr_sj_9 = "images/ep1_hfr_sj_9.webp"
+image ep1_hfr_sj_10 = "images/ep1_hfr_sj_10.webp"
+image ep1_hfr_n_1 = "images/ep1_hfr_n_1.webp"
+image ep1_hfr_n_2 = "images/ep1_hfr_n_2.webp"
+image ep1_hfr_n_3 = "images/ep1_hfr_n_3.webp"
+image ep1_hfr_n_3a = "images/ep1_hfr_n_3a.webp"
+image ep1_hfr_n_3b = "images/ep1_hfr_n_3b.webp"
+image ep1_hfr_n_3c = "images/ep1_hfr_n_3c.webp"
+image ep1_hfr_n_3d = "images/ep1_hfr_n_3d.webp"
+image ep1_hfr_n_3e = "images/ep1_hfr_n_3e.webp"
+image ep1_hfr_n_4 = "images/ep1_hfr_n_4.webp"
+image ep1_hfr_n_5 = "images/ep1_hfr_n_5.webp"
+image ep1_hfr_m_1 = "images/ep1_hfr_m_1.webp"
+image ep1_hfr_m_1a = "images/ep1_hfr_m_1a.webp"
+image ep1_hfr_m_2 = "images/ep1_hfr_m_2.webp"
+image ep1_hfr_m_2a = "images/ep1_hfr_m_2a.webp"
+image ep1_hfr_m_2b = "images/ep1_hfr_m_2b.webp"
+image ep1_hfr_m_2c = "images/ep1_hfr_m_2c.webp"
+image ep1_hfr_m_2d = "images/ep1_hfr_m_2d.webp"
+image ep1_hfr_m_2e = "images/ep1_hfr_m_2e.webp"
+image ep1_hfr_m_2f = "images/ep1_hfr_m_2f.webp"
+image ep1_hfr_m_2g = "images/ep1_hfr_m_2g.webp"
+image ep1_hfr_m_3 = "images/ep1_hfr_m_3.webp"
+image ep1_hfr_m_3a = "images/ep1_hfr_m_3a.webp"
+image ep1_hfr_m_4 = "images/ep1_hfr_m_4.webp"
+image ep1_hfr_m_4a = "images/ep1_hfr_m_4a.webp"
+image ep1_hfr_m_4b = "images/ep1_hfr_m_4b.webp"
+image ep1_hfr_m_4c = "images/ep1_hfr_m_4c.webp"
+image ep1_hfr_a_1 = "images/ep1_hfr_a_1.webp"
+image ep1_hfr_a_2 = "images/ep1_hfr_a_2.webp"
+image ep1_hfr_a_3 = "images/ep1_hfr_a_3.webp"
+image ep1_hfr_a_4 = "images/ep1_hfr_a_4.webp"
+image ep1_hfr_a_4a = "images/ep1_hfr_a_4a.webp"
+image ep1_hfr_a_4b = "images/ep1_hfr_a_4b.webp"
+image ep1_hfr_a_4c = "images/ep1_hfr_a_4c.webp"
+image ep1_hfr_a_4d = "images/ep1_hfr_a_4d.webp"
+image ep1_hfr_a_5 = "images/ep1_hfr_a_5.webp"
+image ep1_hfr_a_6 = "images/ep1_hfr_a_6.webp"
 
 ###############################################
 # TUESDAY MORNING — EPISODE 1 START
@@ -5,26 +131,24 @@
 
 label tuesday_morning:
 
-    scene dorm_room_morning
+    scene e1_tm_1
 
     MCname "{i}(Tuesday. First real day...){/i}"
     MCname "{i}(Mixer’s on Friday...){/i}"
     MCname "{i}(No pressure, right?){/i}"
-
-    show Malik
-
+    scene e1_tm_2
     Malik "Morning, bro. You ready for day one?"
     MCname "Does a bear shit in the woods and....."
 
-    Malik "I feel like a pround dad sending his son to school in the morning."
+    scene e1_tm_2a
+    Malik "I feel like a proud dad sending his son to school in the morning."
 
     MCname "hahah well dad i neeed 18 years of child support to get through this semester."
 
-    Malik "Oh—i think we're outta milk son."
+    Malik "Oh.....i think we're outta milk son."
     Malik "haha but seiously go my friend be a social butterfly and make some new friends."
-
+    scene e1_tm_1
     MCname "{i}(Alright, time to bounce... should I take Malik's advice and look for one of the ladies before class?){/i}"
-
 
     menu:
         "Look for Sienna.":
@@ -48,234 +172,267 @@ label tuesday_morning:
             MCname "{i}(I should probably just head to class before I overthink everything.){/i}"
             jump class_intro
 
-
-
 ###############################################
 # SIENNA ENCOUNTER — FULL SCENE
 ###############################################
 
 label look_for_sienna_tuesday:
 
+    # Initial encounter rewards
     $ relationship_api.add_points("Sienna", 1)
-    $ walkthrough("Sienna +1")
+    $ relationship_api.add_affection("Sienna", 1)
+
+    if walkthrough_enabled:
+        $ walkthrough("Sienna Romance +1 / Affection +1")
+
+    scene ep1_lfst_1
 
     MCname "{i}(Wonder if I'll run into Sienna...){/i}"
-
-    scene campus_path
-    show Sienna
-
-    # MC walking past the Flaunt house
-
+    scene ep1_lfst_2
+    Sienna "[MCname] wait up"
+    scene Sienna mouth open
     Sienna "Morning, freshman."
-
+    scene ep1_lfst_3
     MCname "Oh—hey. Didn't expect to see you out this early."
-
+    scene Sienna mouth open
     Sienna "Really? I've been awake for hours."
-
+    scene ep1_lfst_3
     MCname "It's not even eight."
+    scene Sienna mouth open
+    Sienna "Walk me to class?"
+    scene ep1_lfst_3
+    MCname "Sure"
 
-    Sienna "Exactly. Half the campus is still unconscious."
-
-    menu:
-        "Tease her back.":
-            $ add_personality("Confident", 1)
-            $ walkthrough("Confident +1")
-            $ relationship_api.add_points("Sienna", 1)
-            $ walkthrough("Sienna +1")
-
-            MCname "So ambition or caffeine addiction?"
-            Sienna smirk "Why are you acting like those are different things?"
-
-        "Act impressed.":
-            $ relationship_api.add_points("Sienna", 1)
-            $ walkthrough("Sienna +1")
-            MCname "Seriously? I barely made it out of bed."
-            Sienna eyebrow "Trust me, I noticed."
-
-        "Play it cool.":
-            $ add_personality("Confident", 1)
-            $ walkthrough("Confident +1")
-            MCname "Guess somebody has to keep the campus running."
-            Sienna "Good thing I'm here, then."
-
-    Sienna "Anyway, I'm doing some rush week prep."
-
-    MCname "Already?"
-
-    Sienna "Yup. Rush week is next week, so if you're gonna join a frat now is the time to make that decision known."
-
-    MCname "Malik did ask me if I wanted to join the Kappas."
-
-    Sienna "Well?"
-
-    MCname "I mean... I'd be lying if I said it hasn't been on my mind."
-
-    Sienna "You're off to a good start if the VP is vetting you."
-
-    MCname "I'm confused... I only know Mal... wait!!! He's the fuckin' VP??"
-
-    Sienna "Ding ding, he finally figures it out, haha."
-
-    MCname "That sneaky mofo, he just said he's a part of it!!!"
-
-    Sienna "Technically he didn't lie, he just kinda omitted some information."
-
-    Sienna "Anyway, all I know is this coming week is gonna be hell for us..."
+    # ------------------------------------------------
+    # FIRST INTERACTION
+    # ------------------------------------------------
 
     menu:
-        "Ask about Flaunt.":
+
+        "Ask about Flaunt. {color=#00ff00}{i}[Sienna Romance +1 / Affection +1]{/i}{/color}":
             $ relationship_api.add_points("Sienna", 1)
-            $ walkthrough("Sienna +1")
+            $ relationship_api.add_affection("Sienna", 1)
+            $ walkthrough("Sienna Romance +1 / Affection +1")
+
             MCname "So what does Flaunt actually do on campus?"
+            scene Sienna mouth open
             Sienna "For starters, we aren't what people think we are... just a bunch of chicks who party, drink, and fuck frat boys."
-            Sienna "I mean sure, some of us do enjoy some extracurricular activities, but that's not our main focus."
-            Sienna "We also look to make young women into future leaders in their chosen industry, we feed the homeless every weekend, we do volunteer work in the community and so on."
-            MCname "Wow, and you coordinate all this shit?"
-            Sienna smirk "Indeed I do, freshie."
-            MCname "Sounds like a lot."
-            Sienna "It is."
-            pause 0.2
-            Sienna "Worth it, though."
 
-        "Joke about joining.":
+            scene ep1_lfst_3b
+            Sienna "I mean sure, some of us do enjoy some extracurricular activities, but that's not our main focus."
+
+            scene ep1_lfst_3c
+            Sienna "We also look to make young women into future leaders in their chosen industry, we feed the homeless every weekend, we do volunteer work in the community and so on."
+            scene ep1_lfst_3
+            MCname "Wow, and you coordinate all this shit?"
+            scene Sienna mouth open
+            Sienna "Indeed I do, freshie."
+            scene ep1_lfst_3
+            MCname "Sounds like a lot."
+            scene Sienna mouth open
+            Sienna "It is."
+            scene ep1_lfst_3
+            pause 0.2
+            scene Sienna mouth open
+            Sienna "Worth it, though."
+            scene ep1_lfst_3
+
+        "Joke about joining. {color=#00ff00}{i}[Selfish +1]{/i}{/color}":
             $ add_personality("Selfish", 1)
-            $ walkthrough("Selfish +1")
+            if walkthrough_enabled:
+                $ walkthrough("Selfish +1")
             MCname "Think they'd let me join?"
+            scene Sienna mouth open
             Sienna "Maybe."
+            scene ep1_lfst_3
             MCname "That's not exactly reassuring."
+            scene Sienna mouth open
             Sienna "You'd be a project."
             pause 0.2
-            Sienna smirk "A fun project, though."
+            Sienna "A fun project, though."
+            scene ep1_lfst_3
 
-        "Playfully acknowledge her role.":
+        "Playfully acknowledge her role. {color=#00ff00}{i}[Confident +1]{/i}{/color}":
             $ add_personality("Confident", 1)
-            $ walkthrough("Confident +1")
+            if walkthrough_enabled:
+                $ walkthrough("Confident +1")
             MCname "Presidential duties never stop, huh?"
+            scene Sienna mouth open
             Sienna "Not when you're good at them."
-            MCname "Wow, and humble too!!"
-            Sienna smirk "You say that like I've got a reason to be modest."
+            scene ep1_lfst_3
+            MCname "Wow, and humble too!"
+            scene Sienna mouth open
+            Sienna "You say that like I've got a reason to be modest."
+            scene ep1_lfst_3
+    # ------------------------------------------------
+    # PERSONAL DEVELOPMENT / PERSONALITY REACTION
+    # ------------------------------------------------
 
-    if get_points("Anxiety") >= 3:
+if mc_get("anxiety", 0) >= 30:
+    scene Sienna mouth open
+    Sienna "You look tense."
+    scene ep1_lfst_3
+    MCname "Do I?"
+    scene Sienna mouth open
+    Sienna "A little."
+    scene ep1_lfst_3
+    MCname "First-day jitters."
+    scene Sienna mouth open
+    Sienna "Fair."
+    Sienna "For what it's worth, nobody here knows what they're doing."
+    scene ep1_lfst_3
+    MCname "That's supposed to help?"
+    scene Sienna mouth open
+    Sienna "Maybe."
+    Sienna "Some people are just better at pretending."
+    scene ep1_lfst_3
+elif get_points("Confident") >= 6:
+    scene Sienna mouth open
+    Sienna "You're walking around like you already belong here."
+    scene ep1_lfst_3
+    MCname "That a bad thing?"
+    scene Sienna mouth open
+    Sienna "Not at all."
+    Sienna "Confidence is basically currency on this campus."
+    scene ep1_lfst_3
+    MCname "Good thing I'm rich, then."
+    scene Sienna mouth open
+    Sienna "We'll see."
+    scene ep1_lfst_3
+else:
+    scene Sienna mouth open
+    Sienna "You've got that new-kid look again."
+    scene ep1_lfst_3
+    MCname "What's that supposed to mean?"
+    scene Sienna mouth open
+    Sienna "Like you're constantly checking for emergency exits."
+    scene ep1_lfst_3
+    MCname "Is it really that obvious?"
+    scene Sienna mouth open
+    Sienna "Painfully."
+    scene ep1_lfst_3
+    # ------------------------------------------------
+    # SECOND INTERACTION
+    # ------------------------------------------------
 
-        Sienna "You look tense."
-        MCname "Do I?"
-        Sienna "A little."
-        MCname "First day jitters."
-        Sienna nod "Fair."
-        Sienna "For what it's worth, nobody here knows what they're doing."
-        MCname "That supposed to help?"
-        Sienna "Maybe."
-        Sienna smirk "Some people are just better at pretending."
+menu:
+    "Flirt lightly. {color=#00ff00}{i}[Sienna Romance +5 / Affection +5]{/i}{/color}":
+        $ relationship_api.add_points("Sienna", 5)
+        $ relationship_api.add_affection("Sienna", 5)
+        if walkthrough_enabled:
+            $ walkthrough("Sienna Romance +5 / Affection +5")
+        scene ep1_lfst_4
+        MCname "You know, I didn't expect you to be this easy to talk to."
+        scene ep1_lfst_4a
+        Sienna "That's what you get for listening to Malik."
+        MCname "Hahaha, how'd you know?"
+        scene ep1_lfst_4b
+        Sienna "He tells everyone I'm some kind of man-eater or something. He's just mad I shot down his friends from the frat."
+        MCname "So one could say you're a hot commodity."
+        scene ep1_lfst_4c
+        Sienna "Haha... barely. I don't even have time to myself, let alone maintain a relationship with all the sorority shit going down."
+        scene ep1_lfst_4d
+        MCname "That actually sucks... you're a beautiful woman, you deserve to have someone."
+        scene black
+        with fade
+        pause 0.5
 
-    elif get_points("Depression") >= 3:
+        scene ep1_lfst_4e
+        with fade
+        Sienna "You sound like you have someone in mind."
+        MCname "Maybe I do?"
+        # Sienna stops what she is doing and approaches you
+        scene ep1_lfst_7
+        Sienna "You sure you wanna go that route, [MCname]?"
+        scene ep1_lfst_7a
+        "(......)"
+        scene ep1_lfst_7
+        Sienna "Cat got your tongue?"
+        scene ep1_lfst_7a
+        MCname "Umm, no, I..."
+        scene ep1_lfst_7
+        Sienna "Hahaha, cute...."
 
-        Sienna "You look tired."
-        MCname "Didn't sleep great."
-        Sienna "No, I mean tired tired."
-        MCname "..."
-        Sienna neutral "Then don't let today steamroll you."
-        MCname "Easy for you to say."
-        Sienna "Maybe."
-        Sienna "But you only get one first day. Might as well make it count."
+    "Ask her for advice about day one.":
 
-    elif get_points("Confident") >= 3:
+        $ relationship_api.add_points("Sienna", 1)
+        $ relationship_api.add_affection("Sienna", 1)
 
-        Sienna "You're walking around like you already belong here."
-        MCname "That a bad thing?"
-        Sienna "Not at all."
-        Sienna smirk "Confidence is basically currency on this campus."
-        MCname "Good thing I'm rich, then."
-        Sienna laugh "We'll see."
+        if walkthrough_enabled:
+            $ walkthrough("Sienna Romance +1 / Affection +1")
+        scene ep1_lfst_4
+        MCname "Got any advice for surviving day one?"
+        scene ep1_lfst_4a
+        Sienna "Don't be forgettable."
+        scene ep1_lfst_4b
+        MCname "That's it?"
+        scene ep1_lfst_4c
+        Sienna "People remember confidence."
+        pause 0.2
+        Sienna "Or chaos."
+        Sienna "Ideally the fun kind."
 
-    else:
+    "Challenge her a little.":
 
-        Sienna "You've got that new‑kid look."
-        MCname "What's that supposed to mean?"
-        Sienna "Like you're constantly checking for emergency exits."
-        MCname "Is it really that obvious?"
-        Sienna "Painfully."
+        $ add_personality("Confident", 1)
 
-    menu:
-        "Flirt lightly.":
-            $ relationship_api.add_points("Sienna", 5)
-            $ walkthrough("Sienna +5")
-            MCname "You know, I didn't expect you to be this easy to talk to."
-            Sienna raise_eyebrow "That's what you get for listening to Malik."
-            MCname "Hahaha, how'd you know?"
-            Sienna "He tells everyone I'm some kind of man-eater or something. He's just mad I shot down his friends from the frat."
-            MCname "So one could say you're a hot commodity."
-            Sienna "Haha... barely. I don't even have time to myself, let alone maintain a relationship with all the sorority shit going down."
-            MCname "That actually sucks... you're a beautiful woman, you deserve to have someone."
-            Sienna "You sound like you have someone in mind."
-            MCname "Maybe I do?"
-            # Sienna stops what she is doing and approaches you
-            Sienna "You sure you wanna go that route, [MCname]?"
-            "(......)"
-            Sienna smirk "Cat got your tongue?"
-            MCname "Umm, no, I..."
-            Sienna "Hahaha, cute...."
-
-        "Ask her for advice about day one.":
-            $ relationship_api.add_points("Sienna", 1)
-            $ walkthrough("Sienna +1")
-            MCname "Got any advice for surviving day one?"
-            Sienna "Don't be forgettable."
-            MCname "That's it?"
-            Sienna "People remember confidence."
-            pause 0.2
-            Sienna "Or chaos."
-            Sienna smirk "Ideally the fun kind."
-
-        "Challenge her a little.":
-            $ add_personality("Confident", 1)
+        if walkthrough_enabled:
             $ walkthrough("Confident +1")
-            MCname "You talk like you've got everyone figured out."
-            Sienna "Maybe I do."
-            MCname "That's a dangerous amount of confidence."
-            Sienna smirk "Then prove me wrong."
-            "Sienna glances at her phone."
+        scene ep1_lfst_4
+        MCname "You talk like you've got everyone figured out."
+        scene ep1_lfst_4a
+        Sienna "Maybe I do."
+        scene ep1_lfst_4b
+        MCname "That's a dangerous amount of confidence."
+        scene ep1_lfst_4c
+        Sienna "Then prove me wrong."
+        scene ep1_lfst_4d
+        "Sienna glances at her phone."
 
+# ------------------------------------------------
+# END OF SCENE
+# ------------------------------------------------
+scene ep1_lfst_6
+Sienna "Anyway, go to class before you get lost."
+scene ep1_lfst_5
+MCname "That likely?"
+scene ep1_lfst_6c
+Sienna "For you? Very."
+scene ep1_lfst_5b
+MCname "Wow."
+scene ep1_lfst_6b
+Sienna "See you around, [MCname]."
+scene ep1_lfst_8
+MCname "{i}(She somehow manages to be encouraging and insulting at the same time.){/i}"
 
-    Sienna "Anyway, go to class before you get lost."
-
-    MCname "That likely?"
-
-    Sienna "For you? Very."
-
-    MCname "Wow."
-
-    Sienna smirk "See you around, [MCname]."
-
-    MCname "{i}(She somehow manages to be encouraging and insulting at the same time.){/i}"
-
-    jump class_intro
-
-
+jump class_intro
 
 ###############################################
 # JESS ENCOUNTER — NEW FULL SCENE
 ###############################################
-
 label look_for_jess_tuesday:
 
-    $ change_points("Jess", +1)
+    $ relationship_api.add_points("Jess", 1)
     $ walkthrough("Jess +1")
 
-    scene campus_hallway
-
+    scene ep1_lfjt_1
     MCname "{i}(Hopefully I'll run into Jess along the way.){/i}"
-
-    # MC runs into Jess in the library
-
+    scene ep1_lfjt_2
+    MCname "{i}(There she is!!){/i}"
+    scene ep1_lfjt_3
     Jess "[MCname], hey, how are you?"
 
     MCname "I'm doing great, how's the morning treating you?"
+    scene ep1_lfjt_4
     Jess "It could be better..."
     MCname "Something wrong?"
+    scene ep1_lfjt_4a
     Jess "Just the stress of this coming rush week."
     MCname "Shit, I can imagine... but it'll be over soon enough and you'll be free!!"
+    scene ep1_lfjt_4b
     Jess "I keep telling myself that."
     MCname "Hey, don't you worry. If things get too stressful, you call us and we'll come rescue you!!"
+    scene ep1_lfjt_4c
     Jess "Haha, thanks. How's Malik?"
     MCname "Just as goofy as ever, but I'm glad he's my roomie."
     Jess "He's a good guy, stick with him."
@@ -283,38 +440,46 @@ label look_for_jess_tuesday:
     # Jess lets out a content sigh
     Jess "I like quiet mornings. Less noise, less chaos."
 
-    menu:
-        "Be friendly.":
-            $ change_points("Jess", +1)
-            $ walkthrough("Jess +1")
-            MCname "Campus is kinda peaceful right now."
-            Jess "It won't last too much longer though, sadly."
+menu:
 
-        "Be flirty.":
-            $ add_personality("Confident", 1)
+    "Be friendly.":
+
+        $ relationship_api.add_points("Jess", 1)
+        $ relationship_api.add_affection("Jess", 1)
+
+        if walkthrough_enabled:
+            $ walkthrough("Jess Romance +1 / Affection +1")
+        scene ep1_lfjt_4d
+        MCname "Campus is kinda peaceful right now."
+        Jess "It won't last too much longer though, sadly."
+
+    "Be flirty.":
+        $ add_personality("Confident", 1)
+        if walkthrough_enabled:
             $ walkthrough("Confident +1")
-            MCname "I'm really glad I ran into you this morning."
-            Jess "Why's that?"
-            MCname "You're such a calming influence on people, it's actually refreshing."
-            Jess blush "That's so sweet, [MCname]..."
-            Jess "Thank you."
 
-    Jess "Are you heading to class?"
+        scene ep1_lfjt_4a
+        MCname "I'm really glad I ran into you this morning."
+        Jess "Why's that?"
+        MCname "You're such a calming influence on people, it's actually refreshing."
+        scene ep1_lfjt_4b
+        Jess "That's so sweet, [MCname]..."
+        Jess "Thank you."
+        Jess "Are you heading to class?"
+        MCname "Yup, I think I'm headed in the right direction, haha."
+        Jess "What do you need to go?"
+        MCname "English Comp."
+        Jess "Ahh, you're in Prof Hart's class!!! She's an amazing prof!! You'll love her."
+        Jess "Just keep going down the hall and take a right, it's the second door on the left."
+        MCname "You, my friend, are a scholar and a lady!!!"
+        scene ep1_lfjt_4c
+        Jess "Haha."
+        Jess "Anyway… I should get going. Don’t be late to class."
 
-    MCname "Yup, I think I'm headed in the right direction, haha."
-    Jess "What do you need to go?"
-    MCname "English Comp."
-    Jess "Ahh, you're in Prof Hart's class!!! She's an amazing prof!! You'll love her."
-    Jess "Just keep going down the hall and take a right, it's the second door on the left."
-    MCname "You, my friend, are a scholar and a lady!!!"
-    Jess "Haha."
-    Jess "Anyway… I should get going. Don’t be late to class."
+        scene ep1_lfjt_5
+        MCname "{i}(She’s definitely different from Sienna… quieter, but sharp.){/i}"
 
-    hide Jess with dissolve
-
-    MCname "{i}(She’s definitely different from Sienna… quieter, but sharp.){/i}"
-
-
+jump class_intro
 
 ###############################################
 # CLASS INTRO — FIRST CLASS OF THE YEAR
@@ -322,23 +487,26 @@ label look_for_jess_tuesday:
 
 label class_intro:
 
-    scene classroom_morning with dissolve
+    scene ep1_ci_1 with dissolve
 
     MCname "{i}(First class of freshman year... alright. Deep breath. Try not to say anything stupid.){/i}"
 
     # Optional callback depending on who you looked for
     if morning_route == "sienna":
+        scene ep1_ci_1a
         MCname "{i}(Running into Sienna definitely woke me up. She has... a lot of energy.){/i}"
     elif morning_route == "jess":
+        scene ep1_ci_1b
         MCname "{i}(Jess made the morning a little less intimidating. That was nice.){/i}"
     else:
+        scene ep1_ci_1
         MCname "{i}(Definitely should've grabbed coffee. I'm barely functioning.){/i}"
 
     play sound "classroom_murmur.ogg"
 
     MCname "{i}(The room buzzes with nervous conversations. Some people already know each other. Most are pretending they do.){/i}"
 
-    show prof
+    scene ep1_ci_2 with dissolve
 
     # Professor Hart enters the room
 
@@ -350,6 +518,7 @@ label class_intro:
 
     prof "I'm Professor Hart."
 
+    scene ep1_ci_3
     prof "Some of you enrolled because the course title sounded interesting."
 
     prof "Some of you because it fit your schedule."
@@ -358,6 +527,7 @@ label class_intro:
 
     pause 0.4
 
+    scene ep1_ci_4
     prof "Those students usually stop showing up around midterms."
 
     MCname "{i}(Well... she wasted absolutely no time setting the tone.){/i}"
@@ -392,6 +562,7 @@ label class_intro:
 
     prof "Stand up, tell us your name, and share one thing you hope to improve or learn this semester."
 
+    scene ep1_ci_5
     MCname "{i}(Of course. Icebreakers. The true enemy of higher education.){/i}"
 
 menu:
@@ -400,8 +571,10 @@ menu:
         $ add_personality("Confident", 1)
         $ walkthrough("Confident +1")
 
+        scene ep1_ci_5a
         MCname "I'm [MCname]. I'd like to take my writing to the next level!!!"
 
+        scene ep1_ci_4
         prof "Confidence is useful."
         prof "Just make sure it's earned."
 
@@ -409,22 +582,27 @@ menu:
         $ mc_adjust_growth(1)
         $ walkthrough("Growth +1")
 
+        scene ep1_ci_5b
         MCname "I'm [MCname]. Honestly... I'm mostly hoping to improve my writing a little."
 
+        scene ep1_ci_4
         prof "A realistic goal."
         prof "College has a way of humbling everyone."
 
     "Be funny.\n{color=#00ff00}{i}(Selfish +1){/i}{/color}":
-        $ change_points("Selfish", 1)
+        $ add_personality("Selfish", 1)
         $ walkthrough("Selfish +1")
 
+        scene ep1_ci_5c
         MCname "My name is Buck, I drive a truck, and I like to—"
 
+        scene ep1_ci_4
         prof "Nope, don't you finish that sentence."
         prof "Now that it's out of your system, tell us your name and what you hope to learn this semester."
 
         MCname "I'm [MCname]. I hope to learn how to write better essays and not get lost in the library."
 
+        scene ep1_ci_4
         prof "Funny. Now sit down."
         prof "I'll have my eye on you..."
 
@@ -432,13 +610,15 @@ menu:
         $ mc_adjust_anxiety(1)
         $ walkthrough("Anxiety +1")
 
+        scene ep1_ci_5d
         MCname "I'm... [MCname]."
         MCname "...I actually don't know yet."
 
+        scene ep1_ci_4
         prof "That's an acceptable answer."
         prof "If you already knew everything you wanted to learn, you wouldn't need college."
 
-
+scene ep1_ci_4
 prof "Good."
 
 prof "Here's one thing you'll discover over the next few months."
@@ -449,8 +629,10 @@ prof "Very few people know how to understand someone else."
 
 prof "Pay attention in here, and you might learn something useful."
 
+scene ep1_ci_5e
 MCname "{i}(She's definitely more interesting than I expected.){/i}"
 
+scene ep1_ci_4
 if get_points("Confident") >= 3:
 
     prof "Confidence opens doors."
@@ -494,13 +676,13 @@ prof "Now I'm going to pass around a small quiz to evaluate your level of unders
 prof "You have until the end of class to finish."
 
 # MC receives his test
+scene ep1_ci_6
 "Your professor hands you the test."
 
 if mini_games_enabled:
     call english_comp_quiz1
 else:
     "You skip the diagnostic quiz."
-
 
 prof "See you Wednesday."
 
@@ -510,23 +692,19 @@ MCname "{i}(One class down. Only... a few hundred more to go.){/i}"
 
 jump campus_after_class
 
-
-
 ###############################################
 # AFTER CLASS — MINI FREE ROAM HUB
 ###############################################
 
 label campus_after_class:
 
-    scene campus_path with dissolve
+    scene ep1_cac_1 with dissolve
 
     MCname "{i}(Class wasn't bad… might as well look around before heading out.){/i}"
     MCname "{i}(Looks like a few people are still hanging around.){/i}"
 
     call screen hallway_free_roam
     return
-
-
 
 ###############################################
 # FREE ROAM SCREEN — CLICK TO TALK
@@ -535,41 +713,47 @@ label campus_after_class:
 screen hallway_free_roam:
 
     # Background hallway
-    add "campus_hallway.webp"
+    add "ep1_hfr_screen"
 
-    # Sienna & Jess together
     imagebutton:
-        idle "sienna_jess_idle.webp"
-        hover "sienna_jess_hover.webp"
-        xpos 150
-        ypos 300
-        action Jump("fr_sienna_jess")
+        idle "images/hfr_sj_idle.webp"
+        hover "images/hfr_sj_hover.webp"
+        focus_mask True
+        action If(
+            talked_sj,
+            Function(renpy.notify, "I've already talked to Sienna and Jess."),
+            Jump("fr_sienna_jess")
+        )
 
-    # Norah
     imagebutton:
-        idle "norah_idle.webp"
-        hover "norah_hover.webp"
-        xpos 600
-        ypos 320
-        action Jump("fr_norah")
+        idle "images/hfr_n_idle.webp"
+        hover "images/hfr_n_hover.webp"
+        focus_mask True
+        action If(
+            talked_norah,
+            Function(renpy.notify, "I've already talked to her."),
+            Jump("fr_norah")
+        )
 
-    # Malik
     imagebutton:
-        idle "Malik_idle.webp"
-        hover "Malik_hover.webp"
-        xpos 950
-        ypos 310
-        action Jump("fr_Malik")
+        idle "images/hfr_m_idle.webp"
+        hover "images/hfr_m_hover.webp"
+        focus_mask True
+        action If(
+            talked_Malik,
+            Function(renpy.notify, "I've already talked to Malik."),
+            Jump("fr_Malik")
+        )
 
-    # Continue down hallway → Aubrey scene
     imagebutton:
-        idle "hallway_arrow_idle.webp"
-        hover "hallway_arrow_hover.webp"
-        xpos 1200
-        ypos 400
-        action Jump("aubrey_hallway_scene")
-
-
+        idle "images/hfr_a_idle.webp"
+        hover "images/hfr_a_hover.webp"
+        focus_mask True
+        action Confirm(
+            "Talking to Aubrey will end free roam. Do you want to continue?",
+            Jump("aubrey_hallway_scene"),
+            Hide("confirm")
+        )
 
 ###############################################
 # SIENNA + JESS
@@ -580,15 +764,12 @@ label fr_sienna_jess:
 
     $ talked_sj = True
 
-    scene campus_hallway with dissolve
+    scene ep1_hfr_sj_1 with dissolve
     play ambience "audio/ambience/campus_hallway.ogg" fadein 1.5
-
-    show Sienna casual smirk at left
-    show Jess casual smile at right
-
 
     Sienna "I'm telling you, that's absolutely cheating."
 
+    scene ep1_hfr_sj_2
     "Jess laughs."
 
     Jess "It isn't cheating."
@@ -607,9 +788,11 @@ label fr_sienna_jess:
 
     MCname "{i}(...Do I interrupt?){/i}"
 
+    scene ep1_hfr_sj_3
     "Jess notices you first."
     "Jess smiles."
 
+    scene ep1_hfr_sj_4
     Jess "Hey."
 
     "Sienna glances over."
@@ -619,122 +802,172 @@ label fr_sienna_jess:
 
     MCname "Hello to you too, Sienna."
 
+    scene ep1_hfr_sj_5
     Sienna "Hey, handsome."
 
     MCname "Does Professor Hart ever smile?"
 
+    scene ep1_hfr_sj_6a
     "Jess thinks for a second."
 
+    scene ep1_hfr_sj_6
     Jess "I've seen it."
 
+    scene ep1_hfr_sj_5
     Sienna "Liar."
 
+    scene ep1_hfr_sj_6a
     "Jess laughs."
 
+    scene ep1_hfr_sj_6
     Jess "I have!"
 
+    scene ep1_hfr_sj_5b
     Sienna "That was probably indigestion."
 
+    scene ep1_hfr_sj_5c
     MCname "{i}(I can't help but chuckle.){/i}"
 
     MCname "She isn't that bad, tbh."
 
+    scene ep1_hfr_sj_5b
     Sienna "Oh, she's awful."
 
+    scene ep1_hfr_sj_6b
     Jess "She's exaggerating."
 
+    scene ep1_hfr_sj_5d
     Sienna "No, I'm being charitable."
 
+    scene ep1_hfr_sj_5e
     "Jess nudges Sienna with her shoulder."
 
+    scene ep1_hfr_sj_6b
     Jess "Ignore her."
     Jess "She enjoys scaring freshmen."
 
+    scene ep1_hfr_sj_5d
     Sienna "Correction."
 
+    scene ep1_hfr_sj_5f
     Sienna "I enjoy watching freshmen scare themselves."
 
+    scene ep1_hfr_sj_5g
     MCname "There's a difference?"
 
+    scene ep1_hfr_sj_5f
     Sienna "Huge difference."
     Sienna "I don't create the fear."
 
+    scene ep1_hfr_sj_5g
     "Sienna grins."
 
+    scene ep1_hfr_sj_5f
     Sienna "I simply appreciate it."
 
+    scene ep1_hfr_sj_5g
     MCname "{i}(She's impossible to get a straight answer out of.){/i}"
 
     "Jess notices your expression."
 
+    scene ep1_hfr_sj_6e
     Jess "Don't worry."
     Jess "She's actually nicer than she pretends to be."
 
     "Sienna gasps dramatically."
 
+    scene ep1_hfr_sj_5
     Sienna "Jess."
     Sienna "You're ruining my reputation."
 
+    scene ep1_hfr_sj_6e
     Jess "What reputation?"
 
+    scene ep1_hfr_sj_6d
     "Sienna places a hand over her heart."
 
+    scene ep1_hfr_sj_5
     Sienna "You wound me, madam!!!"
 
+    scene ep1_hfr_sj_6f
     Jess "Debatable."
 
+    scene ep1_hfr_sj_6g
     Sienna "Intimidating."
 
+    scene ep1_hfr_sj_6f
     Jess "Debatable."
 
+    scene ep1_hfr_sj_5f
     Sienna "Mysterious."
 
+    scene ep1_hfr_sj_5g
     "Jess tilts her head."
 
+    scene ep1_hfr_sj_6f
     Jess "That one I'll allow."
 
+    scene ep1_hfr_sj_6g
     MCname "{i}(I can't help but laugh.){/i}"
 
     MCname "You two have known each other a while?"
 
+    scene ep1_hfr_sj_6f
     Jess "Since freshman orientation."
 
+    scene ep1_hfr_sj_5f
     Sienna "Longest two years of my life."
 
+    scene ep1_hfr_sj_6g
     "Jess smiles sweetly."
 
+    scene ep1_hfr_sj_6f
     Jess "Yet you still keep me around."
 
+    scene ep1_hfr_sj_5c
+    "Sienna points toward you."
+    scene ep1_hfr_sj_5b
     Sienna "Someone has to stop you from feeding strangers."
 
+    scene ep1_hfr_sj_6a
     "Jess looks genuinely confused."
 
+    scene ep1_hfr_sj_6b
     Jess "Why is that a bad thing?"
 
-    "Sienna points toward you."
-
+    scene ep1_hfr_sj_5b
     Sienna "See?"
     Sienna "She'd probably bake you cookies if you looked hungry."
 
+    scene ep1_hfr_sj_6c
     "Jess glances toward you."
 
+    scene ep1_hfr_sj_6b
     Jess "...Would that be weird?"
 
+    scene ep1_hfr_sj_6c
     MCname "Nope!!!"
 
     "Jess hides a smile."
 
+    scene ep1_hfr_sj_6b
     Jess "Good."
 
+    scene ep1_hfr_sj_6c
     "Sienna smirks."
 
+    scene ep1_hfr_sj_5d
     Sienna "You're too nice, Jess."
 
     "Jess quietly laughs."
 
+    scene ep1_hfr_sj_6a
+    scene ep1_hfr_sj_7
     "A group of students rushes past, nearly clipping one another as they argue over which building their next lecture is in."
+    scene ep1_hfr_sj_7a
     "The three of you instinctively step aside."
 
+    scene ep1_hfr_sj_4
     MCname "{i}(Campus somehow feels less overwhelming when you're standing with people instead of wandering around alone.){/i}"
 
     "Sienna notices you looking around."
@@ -814,14 +1047,14 @@ label fr_sienna_jess:
 
             jump fr_sienna_jess_part2
 
-
-
 ##########################################################
 # SIENNA + JESS
 # PART 2
 ##########################################################
 
 label fr_sienna_jess_part2:
+
+    scene ep1_hfr_sj_4 with dissolve
 
     "Jess looks down the hallway as another wave of students pours out of a nearby classroom."
 
@@ -885,14 +1118,18 @@ label fr_sienna_jess_part2:
 
     "The three of you laugh."
 
+    scene ep1_hfr_sj_8
     "A student rushes by carrying far too many textbooks."
     "Halfway down the hall, the stack slips from his arms, scattering books across the floor."
 
+    scene ep1_hfr_sj_9
     "Without thinking, Jess takes a step forward."
 
+    scene ep1_hfr_sj_10
     "Another student is already helping gather everything."
     "Jess relaxes."
 
+    scene ep1_hfr_sj_4
     "Sienna notices."
 
     Sienna "You were about to help."
@@ -934,6 +1171,7 @@ label fr_sienna_jess_part2:
 
     Jess "You say that every time."
 
+    scene ep1_hfr_sj_5f
     Sienna "What's been your favorite part of today?"
 
     menu:
@@ -945,19 +1183,26 @@ label fr_sienna_jess_part2:
             $ add_personality("Caring", 1)
             $ walkthrough("Caring +1")
 
+            scene ep1_hfr_sj_6a
             MCname "Honestly..."
             MCname "Meeting people."
             MCname "It's made the campus feel a lot less intimidating."
 
+            scene ep1_hfr_sj_6
             "Jess smiles warmly."
             Jess "I'm glad."
             Jess "College's a lot more fun when you don't try to do everything alone."
 
+            scene ep1_hfr_sj_5f
             Sienna "Besides..."
+            scene ep1_hfr_sj_5g
             "Sienna smirks."
+            scene ep1_hfr_sj_5f
             Sienna "You seem decent."
 
+            scene ep1_hfr_sj_5g
             MCname "That's the nicest thing you've said to me."
+            scene ep1_hfr_sj_5f
             Sienna "Don't get used to it."
 
         "Surviving Professor Hart.":
@@ -966,15 +1211,22 @@ label fr_sienna_jess_part2:
             $ relationship_api.add_points("Sienna", 2)
             $ walkthrough("Sienna +2")
 
+            scene ep1_hfr_sj_5a
             MCname "Making it out of Hart's classroom alive."
 
+            scene ep1_hfr_sj_5
             "Sienna laughs."
+            scene ep1_hfr_sj_6a
             "Jess shakes her head."
 
+            scene ep1_hfr_sj_6b
             Jess "You're both so dramatic."
+            scene ep1_hfr_sj_5f
             Sienna "Says the girl who looked terrified on her first day."
 
+            scene ep1_hfr_sj_6c
             "Jess smiles sheepishly."
+            scene ep1_hfr_sj_6b
             Jess "I was."
 
         "It's too early to decide.":
@@ -983,17 +1235,22 @@ label fr_sienna_jess_part2:
             $ relationship_api.add_points("Jess", 1)
             $ walkthrough("Jess +1")
 
+            scene ep1_hfr_sj_6a
             MCname "Ask me next week."
             MCname "I'm still processing everything."
 
+            scene ep1_hfr_sj_6
             Jess "Fair answer."
+            scene ep1_hfr_sj_5f
             Sienna "Responsible answer."
 
+            scene ep1_hfr_sj_5g
             MCname "You sound disappointed."
+            scene ep1_hfr_sj_5f
             Sienna "A little."
 
+            scene ep1_hfr_sj_6a
             "Jess laughs."
-
 
     "Sienna glances toward the windows."
 
@@ -1065,17 +1322,12 @@ label fr_sienna_jess_part2:
 
     "Sienna laughs quietly before continuing down the hall beside Jess."
 
-    hide Sienna with dissolve
-    hide Jess with dissolve
-
     MCname "{i}(They're... fun.){/i}"
     MCname "{i}(Completely different people... but somehow they balance each other out.){/i}"
     MCname "{i}(Something tells me today won't be the last time our paths cross.){/i}"
 
     call screen hallway_free_roam
     return
-
-
 
 ###############################################
 # NORAH — FREE ROAM
@@ -1085,51 +1337,53 @@ label fr_norah:
 
     $ talked_norah = True
 
-    scene campus_hallway with dissolve
+    scene ep1_hfr_n_1 with dissolve
 
     MCname "{i}(...Damn, who is that???){/i}"
 
     MCname "{i}(...I don't know, but I'm about to find out.){/i}"
 
+    scene ep1_hfr_n_2
     MCname "Hey."
 
-    Norah "Hey."
+    mystery "Hey."
 
     MCname "You're in Hart's class."
 
-    Norah "Yeah."
+    mystery "Yeah."
 
     MCname "I'm—"
 
-    Norah "The new guy."
+    mystery "The new guy."
 
     "MCname laughs."
     MCname "That obvious?"
 
-    show norah casual neutral
-    Norah "You keep looking at the room numbers."
+    scene ep1_hfr_n_3
+    mystery "You keep looking at the room numbers."
 
     "MCname instinctively glances toward one."
 
-    show norah casual smirk
-    Norah "Case in point."
+    scene ep1_hfr_n_3a
+    mystery "Case in point."
 
     "MCname laughs."
     MCname "Okay... fair."
 
-    show norah casual neutral
-    Norah "Look, new guy... I'm kinda busy, so if you don't mind?"
+    scene ep1_hfr_n_3b
+    mystery "Look, new guy... I'm kinda busy, so if you don't mind?"
 
     MCname "Yeah... sure."
 
-    "Norah shakes her head."
-    Norah "My bad...im just in a hurry and have alot on my mind."
+    scene ep1_hfr_n_3c
+    "She shakes her head."
+    mystery "My bad...im just in a hurry and have alot on my mind."
 
     MCname "{i}(...Wasn't expecting that.){/i}"
 
     MCname "Understandable we all have stuff that weighs on us, no harm no foul, I'm [MCname]"
 
-    Norah "Norah."
+    mystery "Norah."
 
     MCname "Pleasure to meet you Norah"
 
@@ -1143,13 +1397,12 @@ label fr_norah:
 
     Norah "hahah Sounds like her"
 
-    show norah casual soft
+    scene ep1_hfr_n_3d
     MCname "{i}(I think that's the first time she's smiled.){/i}"
 
     # Freshman drops papers
-    show norah casual neutral
+    scene ep1_hfr_n_3e
     $ renpy.pause(0.2)
-
 
     menu:
 
@@ -1162,9 +1415,7 @@ label fr_norah:
 
             MCname "You have a beautiful smile."
 
-            # show norah casual raisedbrow
             Norah "....Thanks"
-
 
         "Tease her.":
 
@@ -1176,17 +1427,17 @@ label fr_norah:
             MCname "Careful."
             MCname "People might start thinking you're nice."
 
-            show norah casual neutral
+            scene ep1_hfr_n_3c
             Norah "That would ruin my image."
 
             "MCname laughs."
 
             $ renpy.pause(0.4)
-            show norah casual smirk
+            scene ep1_hfr_n_3d
             "A beat later, the corner of her mouth curls into a tiny smile."
 
     # Exit
-    show norah casual neutral
+    scene ep1_hfr_n_3e
     "Norah checks her phone."
 
     Norah "I should get going."
@@ -1195,30 +1446,28 @@ label fr_norah:
 
     Norah "Doesn't it always"
 
-    show norah casual walk
+    scene ep1_hfr_n_4
     "Norah starts walking."
 
     $ renpy.pause(0.5)
 
-    show norah casual back
+    scene ep1_hfr_n_5
     "After a few steps, she stops."
 
     Norah "Welcome to SSU."
 
     MCname "Thanks."
 
-    show norah casual back
+    scene ep1_hfr_n_4
     "She gives a small wave over her shoulder before disappearing into the crowd."
 
-    hide norah with dissolve
+    scene ep1_hfr_n_5 with dissolve
 
     MCname "{i}(She's hard to read.){/i}"
     MCname "{i}(...But I don't think she's nearly as cold as she wants people to believe.){/i}"
 
     call screen hallway_free_roam
     return
-
-
 
 #################################################
 # Malik — FREE ROAM
@@ -1228,31 +1477,35 @@ label fr_Malik:
 
     $ talked_Malik = True
 
-    scene campus_hallway with dissolve
-
-    show Malik grin at center
+    scene ep1_hfr_m_1 with dissolve
 
     MCname "{i}(Malik's talking to some swoll ass dude..maybe a linebacker..){/i}"
     MCname "{i}(Let's see whats up.){/i}"
 
     "Before you can say anything—"
 
+    scene ep1_hfr_m_1a
     Malik "There he is!"
     "Malik points dramatically."
     Malik "The man."
     Malik "The myth."
     Malik "The freshman."
 
+    scene ep1_hfr_m_1
     "MCname laughs."
     MCname "I was wondering when that title would stop following me."
 
+    scene ep1_hfr_m_1a
     Malik "Give it..."
+    scene ep1_hfr_m_2b
     "Malik pretends to check an invisible watch."
     Malik "Two weeks."
     Malik "Maybe three."
 
+    scene ep1_hfr_m_2a
     MCname "Comforting."
 
+    scene ep1_hfr_m_2
     Malik "So."
     Malik "Scale of one to ten."
     Malik "How's your first day so far??"
@@ -1264,10 +1517,12 @@ label fr_Malik:
             $ mc_adjust_anxiety(-1)
             $ walkthrough("Anxiety -1")
 
+            scene ep1_hfr_m_2a
             MCname "Honestly?"
             MCname "Like an eight."
 
             "Malik nods seriously."
+            scene ep1_hfr_m_2
             Malik "Respect."
             Malik "Admitting it is step one."
 
@@ -1276,9 +1531,11 @@ label fr_Malik:
             $ add_personality("Confident", 1)
             $ walkthrough("Confident +1")
 
+            scene ep1_hfr_m_2a
             MCname "I'm adapting."
 
             "Malik squints."
+            scene ep1_hfr_m_2
             Malik "Confident answer."
             "Malik grins."
             Malik "Suspiciously confident."
@@ -1288,120 +1545,157 @@ label fr_Malik:
             $ add_personality("Selfish", 1)
             $ walkthrough("Selfish +1")
 
+            scene ep1_hfr_m_2a
             MCname "I've mastered walking with purpose."
             MCname "People assume I belong."
 
             "Malik bursts out laughing."
+            scene ep1_hfr_m_2
             Malik "That's literally what I did."
 
-
+    scene ep1_hfr_m_2
     Malik "Little secret."
     "Malik leans closer."
+    scene ep1_hfr_m_2f
     Malik "Nobody knows what they're doing."
 
+    scene ep1_hfr_m_2g
     MCname "Really?"
 
+    scene ep1_hfr_m_2e
     Malik "Upperclassmen just walk faster."
 
+    scene ep1_hfr_m_2g
     "MCname laughs."
 
+    scene ep1_hfr_m_2f
     Malik "That's the trick."
     Malik "Confidence."
     Malik "If you look like you belong..."
     "Malik shrugs."
     Malik "...people stop asking questions."
 
+    scene ep1_hfr_m_2g
     MCname "{i}(He's got a point.){/i}"
 
     # Passing students
-    Student "Hey Malik!"
+    scene ep1_hfr_m_3
+    "A student calls out, 'Hey, Malik!'"
     "Malik waves back."
+    scene ep1_hfr_m_2f
     Malik "Hey!"
 
     "Thirty seconds later—"
 
+    scene ep1_hfr_m_3a
     Malik "Yo, Tyler!"
     "Tyler gives him a fist bump without slowing down."
 
+    scene ep1_hfr_m_2g
     MCname "Do you know everyone?"
 
     "Malik thinks."
+    scene ep1_hfr_m_2f
     Malik "No."
     "Malik pauses."
     Malik "Just... a concerning percentage."
 
+    scene ep1_hfr_m_2g
     "MCname laughs."
 
     MCname "How?"
 
     "Malik shrugs."
+    scene ep1_hfr_m_2f
     Malik "Talk to people."
     Malik "Remember names."
     Malik "Don't be weird."
 
+    scene ep1_hfr_m_2g
     "MCname raises an eyebrow."
 
+    scene ep1_hfr_m_2f
     Malik "Okay..."
     "Malik grins."
     Malik "Be the fun kind of weird."
 
     "Both laugh."
 
+    scene ep1_hfr_m_2f
     Malik "Speaking of..."
     "Malik points toward you."
+    scene ep1_hfr_m_4
     Malik "This here is Brad,he's the frat pres."
 
+    scene ep1_hfr_m_4b
     MCname "Sup bro."
 
+    scene ep1_hfr_m_4a
     Brad "Sup man, Malik tells me yall are roomies"
 
+    scene ep1_hfr_m_4b
     MCname "Yup!!"
 
+    scene ep1_hfr_m_4c
     Brad "You going for a bid this year?"
 
+    scene ep1_hfr_m_4b
     MCname "Bid?"
 
+    scene ep1_hfr_m_4a
     Brad "Joining a frat basically"
 
+    scene ep1_hfr_m_4b
     MCname "Idk man. like i told Malik its a bit to soon to make a decison on that."
 
+    scene ep1_hfr_m_4c
     Brad "I hear you man but its rush week so how about you come to our party tomorrow night."
 
+    scene ep1_hfr_m_4b
     MCname "...Maybe"
 
+    scene ep1_hfr_m_4c
     Brad "No pressure man just drinks and chicks to party with"
 
+    scene ep1_hfr_m_4b
     "{i}(Ok i can get behind that....){/i}"
 
+    scene ep1_hfr_m_4b
     MCname "You know what fuck it i'll be there"
 
+    scene ep1_hfr_m_4c
     Brad "Awesome just look for me when you get there"
 
     Brad "Alright i gotta bounce Malik i'll holla at you later"
 
+    scene ep1_hfr_m_2f
     Malik "Dueces"
 
+    scene ep1_hfr_m_2f
     Malik "My man!!! Making new friends!!!"
 
+    scene ep1_hfr_m_2g
     MCname "Hardly..that felt more like a recruitment pitch"
 
+    scene ep1_hfr_m_2f
     Malik "Hey its free booze and hot chicks,recruitment pitch or not its a win"
 
+    scene ep1_hfr_m_2g
     MCname "Andddd the lie detector determined that...you're telling the truth!!"
 
+    scene ep1_hfr_m_2f
     Malik "Haha"
 
-    Malik "Alright bro-ham i gotta bounce i'll see you back at the dorm homie."
+    Malik "Alright broham i gotta bounce i'll see you back at the dorm homie."
 
+    scene ep1_hfr_m_2g
     MCname "Alright man stay outta trouble"
 
+    scene ep1_hfr_m_2f
     Malik "haha i'll try"
-
 
     call screen hallway_free_roam
     return
-
-
 
 #################################################
 # AUBREY — FIRST APPEARANCE
@@ -1409,68 +1703,68 @@ label fr_Malik:
 
 label aubrey_hallway_scene:
 
-    scene campus_hallway with dissolve
+    scene ep1_hfr_a_1 with dissolve
 
     stop ambience fadeout 1.0
 
-    MCname "{i}(I should probably head back im done with classes for today.){/i}"
+    MCname "{i}(I should probably head back. I'm done with classes for today.){/i}"
 
     play sound "footsteps.ogg"
 
+    scene ep1_hfr_a_5
     MCname "{i}(...huh?){/i}"
 
-    show aubrey neutral at right with dissolve
-
-    MCname "{i}She moves through the hallway like she has somewhere to be, but she's in no hurry to get there.{/i}"
-    MCname "{i}Dark ink traces along one arm beneath the sleeve of her jacket—just enough to catch your eye before disappearing again.{/i}"
+    MCname "{i}A woman walks down the hall, unhurried and completely at ease.{/i}"
+    MCname "{i}Her long dark hair and the tattoos covering her arms and back make her hard to miss.{/i}"
 
     "A couple of students step aside without being asked."
-    "Aubrey barely seems to notice."
-    "She passes you..."
-    "..."
-    "..."
-    "Then stops."
+    "She barely seems to notice."
+    "She passes you, then stops and turns around."
 
-    Aubrey "Tall,dark and handsome."
+    scene ep1_hfr_a_2
+    "Her gaze settles on you."
 
-    "MCname looks behind himself."
-    MCname "...what?."
+    scene ep1_hfr_a_4a
+    mystery "Well, look at you. Tall, dark, and handsome."
 
-    #Aubrey steps closer 
+    scene ep1_hfr_a_2
+    MCname "Me?"
 
-    Aubrey "What's your name handsome?"
+    scene ep1_hfr_a_4b
+    mystery "Do you see anyone else here?"
 
-    MCname "...[MCname]"
-    MCname "And you?"
+    scene ep1_hfr_a_4c
+    MCname "Fair enough. I'm [MCname]. Who are you?"
 
-    MCname "{i}(She seems oddly fimiliar..){/i}"
+    scene ep1_hfr_a_4a
+    mystery "Aubrey."
 
-    Aubrey "Aubrey"
+    scene ep1_hfr_a_4c
+    MCname "Nice to meet you, Aubrey. You seem familiar."
 
-    MCname "Wait."
+    scene ep1_hfr_a_4b
+    Aubrey "Maybe we have crossed paths before."
 
-    "Aubrey pauses."
+    scene ep1_hfr_a_4c
+    MCname "Maybe. I feel like I'd remember."
 
-    MCname "Can I ask you something?"
+    scene ep1_hfr_a_4a
+    Aubrey "Careful, handsome. That almost sounded like a line."
 
-    Aubrey "Depends."
+    scene ep1_hfr_a_4d
+    Aubrey "Seriously? Right now?"
 
-    MCname "Do i know you from somewhere?"
+    "She checks her phone, then turns away to answer."
 
-    Aubrey "I dount it pretty boy"
+    scene ep1_hfr_a_5
+    Aubrey "Yeah, I'm on my way."
 
-    #Aubrey's phone rings
+    scene ep1_hfr_a_6
+    MCname "{i}(And just like that, she was gone. What a strange first meeting...){/i}"
 
-    Aubrey "wtf does she want...."
-
-    #Aubrey walks away talking on her phone
-
-    "{i}(Ok wtf was that...){/i}"
-
-    "{i}(Alright lets get back to the dorm im kinda tired){/i}"
+    MCname "{i}(I should get back to the dorm. I'm exhausted.){/i}"
 
     jump end_of_day_transition
-
 
 label end_of_day_transition:
 
@@ -1481,7 +1775,7 @@ label end_of_day_transition:
 
     "You survived your first day."
 
-    scene dorm_night with dissolve
+    scene ep1_eodt_1 with dissolve
     $ renpy.pause(0.5)
 
     "And tomorrow?"
@@ -1489,15 +1783,3 @@ label end_of_day_transition:
     "Day 2..."
 
     jump episode_2_start
-
-    
-    
-            
-    
-    
-    
-    
-
-
-
-

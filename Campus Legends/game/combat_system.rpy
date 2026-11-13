@@ -43,7 +43,6 @@ default active_ally = None
 # Enemy party
 default enemy_party = []
 
-
 # ---------- CLASS SELECTION (EXAMPLE) ----------
 
 label choose_class:
@@ -61,7 +60,6 @@ label choose_class:
     "You chose [player_class]."
 
     return
-
 
 # ---------- PATH SELECTION (LEVEL 4) ----------
 
@@ -93,7 +91,6 @@ label choose_class_path:
 
     return
 
-
 # =========================================================
 # PYTHON CORE — FIGHTERS, ALLIES, ENEMIES, AP, AI
 # =========================================================
@@ -122,10 +119,10 @@ init python:
             self.cooldowns = {}
             self.status = []
             self.alive = True
+            self.ap = 0
 
         def is_alive(self):
             return self.hp > 0
-
 
     # ---------- ALLY CLASS ----------
 
@@ -145,8 +142,6 @@ init python:
             self.personality = personality    # dict like player personality
             self.abilities = abilities        # list of ability keys
             self.passives = passives          # list of passive keys
-            self.ap = 0
-
 
     # ---------- ENEMY CLASS ----------
 
@@ -165,8 +160,6 @@ init python:
             self.personality = personality    # "Aggressive", "Defensive", "Chaotic", "Calculated"
             self.abilities = abilities        # list of ability keys
             self.passives = passives          # list of passive keys
-            self.ap = 0
-
 
     # ---------- UTILS ----------
 
@@ -174,6 +167,13 @@ init python:
         num, sides = dice.lower().split("d")
         return sum(random.randint(1, int(sides)) for _ in range(int(num)))
 
+    def restore_fighter(fighter):
+        fighter.hp = fighter.max_hp
+        fighter.ap = 0
+        fighter.temp_defense = 0
+        fighter.cooldowns = {}
+        fighter.status = []
+        fighter.alive = True
 
     def personality_bonus_for_player():
         bonus = {"hit": 0, "crit": 0, "defense": 0, "damage": 0, "speed": 0}
@@ -191,7 +191,6 @@ init python:
 
         return bonus
 
-
     def get_hit_chance(attacker, defender, attacker_personality=None):
         base = 60 + attacker.dexterity * 3 - defender.dexterity * 2
 
@@ -204,7 +203,6 @@ init python:
             base += pb["hit"]
 
         return max(20, min(95, base))
-
 
     def get_crit_chance(attacker, attacker_personality=None):
         base = 5 + attacker.dexterity * 2 + attacker.charisma
@@ -221,7 +219,6 @@ init python:
 
         return max(0, min(50, base))
 
-
     def calculate_damage(attacker, defender, flat_bonus=0, attacker_personality=None):
         base = attacker.strength + roll("1d6") + flat_bonus
         reduction = (defender.constitution + defender.temp_defense) // 2
@@ -237,7 +234,6 @@ init python:
 
         dmg = max(1, base - reduction)
         return dmg
-
 
     def perform_attack(attacker, defender, attacker_personality=None):
         hit_roll = random.randint(1, 100)
@@ -257,7 +253,6 @@ init python:
         defender.hp = max(0, defender.hp - dmg)
         return True, dmg, crit
 
-
     # ---------- AP / FATIGUE / MOMENTUM ----------
 
     def get_ap_for_turn(turn_count):
@@ -271,12 +266,10 @@ init python:
 
         return ap
 
-
     def apply_momentum(current_ap, crit_happened):
         if crit_happened:
             current_ap += 1
         return min(current_ap, max_ap_per_turn)
-
 
     # ---------- LEVELING (PLAYER ONLY) ----------
 
@@ -296,7 +289,6 @@ init python:
 
         return msg
 
-
     # =========================================================
     # ABILITIES — PLAYER, ALLIES, ENEMIES (SIMPLE SET)
     # =========================================================
@@ -307,17 +299,26 @@ init python:
     def ability_basic_attack(attacker, defender, ap_cost=2, personality=None):
         hit, dmg, crit = perform_attack(attacker, defender, personality)
         if not hit:
-            return "The attack misses.", 0, crit, 0, 0, ap_cost
+            return f"{attacker.name}'s attack misses {defender.name}!", 0, crit, 0, 0, ap_cost
         return f"{attacker.name} hits {defender.name} for {dmg} damage.", dmg, crit, 0, 0, ap_cost
 
     def ability_heavy_smash(attacker, defender, personality=None):
         dmg = calculate_damage(attacker, defender, flat_bonus=4, attacker_personality=personality)
-        defender.hp -= dmg
+        defender.hp = max(0, defender.hp - dmg)
         return f"{attacker.name} uses Heavy Smash for {dmg} damage!", dmg, False, 0, 0, 3
 
     def ability_magic_bolt(attacker, defender, personality=None):
-        dmg = 6 + attacker.charisma + roll("1d6")
-        defender.hp -= dmg
+        hit_chance = max(20, min(95, 60 + attacker.charisma * 3 - defender.dexterity * 2))
+        if random.randint(1, 100) > hit_chance:
+            return f"{attacker.name}'s Magic Bolt misses {defender.name}!", 0, False, 0, 0, 3
+
+        base = 6 + attacker.charisma + roll("1d6")
+        if personality:
+            if personality.get("Selfish", 0) >= 3:
+                base += 2
+        reduction = (defender.constitution + defender.temp_defense) // 2
+        dmg = max(1, base - reduction)
+        defender.hp = max(0, defender.hp - dmg)
         return f"{attacker.name} casts Magic Bolt for {dmg} damage!", dmg, False, 0, 0, 3
 
     def ability_guard(attacker):
@@ -326,7 +327,8 @@ init python:
 
     def ability_ap_drain(attacker, defender, drain_amount=2, personality=None):
         dmg = calculate_damage(attacker, defender, flat_bonus=2, attacker_personality=personality)
-        defender.hp -= dmg
+        defender.hp = max(0, defender.hp - dmg)
+        defender.ap = max(0, defender.ap - drain_amount)
         return f"{attacker.name} drains {drain_amount} AP and deals {dmg} damage!", dmg, False, 0, drain_amount, 4
 
     # Map ability keys to functions for allies/enemies
@@ -337,7 +339,6 @@ init python:
         "guard": ability_guard,
         "ap_drain": ability_ap_drain,
     }
-
 
     # =========================================================
     # ENEMY AI (ADVANCED-ish BUT COMPACT)
@@ -360,12 +361,10 @@ init python:
             current_ap -= cost
             return msg, current_ap
 
-        # If Support enemy and ally exists, sometimes buff/debuff
+        # If Support enemy, drain player AP
         if enemy.enemy_class == "Support" and current_ap >= 4:
-            # Use AP drain on player
             msg, dmg, crit, ap_refund, ap_drain, cost = ability_ap_drain(enemy, player, drain_amount=2)
             current_ap -= cost
-            # AP drain would be applied in combat loop
             return msg, current_ap
 
         # If Caster, use magic
@@ -389,7 +388,6 @@ init python:
             return msg, current_ap
 
         return f"{enemy.name} is too exhausted to act.", current_ap
-
 
     # =========================================================
     # ALLY AI (PERSONA-STYLE, ONE ACTION PER TURN)
@@ -435,7 +433,6 @@ init python:
 
         return f"{ally.name} is too exhausted to act.", current_ap
 
-
     # =========================================================
     # SIMPLE ALLY ROSTER SETUP (EXAMPLE)
     # =========================================================
@@ -476,7 +473,6 @@ init python:
 
         ally_roster = [nora, malik, jess]
 
-
     # =========================================================
     # ENEMY PARTY SETUP (EXAMPLE)
     # =========================================================
@@ -509,7 +505,6 @@ init python:
         if num_enemies > 1:
             enemy_party.append(mage)
 
-
 # =========================================================
 # UI — COMBAT SCREEN (PLAYER + OPTIONAL ALLY + MULTIPLE ENEMIES)
 # =========================================================
@@ -529,7 +524,7 @@ screen combat_screen(player, ally, enemies):
                     text "[player.name] (Lv [player_level])"
                     bar value player.hp range player.max_hp
                     text "[player.hp] / [player.max_hp] HP"
-                    text "AP: [player_ap]"
+                    text "AP: [player.ap]"
 
                 if ally:
                     vbox:
@@ -552,15 +547,14 @@ screen combat_screen(player, ally, enemies):
                 spacing 10
 
                 # Simple player options (you can plug in your full ability set here)
-                if player_ap >= 2:
-                    textbutton "Basic Attack (2 AP)" action SetVariable("combat_choice", "basic_attack")
-                if player_ap >= 3:
-                    textbutton "Guard (3 AP)" action SetVariable("combat_choice", "guard")
-                if player_ap >= 4:
-                    textbutton "AP Drain (4 AP)" action SetVariable("combat_choice", "ap_drain")
+                if player.ap >= 2:
+                    textbutton "Basic Attack (2 AP)" action Return("basic_attack")
+                if player.ap >= 2:
+                    textbutton "Guard (2 AP)" action Return("guard")
+                if player.ap >= 4:
+                    textbutton "AP Drain (4 AP)" action Return("ap_drain")
 
-                textbutton "End Turn" action SetVariable("combat_choice", "end_turn")
-
+                textbutton "End Turn" action Return("end_turn")
 
 # =========================================================
 # CONDITIONAL ALLY CHOICE SCREEN
@@ -582,25 +576,32 @@ screen ally_choice_screen:
                 for a in ally_roster:
                     textbutton "[a.name] ([a.class_type] — [a.branch])" action [SetVariable("active_ally", a), Return("ally")]
 
-
 # =========================================================
 # MAIN COMBAT LABEL — MULTI-ENEMY + CONDITIONAL ALLY
 # =========================================================
 
 label campus_fight_multi:
 
-    # Setup player
-    $ player = Fighter(
-        "MC",
-        hp=20,
-        strength=player_stats["Strength"],
-        dexterity=player_stats["Dexterity"],
-        constitution=player_stats["Constitution"],
-        charisma=player_stats["Charisma"]
-    )
+    # Setup player (class choice adds stat modifiers)
+    python:
+        class_mods = {
+            "Warrior": {"Strength": 3, "Constitution": 2},
+            "Rogue": {"Dexterity": 3, "Charisma": 1},
+            "Sorcerer": {"Charisma": 3, "Dexterity": 1},
+        }
+        mods = class_mods.get(player_class, {})
+        player = Fighter(
+            "MC",
+            hp=20,
+            strength=player_stats["Strength"] + mods.get("Strength", 0),
+            dexterity=player_stats["Dexterity"] + mods.get("Dexterity", 0),
+            constitution=player_stats["Constitution"] + mods.get("Constitution", 0),
+            charisma=player_stats["Charisma"] + mods.get("Charisma", 0)
+        )
 
-    # Setup ally roster (example)
-    $ setup_default_ally_roster()
+    # Setup ally roster (only if not already created, so ally state persists)
+    if not ally_roster:
+        $ setup_default_ally_roster()
 
     # Setup enemy party (2 enemies for demo)
     $ setup_enemy_party(num_enemies=2)
@@ -611,7 +612,8 @@ label campus_fight_multi:
         if _return == "solo":
             $ active_ally = None
         elif _return == "ally":
-            pass
+            # Heal the ally so a previously-downed ally can fight again
+            $ restore_fighter(active_ally)
     else:
         $ active_ally = None
 
@@ -631,7 +633,7 @@ label campus_fight_multi:
 
         # AP for this turn
         $ turn_count += 1
-        $ player_ap = get_ap_for_turn(turn_count)
+        $ player.ap = get_ap_for_turn(turn_count)
         if active_ally:
             $ active_ally.ap = get_ap_for_turn(turn_count)
 
@@ -639,42 +641,40 @@ label campus_fight_multi:
             for e in enemy_party:
                 e.ap = get_ap_for_turn(turn_count)
 
-
         # ---------- PLAYER TURN ----------
 
-        while player_ap > 0 and any(e.is_alive() for e in enemy_party):
+        while player.ap > 0 and any(e.is_alive() for e in enemy_party):
 
             $ combat_choice = None
             call screen combat_screen(player, active_ally, enemy_party)
+            $ combat_choice = _return
 
             if combat_choice == "basic_attack":
                 # Target weakest enemy
                 $ target = min([e for e in enemy_party if e.is_alive()], key=lambda x: x.hp)
                 $ msg, dmg, crit, ap_refund, ap_drain, cost = ability_basic_attack(player, target)
-                $ player_ap -= cost
-                $ player_ap = apply_momentum(player_ap, crit)
+                $ player.ap -= cost
+                $ player.ap = apply_momentum(player.ap, crit)
                 $ combat_log = msg
 
             elif combat_choice == "guard":
                 $ msg, dmg, crit, ap_refund, ap_drain, cost = ability_guard(player)
-                $ player_ap -= cost
+                $ player.ap -= cost
                 $ combat_log = msg
 
             elif combat_choice == "ap_drain":
                 $ target = max([e for e in enemy_party if e.is_alive()], key=lambda x: x.strength + x.dexterity + x.charisma)
                 $ msg, dmg, crit, ap_refund, ap_drain, cost = ability_ap_drain(player, target, drain_amount=2)
-                $ player_ap -= cost
+                $ player.ap -= cost
                 $ combat_log = msg
-                # Apply AP drain to target
-                $ target.ap = max(0, target.ap - ap_drain)
 
             elif combat_choice == "end_turn":
                 $ combat_log = "You end your turn."
-                $ player_ap = 0
+                $ player.ap = 0
 
             else:
                 $ combat_log = "You hesitate, doing nothing."
-                $ player_ap = 0
+                $ player.ap = 0
 
             if not any(e.is_alive() for e in enemy_party):
                 jump combat_win_multi
@@ -695,34 +695,32 @@ label campus_fight_multi:
                 # Ally acts only once per turn for simplicity
                 $ active_ally.ap = 0
 
-    # ---------- ENEMY TURN ----------
+        # ---------- ENEMY TURN ----------
 
-    python:
-        for e in enemy_party:
-            if not e.is_alive():
-                continue
+        python:
+            for e in enemy_party:
+                if not e.is_alive():
+                    continue
 
-            while e.ap > 0 and player.is_alive():
+                while e.ap > 0 and player.is_alive():
 
-                msg, new_ap = enemy_choose_action(e, player, active_ally, e.ap)
-                e.ap = new_ap
-                combat_log = combat_log + "\n" + msg
+                    msg, new_ap = enemy_choose_action(e, player, active_ally, e.ap)
+                    e.ap = new_ap
+                    combat_log = combat_log + "\n" + msg
 
-                if not player.is_alive():
-                    renpy.jump("combat_lose_multi")
+                    if not player.is_alive():
+                        renpy.jump("combat_lose_multi")
 
-                # Each enemy acts once per turn for simplicity
-                e.ap = 0
+                    # Each enemy acts once per turn for simplicity
+                    e.ap = 0
 
+            if not player.is_alive():
+                renpy.jump("combat_lose_multi")
 
-        if not player.is_alive():
-            renpy.jump("combat_lose_multi")
-
-        if not any(e.is_alive() for e in enemy_party):
-            renpy.jump("combat_win_multi")
+            if not any(e.is_alive() for e in enemy_party):
+                renpy.jump("combat_win_multi")
 
     return
-
 
 label combat_win_multi:
     $ xp_msg = gain_xp(60)
@@ -730,15 +728,6 @@ label combat_win_multi:
     "[xp_msg]"
     return
 
-
 label combat_lose_multi:
     "You lose the fight. Someone is definitely going to post this on the campus meme page."
     return
-
-
-
-
-
-
-
-

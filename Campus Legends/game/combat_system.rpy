@@ -624,16 +624,21 @@ label campus_fight_multi:
         $ player.temp_defense = 0
         if active_ally:
             $ active_ally.temp_defense = 0
-        for e in enemy_party:
-            $ e.temp_defense = 0
+
+        python:
+            for e in enemy_party:
+                e.temp_defense = 0
 
         # AP for this turn
         $ turn_count += 1
         $ player_ap = get_ap_for_turn(turn_count)
         if active_ally:
             $ active_ally.ap = get_ap_for_turn(turn_count)
-        for e in enemy_party:
-            $ e.ap = get_ap_for_turn(turn_count)
+
+        python:
+            for e in enemy_party:
+                e.ap = get_ap_for_turn(turn_count)
+
 
         # ---------- PLAYER TURN ----------
 
@@ -690,28 +695,31 @@ label campus_fight_multi:
                 # Ally acts only once per turn for simplicity
                 $ active_ally.ap = 0
 
-        # ---------- ENEMY TURN ----------
+    # ---------- ENEMY TURN ----------
 
+    python:
         for e in enemy_party:
             if not e.is_alive():
                 continue
 
             while e.ap > 0 and player.is_alive():
 
-                $ msg, new_ap = enemy_choose_action(e, player, active_ally, e.ap)
-                $ e.ap = new_ap
-                $ combat_log = combat_log + "\n" + msg
+                msg, new_ap = enemy_choose_action(e, player, active_ally, e.ap)
+                e.ap = new_ap
+                combat_log = combat_log + "\n" + msg
 
                 if not player.is_alive():
-                    jump combat_lose_multi
+                    renpy.jump("combat_lose_multi")
 
                 # Each enemy acts once per turn for simplicity
-                $ e.ap = 0
+                e.ap = 0
+
 
         if not player.is_alive():
-            jump combat_lose_multi
+            renpy.jump("combat_lose_multi")
+
         if not any(e.is_alive() for e in enemy_party):
-            jump combat_win_multi
+            renpy.jump("combat_win_multi")
 
     return
 

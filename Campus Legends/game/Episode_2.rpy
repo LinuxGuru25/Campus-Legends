@@ -1,5 +1,6 @@
 define Aubrey = Character("Aubrey")
 define Tiffany = Character("Tiff")
+define mystery = Character("???")
 label episode_2_start:
 
     scene dorm_morning
@@ -8,963 +9,549 @@ label episode_2_start:
     MCname "(Day two.)"
     MCname "(Still weird waking up somewhere that isn't home... but it's starting to feel a little less strange.)"
 
-    show nick grin at left
+    show Malik grin at left
     with dissolve
 
-    Nick "Look who survived freshman day one."
+    Malik "Morning good sir"
 
-    MCname "Barely."
+    MCname "Coffee"
 
-    Nick "Hey, barely still counts."
+    Malik "I got you bro there's a spot not to far from here that has fantastic coffee"
 
-    MCname "You're way too awake for this."
+    MCname "Gonna shower first"
 
-    Nick "Coffee."
+    Malik "Good idea man you're becoming a little pungent"
 
-    MCname "I don't see any coffee."
+    MCname "Room already smelled a little pungent haha"
 
-    Nick "Exactly."
-    Nick "Imagine how powerful I'd be if I actually had some."
-
-    MCname "(I'm ninety percent sure he's running on pure stupidity.)"
-
-    Nick "So..."
-    Nick "What's the game plan today?"
-
-    $ personality = get_mc_personality()
-
-    if personality == "Confident":
-        Nick "Yesterday you walked around like you already owned the campus."
-        Nick "Kind of worked, honestly."
-
-    elif personality == "Playful":
-        Nick "You somehow managed to stir things up on your very first day."
-        Nick "That's impressive."
-
-    elif personality == "Anxious":
-        Nick "You hanging in there?"
-        Nick "First week hits everybody differently."
-
-    else:
-        Nick "Yesterday was... something."
-        Nick "Campus has a funny way of throwing people into the deep end."
-
-    MCname "I'm still figuring everything out."
-
-    Nick "That's college."
-    Nick "Nobody actually knows what they're doing."
-
-    MCname "You seem pretty confident."
-
-    Nick "Fake it until graduation."
-
-    MCname "That's... surprisingly honest."
-
-    Nick "Don't tell anyone."
-
-    Nick "Anyway..."
-
-    Nick "If you're looking to kill some time before class..."
-
-    Nick "Sienna's usually out getting a workout in before most people are even awake."
-    Nick "Jess is probably wandering around with a coffee the size of her head."
-    Nick "Norah's already judging the entire student body before breakfast."
-    Nick "Aubrey..."
-    Nick "Honestly, finding Aubrey is less of a plan and more of an accident waiting to happen."
-
-    MCname "That's... weirdly specific."
-
-    Nick "You'll see."
-
-    Nick "Or..."
-    Nick "You could ignore everybody, go straight to class, and make responsible life choices."
-
-    MCname "You don't sound very convincing."
-
-    Nick "Because responsible people don't make interesting stories."
-
-    MCname "(He's probably right.)"
-    MCname "(So... who do I want to run into today?)"
-
-    jump ep2_choice_gate_1
-
-
-label ep2_choice_gate_1:
-
-    scene dorm_morning
-    with dissolve
-
-    MCname "(I've got a little time before class...)"
-    MCname "(Who do I want to spend the morning with?)"
-
-    menu:
-
-        "See if Sienna's out training.":
-            jump ep2_sienna_morning
-
-        "Grab a coffee with Jess.":
-            jump ep2_jess_morning
-
-        "Go find Norah.":
-            jump ep2_norah_morning
-
-        "Track down Aubrey.":
-            jump ep2_aubrey_morning
-
-        "Hang out with Nick for a bit.":
-            jump ep2_nick_morning
-
-        "Head straight to class.":
-            jump ep2_classroom_morning
-
-
-label ep2_sienna_morning:
-
-    $ add_relationship_points("Sienna", 5)
-
-    scene campus_track_morning
-    with dissolve
-
-    MCname "(Nick was right... if anyone's awake this early, it'd be Sienna.)"
-    MCname "(The athletic field should be around here.)"
-
-    show sienna workout determined at center
-    with dissolve
-
-    Sienna "You're late."
-
-    MCname "Late?"
-    MCname "You never actually invited me."
-
-    Sienna "Exactly."
-
-    MCname "(...I walked right into that one.)"
-
-    Sienna "They're quiet."
-    Sienna "No crowds."
-    Sienna "No pointless conversations."
-    Sienna "...Usually."
-
-    MCname "Wow."
-    MCname "Good morning to you too."
-
-    MCname "(Did... she just laugh?)"
-
-    Sienna "What?"
-
-    MCname "Nothing."
-    MCname "Just wasn't expecting you to have a sense of humor."
-
-    Sienna "I don't."
-    pause 0.2
-    Sienna "It was an accident."
-
-    Sienna "Walk with me."
-
-    scene campus_track_path
-    with dissolve
-
-    show sienna workout neutral at right
-    show mc at left
-
-    Sienna "You looked less lost yesterday."
-
-    MCname "Less?"
-
-    Sienna "You're still wandering onto an athletic field at seven in the morning."
-
-    MCname "Fair point."
-
-    Sienna "Most freshmen spend this hour asleep."
-
-    MCname "Most freshmen don't know anybody."
-
-    Sienna "..."
-    Sienna "That's true."
-
-    MCname "(She actually thought about that.)"
-
-    menu:
-
-        "I figured I'd rather spend the morning with someone interesting.":
-            $ add_relationship_points("Sienna", 1)
-            $ change_personality("Confident", 1)
-
-            MCname "Classes can wait a few minutes."
-            MCname "Interesting people can't."
-
-            Sienna "Careful."
-            Sienna "Flattery has a very low success rate on me."
-
-            MCname "Worth testing."
-
-        "Nick said I'd probably find you here.":
-            $ add_relationship_points("Sienna", 1)
-
-            MCname "Honestly?"
-            MCname "Nick practically gave me your schedule."
-
-            Sienna "I'm going to kill him."
-
-            MCname "He said that was a possibility."
-
-            Sienna "At least he's self-aware."
-
-        "I couldn't sleep anyway.":
-            $ add_relationship_points("Sienna", 1)
-            $ change_personality("Anxious", 1)
-
-            MCname "Everything's still new."
-            MCname "My brain hasn't gotten the memo yet."
-
-            Sienna "It gets easier."
-
-            MCname "Yeah?"
-
-            Sienna "Eventually this place starts feeling normal."
-
-    Sienna "I need to finish my laps."
-
-    MCname "How many do you have left?"
-
-    Sienna "Eight."
-
-    MCname "Left?"
-
-    Sienna "Problem?"
-
-    MCname "No."
-    MCname "I'm just realizing we're very different people."
-
-    Sienna "That's probably true."
-
-    Sienna "Hey."
-
-    MCname "Yeah?"
-
-    Sienna "You came looking for me."
-
-    MCname "I did."
-
-    Sienna "..."
-    Sienna "Thanks."
-
-    hide sienna
-    with dissolve
-
-    MCname "(For someone who acts tough...)"
-    MCname "(She doesn't seem used to people choosing to spend time with her.)"
-    MCname "(There's definitely more to Sienna than she lets people see.)"
-
-    jump ep2_classroom_morning
-
-
-label ep2_norah_morning:
-
-    $ add_relationship_points("Norah", 5)
-
-    MCname "(Nick said Norah was probably judging people somewhere...)"
-    MCname "(Not exactly a helpful clue.)"
-
-    Norah "He's not wrong."
-
-    MCname "How long have you been standing there?"
-
-    Norah "Long enough to hear you talking to yourself."
-
-    MCname "I wasn't talking to myself."
-
-    Norah "No?"
-
-    MCname "Okay, maybe a little."
-
-    Norah "Self-awareness."
-    Norah "That's refreshing."
-
-    MCname "Reading before class?"
-
-    Norah "Is that unusual?"
-
-    MCname "Most people are glued to their phones."
-
-    Norah "Most people also stop in the middle of doorways."
-    Norah "Observe."
-    Norah "Predictable."
-
-    MCname "You've really thought about this."
-
-    Norah "People are remarkably consistent."
-
-    MCname "So..."
-    MCname "Nick says you judge everyone."
-
-    Norah "I make observations."
-
-    MCname "There's a difference?"
-
-    Norah "One is based on evidence."
-    pause 0.2
-    Norah "The other is Twitter."
-
-    MCname "..."
-
-    menu:
+    Malik "Haha"
     
-        "So what's your observation about me?":
+    #MC takes a shower
 
-            $ add_relationship_points("Norah", 1)
-            $ change_personality("Confident", 1)
+    #MC finshes shower and gets dressed
 
-            MCname "Go ahead."
-            MCname "I'm curious."
+    MCname "Alright man lets go coffee is calling my name"
 
-            Norah "You're trying very hard to seem relaxed."
-            Norah "Most freshmen do."
+    #they make it to the diner and grab a table
 
-        "You're impossible to read.":
+    #waitress walks over to the table
 
-            $ add_relationship_points("Norah", 1)
+    mystery "Hi! How are you doing today? Can we start with some coffee or water?"
+
+    #Malik looks at the waitress
+
+    Malik "Yeah let me..."
+    Malik "Tiff?"
+
+    Tiff "Oh, hey Malik!!!"
+
+    Malik "I didnt know you worked here!!"
+
+    Tiff "Yeah, i need the money to be honest."
+
+    Malik "felt"
+    Malik "Let me introduce my new bestie [MCname]"
+
+    MCname "Hi"
+
+    Tiff "You guys ready to order?"
+
+    MCname "I'll start with a coffee"
+
+    Tiff "How do you like your coffee?"
+
+    MCname "2 creams 3 sugars please"
+
+    #show her writing the order down
+
+    Malik "I'll have mine black please"
+
+    Tiff "Alright one black and one with 2 creams and 3 sugars coming up"
+
+    #She walks away
+
+    Malik "The breakfast platter is actually pretty bomb bro,you should give it a try."
+
+    MCname "Once again i'll trust you on this one."
+
+    #Tiff returns with the coffee
+
+    Tiff "You boys ready to order?"
+
+    MCname "Yeah i'll take the breakfast platter,2 eggs,grits,susage,pancakes"
+
+    Tiff "OK, one breakfast platter and for you Malik"
+
+    Malik "I'll have the same!!"
+
+    Tiff "make that 2 platters, alright give me a few minutes ill have that right out to you guys"
+
+    Malik "Thanks Tiff you're the bestest"
+
+    #Tiff smirks at Malik
+
+    Malik "Cute right?"
+
+menu:
+
+    "Yeah, she's hot.\n{color=#00ff00}{i}[Tiff +1]{/i}{/color}":
+        $ relationship_api.add_affection("Tiff", 1)
+        $ walkthrough("Tiff +1")
+        MCname "Yeah, she's definitely cute."
+        Malik "Haha I knew you'd say that."
+
+    "Nah, not my type.\n{color=#ff0000}{i}[Tiff -1]{/i}{/color}":
+        $ relationship_api.add_affection("Tiff", -1)
+        $ walkthrough("Tiff -1")
+        MCname "She’s cool, but not really my type."
+        Malik "Damn, tough crowd."
+  
+
+Malik "She might be at the party tonight and as far as i know she's single as a pringle"
+
+MCname "Looking foward to this party actually i could use a distraction"
+
+Malik "Truer words have never been spoken!!"
+
+#Tiff returns with the food
+
+Tiff "Alright guys 2 platters and if you guys need anything just hollar"
+
+MCname "Looks pretty damn good"
+
+Malik "Trust me it is dude"
+
+#30 minutes later
+
+MCname "Damn that was good!!"
+
+Malik "Best breakfast spot in town if you ask me"
+
+#Tiff comes back to the table
+
+Tiff "You gents ready for the bill?"
+
+MCname "Absolutly and it was damn good"
+
+Malik "Compliments to the chef!!!"
+
+#Tiff walks away to grab the bill and she returns with it
+
+menu:
+
+    # PLAYER PAYS
+    "Pay the bill yourself.\n{color=#ff0000}{i}[-$20]{/i}{/color}\n{color=#00ff00}{i}[Tiff +1]{/i}{/color}":
+        if money_api.spend(20):
+            $ walkthrough("-$20")
+            $ relationship_api.add_affection("Tiff", 1)
+            $ walkthrough("Tiff +1")
+
+            MCname "I got it."
+            "I’ve been saving a little… I can cover this."
+            Malik "Okay, big spender. Respect."
+            Tiff "That’s really sweet of you."
+
+            # TIP MENU
+            menu:
+                "Leave a $5 tip.\n{color=#ff0000}{i}[-$5]{/i}{/color}\n{color=#00ff00}{i}[Tiff +1]{/i}{/color}":
+                    if money_api.spend(5):
+                        $ walkthrough("-$5")
+                        $ relationship_api.add_affection("Tiff", 1)
+                        $ walkthrough("Tiff +1")
+                        "I can spare five bucks."
+                        Tiff "Thank you, sweetheart."
+
+                "Leave a $10 tip.\n{color=#ff0000}{i}[-$10]{/i}{/color}\n{color=#00ff00}{i}[Tiff +2]{/i}{/color}":
+                    if money_api.spend(10):
+                        $ walkthrough("-$10")
+                        $ relationship_api.add_affection("Tiff", 2)
+                        $ walkthrough("Tiff +2")
+                        "Ten bucks isn’t too bad."
+                        Tiff "Wow… that’s really generous."
+
+                "Leave a $20 tip.\n{color=#ff0000}{i}[-$20]{/i}{/color}\n{color=#00ff00}{i}[Tiff +5]{/i}{/color}":
+                    if money_api.spend(20):
+                        $ walkthrough("-$20")
+                        $ relationship_api.add_affection("Tiff", 5)
+                        $ walkthrough("Tiff +5")
+                        "I’ve been saving… I can afford to go big."
+                        Tiff "Oh my god… thank you! That means a lot."
+
+                "Skip the tip.":
+                    "I should save my money."
+                    Tiff "No worries, hun."
+
+        else:
+            MCname "…I don’t have enough."
+            Malik "Bro, you’re tapped out?"
+            Tiff "It’s alright, he can cover it."
+            Malik "I’ll take care of it."
+
+    # MALIK PAYS
+    "Let Malik pay.":
+        MCname "You got this one?"
+        Malik "Yeah, I’ll cover it."
+        Tiff "Thanks, sweetheart."
+        "Probably better to save my cash anyway."
 
 
-            MCname "Do you ever let people know what you're thinking?"
 
-            Norah "Usually."
-            pause 0.2
-            Norah "Just not the people asking."
 
-            MCname "...Fair."
 
-        "Sounds exhausting, noticing everything.":
 
-            $ change_personality("Caring", 1)
 
-            Norah "...Sometimes."
+Malik "Shit i gotta bounce man,sorry to dine and dash on you"
+MCname "All good bro"
+Malik "BE ready by 8 ill meet you back at the dorm"
+MCname "10-4 copy boss"
+#Malik is shown leaving in a hurry
+"I should figure out what to do next… hit the gym or head to the library."
+
+menu:
+    "Go to the gym.":
+        "A workout wouldn’t hurt. Might help clear my head."
+        jump gym_scene
+
+    "Go to the library.":
+        "Probably smart to get ahead on some work."
+        jump library_scene
+
+label gym_scene:
+
+scene gym_day with dissolve
+
+#mc arrives at the gym
+
+#mc enters the front doors
+"{i}(Huh......){/i}"
+#Kaia is busy texting on her phone she doesnt hear the mc
+mystery "Brad, seriously?"
+pause 0.5
+mystery "You promised you'd call me back!"
+pause 0.5
+mystery "I can't believe you forgot our date!"
+pause 0.5
+mystery "Dont even try to turn this around on me, you're the one who forgot!"
+pause 0.5
+"She rubs her forehead"
+mystery "I'm not asking you for every second of the day."
+pause 0.5
+mystery "You know what Brad...I'M DONE ARGUING WITH YOU!"
+"{i}(damn...){/i}"
+#She hangs up the phone and slams it on the counter. She looks up and sees me standing there.
+mystery "WHAT"
+MCname "........."
+mystery "i'm sorry..."
+MCname "It's all good, people get frustrated sometimes."
+mystery "I assume you heard at least some of that.."
+MCname "Yeah, I did. It sounded like you were having a rough time."
+mystery "Yeah, I guess you could say that."
+mystery "Anyway...I'm Kaia, nice to meet you."
+MCname "Nice to meet you too Kaia, I'm [MCname]"
+MCname "I'm actually here to work out, but I can wait if you need a moment."
+Kaia "No, it's fine. Are you a student here?"
+MCname "Yeah, I am."
+kaia "Do you have your student ID on you?"
+MCname "Yeah, I do."
+#hands her student ID
+Kaia "Thanks, I just need to put this in the system and then you can get started."
+Kaia "Okay one second...Alright, you're all set. The gym is open from 6 AM to 10 PM, and the locker rooms are just down the hall to your left."
+MCname "Thanks Kaia, I appreciate it."
+Kaia "Hold your horses for a sceond!!! If you want i can give you the grand tour of the gym, show you where everything is?"
+kaia "Or if you want to just get started, we can skip the tour and you can just start working out?"
+menu:
+    "Accept Kaia's offer to tour the gym {color=#00ff00}{i}[Kaia +2]{/i}{/color}":
+        $ relationship_api.add_points("Kaia", 2)
+        $ walkthrough("Kaia +2")
+        MCname "Sure, a tour sounds great."
+        Kaia "Awesome! Follow me, and I'll show you around."
+        jump gym_tour
+
+    "Decline for now":
+        mc "Maybe another time. i just want to get started with my workout."
+        kaia "No problem. The locker rooms are just down the hall to your left. Enjoy your workout!"
+        jump gym_workout
+
+scene gym_tour with dissolve
+
+Kaia "Alright, let's start with the cardio area. We have treadmills, ellipticals, and stationary bikes here."
+#you guys walk past the cardio area and into the weightlifting section.
+Kaia "Next, we have the weightlifting section. We have free weights, benches, and machines for all your strength training needs."
+#you guys walk past the weightlifting section and into the stretching and yoga area.
+Kaia "Over here is the stretching and yoga area. We have mats and space for you to do your stretches or yoga routines."
+#you guys walk past the stretching and yoga area and into the locker rooms and showers.
+Kaia "Finally, we have the locker rooms and showers. You can change and freshen up after your workout. Just remember to bring your own towel and toiletries."
+Kaia "And i suggest some shower shoes as well, the floors can get a little slippery."
+Kaia "That's the grand tour of the gym! If you have any questions or need assistance, feel free to ask me or any of the staff."
+MCname "Thanks for the tour, Kaia. I appreciate it."
+Kaia "You're welcome! Enjoy your workout!!!"
+Kaia "Oh and you seem smart enough so i dont need to tell you this but just in case, please remember to wipe down the equipment after use and put weights back where they belong"
+Kaia "And for fucks sake no recording yourself for socials or toktoks, this is a gym not a social media studio."
+MCname "HAHA, got it. Thanks for the heads up."
+Kaia "Alright duty calls so i'll leave you to it."
+$ relationship_api.add_points("Kaia", 1)
+$ walkthrough("Kaia +1")
+
+jump gym_workout
+
+scene gym_workout with dissolve
+
+"{i}(Alright..time to hit the weights){/i}"
+
+#MC walks over to the weightlifting section and starts his workout routine. He focuses on his form and pushes himself to lift heavier weights. After a while, he takes a break and wipes down the equipment.
+"{i}(Damn i feel kinda outta shape..){/i}"
+mystery "Hey, you doing alright over there?"
+MCname "Yeah, I'm good. Just taking a break."
+mystery "You know, if you want, I can give you some tips on your form and technique. I used to be a personal trainer."
+MCname "i mean why not."
+#Kai walks over and introduces himself
+mystery "I'm Kai, and I used to be a personal trainer here."
+MCname "Nice to meet you, Kai. I'm [MCname]."
+Kai "Nice to meet you too, [MCname]. So bench today? you trying to max out or just get a good workout in?"
+MCname "Just trying to get a good workout in, but i wouldnt mind maxing out if i can."
+Kai "Alright, let's start with a warm-up set to get your muscles ready. Then we can move on to heavier weights. Remember to keep your back flat and your feet planted firmly on the ground."
+#the workout continues with Kai giving tips and encouragement. After a while, MC finishes his workout and thanks Kai for the help.
+#Kaia walks past
+menu:
+    "Check her out {color=#00ff00}{i}[Kaia +1]{/i}{/color}":
+        $ relationship_api.add_points("Kaia", 1)
+        $ walkthrough("Kaia +1")
+        $ checked_kaia_out = true
+        jump Kaia_notice
+
+        
+    "Focus on your workout":
+        "I should stay focused on my workout and not get distracted."
+        jump gym_workout_end
+
+label Kaia_notice:
+
+    scene Kaia_notice with dissolve
+
+#Kaia notices you checking her out and gives you a playful smile. She walks over to you.
+#As she walks past she delivers a playful line 
+Kaia "You know, staring at me won't make you stronger. But I appreciate the attention."
+#Kaia keeps walking
+Kai "Bro she's taken, you should probably focus on your workout."
+MCname "Yeah, i know man..."
+Kai "Just trying to be a good friend and look out for you."
+Kai "Brad is a bit of a douche canoe..."
+MCname "I can see that, but i dont know the whole story."
+Kai "Well, let's just say he doesn't treat Kaia the way she deserves. You should probably steer clear of him."
+MCname "Thanks for the heads up, Kai. I appreciate it."
+MCname "If it's the same Brad i meet earlier then its to late ,he already invited to a party tonight and i accepted."
+Kai "Figures he'd be trying to recruit you, we could use a few new brothers"
+MCname "Ahh so you're an Alpha?"
+Kai "Damn you say that like its a bad thing haha"
+MCname "Haha naw homie just teasing you, i know a few Alphas and they are all good people...well most of them anyway"
+Kai "Yeah, we have our ups and downs but we look out for each other."
+Kai "It's a brotherhood, and we take care of our own."
+"{i}(It does seem like a tight-knit group, maybe I should join them){/i}"
+
+jump gym_workout_end
+
+
+label gym_workout_end:
+
+    scene gym_day with dissolve
+
+    "{i}(Alright, time to hit the showers and get ready for the party tonight.){/i}"
+    "{i}(I should probably head back to the dorms and get cleaned up.){/i}"
+MCname "Thanks for the help, Kai. I appreciate it."
+Kai "No problem, [MCname]. It was great working out with you. See you around!"
+#Show mc taking a shower in the locker room
+"{i}(This shower is actually feeling pretty damn good, I could get used to this.){/i}"
+"[i](Why cant our showers be like this?){/i}"
+#MC finishes showering and gets dressed
+
+#show mc walking past front desk
+Kai "Hey, [MCname]! How was your workout?"
+MCname "It was great!!"
+
+if checked_kaia_out:
+    Kaia "Hey, [MCname]! I noticed you checking me out earlier. Just remember, I'm taken."
+    MCname "Yeah, I know. I was just admiring your dedication to fitness."
+    "Kaia blushes, trying to hide it with a quick glance away."
+    kaia "I'll catch you later. {i}…never noticed how cute he really is...{/i}"
+
+MCname "You going to the party tonight?"
+Kaia "Yeah, I might swing by for a bit. But I have to be up early tomorrow for a training session, so I won't stay too long."
+Kaia "I'll be there to support Brad, but I won't be staying for the whole thing."
+Kaia "Anyway, I should get BACK TO WORK . See you around, [MCname]!"
+jump pre_party_scene
+
+label pre_party_scene:
+
+#MC geta text from Malik "Yo bro, you ready for the party tonight? It's gonna be lit!"
+MCname "I just left the gym and im on my way back to the dorms to get cleaned up and dressed. I'll be ready by 8."
+Malik "Sweet, see you then!"
+#MC walks back to the dorms
+Malik "Yoooo was good Broseph Stalin, get dressed and reasy to mingle like a Pringle!!!"
+MCname "Haha, you got it bro. I'll be ready by 8."
+#MC starts to get dressed
+"{i}(This should do the trick.){/i}"
+Malik "Damn bro, you clean up nice. I like the fit."
+MCname "Thanks, man. I appreciate it."
+Malik "I got us a few pre party drinks, so we can get the night started right."
+MCname "My man what you got?"
+Malik "I got us some whiskey, some vodka, and a few beers. What do you want to start with?"
+MCname "Lets take a few shots of whiskey and then head out,,i dont wanna be smashed before we get to the party haha."
+#they take a few shots of whiskey
+Malik "Yo man how about a friendly wager?"
+MCname "Why do i feel like this is a bad idea?"
+Malik "Naw man its just a friendly wager."
+MCname "Alright, what are we betting on?"
+Malik "Alright im gonna give you a list."
+Malik "Complete the list at the party and you become a legend, nobody has ever completed the entire list."
+# Activate objectives AFTER the conversation
+$ rush_obj_blowie = active
+$ rush_obj_handjob = active
+$ rush_obj_kiss = active
+$ rush_obj_panties = active
+$ rush_obj_drink_5_shots = active
+$ rush_obj_have_sex = active
+
+"{i}(A list? This already sounds like a setup…){/i}"
+jump rush_party_start    
+
+label rush_party_start:
+    show screen rush_objectives
+#MC and Malik arrive at the party, which is in full swing. The music is loud, people are dancing, and the atmosphere is electric. The party is filled with students from the campus, and everyone seems to be having a great time.
+#Shwo front of frat house with people drinking and talking outside.
+Malik "We have arrived at our destination!!"
+MCname "Damn this place is nice"
+Malik "Right"
+Malik "Well the world is your oyster so i'll see you inside."
+"{i}(Alright, lets see what i can get into.){/i}"
+#Brad spots the MC and signals for him to join him
+Brad "My man!!! glad you could make it!!"
+MCname "Seems like the party is in full swing already"
+Brad "Hell yeah dude go ahead inside and enjoy yourself"
+MCname "I think i....."
+Brad "Get this man a beer asap"
+#a frat bro hands the mc a beer
+Brad "Now you're set to go have fun bro"
+#Brad turns away and starts mingling before you can even respond
+"{i}(Well shit...i guess ill just head inside.){/i}"
+
+jump rush_party_free_roam
+
+###############################################
+# RUSH PARTY — FREE ROAM HUB
+###############################################
+
+label rush_party_free_roam:
+
+    scene party_main_room
+    play music "party_mix.ogg"
+
+    show screen rush_objectives
+    call screen rush_party_free_roam_screen
+    return
+
+
+
+###############################################
+# RUSH PARTY FREE ROAM SCREEN — CLICK TO TALK
+###############################################
+
+screen rush_party_free_roam_screen:
+
+    # Background party render
+    add "party_main_room.png"
+
+    # Sienna
+    imagebutton:
+        idle "sienna_party_idle.png"
+        hover "sienna_party_hover.png"
+        xpos 200
+        ypos 350
+        action Jump("party_sienna_scene")
+
+    # Jess
+    imagebutton:
+        idle "jess_party_idle.png"
+        hover "jess_party_hover.png"
+        xpos 900
+        ypos 120
+        action Jump("party_jess_scene")
+
+    # Malik
+    imagebutton:
+        idle "malik_party_idle.png"
+        hover "malik_party_hover.png"
+        xpos 1100
+        ypos 400
+        action Jump("party_malik_scene")
+
+    # Kaia
+    imagebutton:
+        idle "kaia_party_idle.png"
+        hover "kaia_party_hover.png"
+        xpos 350
+        ypos 120
+        action Jump("party_kaia_scene")
+
+    # Misty
+    imagebutton:
+        idle "misty_party_idle.png"
+        hover "misty_party_hover.png"
+        xpos 750
+        ypos 250
+        action Jump("party_misty_scene")
+
+    # Kai
+    imagebutton:
+        idle "kai_party_idle.png"
+        hover "kai_party_hover.png"
+        xpos 500
+        ypos 500
+        action Jump("party_kai_scene")
+
+    # Random people
+    imagebutton:
+        idle "party_crowd_idle.png"
+        hover "party_crowd_hover.png"
+        xpos 650
+        ypos 420
+        action Jump("party_random_people")
+
+    # Exit
+    imagebutton:
+        idle "exit_party_idle.png"
+        hover "exit_party_hover.png"
+        xpos 1200
+        ypos 600
+        action Jump("rush_party_summary")
+
+
+
+
+
+
+
+
+
+
+
+
+
     
-    MCname "Can I ask you something?"
 
-    Norah "You just did."
+        
+        
 
-    MCname "You're impossible."
 
-    Norah "I've heard that."
 
-    MCname "You don't seem bothered."
-
-    Norah "The opinions of strangers usually aren't worth carrying."
-
-    MCname "That's... actually good advice."
-
-    Norah "Don't get used to it."
-
-    Norah "By the way."
-
-    MCname "Yeah?"
-
-    Norah "You asked questions instead of pretending to know everything."
-    pause 0.2
-    Norah "That's rarer than you'd think."
-
-    hide norah
-    with dissolve
-
-    MCname "(She compliments people like she's issuing parking tickets.)"
-    MCname "(I think that was a compliment.)"
-
-    jump ep2_classroom_morning
-
-label ep2_aubrey_morning:
-
-    $ add_relationship_points("Aubrey", 2)
-
-    scene campus_quad_morning
-    with dissolve
-
-    MCname "(Nick made Aubrey sound like a natural disaster.)"
-    MCname "(Hopefully he was exaggerating...)"
-
-    "WHACK!"
-
-    MCname "Ow!"
-
-    MCname "...Was that..."
-    MCname "...an apple?"
-
-    show aubrey casual grin at center
-    with dissolve
-
-    Aubrey "Yep."
-
-    MCname "Did you just throw fruit at me?"
-
-    Aubrey "Relax."
-    Aubrey "I was aiming for the trash can."
-
-    Aubrey "...Mostly."
-
-    MCname "(She's smiling way too much for someone who just assaulted me with produce.)"
-
-    MCname "You're Aubrey."
-
-    Aubrey "Damn."
-    Aubrey "My reputation really is getting around."
-
-    MCname "Nick mentioned you."
-
-    Aubrey "Of course he did."
-    Aubrey "Lemme guess."
-    Aubrey "\"She's trouble.\""
-
-    MCname "More like..."
-    MCname "\"Chaos potential.\""
-
-    Aubrey "Ha!"
-    Aubrey "I'm stealing that."
-
-    Aubrey "C'mon."
-
-    MCname "Where are we going?"
-
-    Aubrey "No clue."
-
-    MCname "That's... not reassuring."
-
-    Aubrey "Exactly."
-
-    scene campus_walkway
-    with dissolve
-
-    show aubrey casual smirk at right
-
-    Aubrey "You always this cautious?"
-
-    menu:
-    
-        "Only around people throwing apples.":
-
-            $ add_relationship_points("Aubrey", 1)
-
-            MCname "I've got trust issues now."
-
-            Aubrey "Good."
-            Aubrey "Means you're learning."
-
-        "I'm just trying not to die before my second class.":
-
-            $ add_relationship_points("Aubrey", 1)
-
-            Aubrey "Boring."
-
-            MCname "Alive."
-
-            Aubrey "Debatable."
-
-        "Depends who's asking.":
-
-            $ add_relationship_points("Aubrey", 2)
-
-            MCname "You interviewing me?"
-
-            Aubrey "Maybe."
+        
+        
 
     
-    MCname "What are you doing?"
 
-    Aubrey "Shh."
 
-    MCname "Were you hiding?"
+ 
 
-    Aubrey "Maybe."
 
-    MCname "Why?"
-
-    Aubrey "Long story."
-    Aubrey "Also a funny one."
-
-    MCname "Should I be concerned?"
-
-    Aubrey "Probably."
-
-    MCname "..."
-    MCname "Why?"
-
-    Aubrey "Some perfectionist is gonna spend all day thinking about that."
-
-    MCname "You're evil."
-
-    Aubrey "Thank you."
-
-    Aubrey "Damn."
-
-    MCname "Late?"
-
-    Aubrey "Very."
-
-    MCname "Then why are you just standing here?"
-
-    Aubrey "Because I was already late."
-
-    MCname "...That's terrible logic."
-
-    Aubrey "Works every time."
-
-    Aubrey "See ya around, freshman."
-
-    MCname "You're not even going the right direction."
-
-    Aubrey "Details."
-
-    hide aubrey
-    with dissolve
-
-    MCname "(She's either the most confident person on campus...)"
-    MCname "(...or the biggest menace.)"
-    MCname "(Honestly... probably both.)"
-
-    jump ep2_classroom_morning
-
-label ep2_jess_morning:
-
-    $ add_relationship_points("Jess", 2)
-
-    scene campus_coffee_shop
-    with dissolve
-
-    MCname "(If anyone's making a coffee run this early...)"
-
-    show jess casual smile at center
-    with dissolve
-
-    Jess "Well, look who survived day one."
-
-    MCname "Barely."
-
-    Jess "That seems to be the freshman motto."
-
-    MCname "You heading to class?"
-
-    Jess "Eventually."
-    Jess "First, coffee delivery."
-
-    MCname "That many cups?"
-
-    Jess "One's mine."
-    Jess "One's for my roommate."
-    Jess "...And one's for Nick."
-
-    MCname "You bring him coffee?"
-
-    Jess "He's hopeless before nine."
-
-    Jess "Want to walk with me?"
-
-    MCname "Sure."
-
-    scene campus_path
-    with dissolve
-
-    show jess casual neutral at right
-
-    Jess "So..."
-    Jess "How are you holding up?"
-
-    MCname "Honestly?"
-    MCname "Still trying to remember where half my classes are."
-
-    Jess "Everyone gets lost."
-    Jess "Some people just get lost with more confidence."
-
-    MCname "That sounds oddly specific."
-
-    Jess "Experience."
-
-    Student "Thank you!"
-
-    Jess "You're okay."
-    Jess "First week's rough."
-
-    Jess "It gets easier."
-
-    MCname "You do that a lot?"
-
-    Jess "Help people?"
-
-    MCname "Yeah."
-
-    Jess "If I can make someone's day a little less stressful..."
-    Jess "...why wouldn't I?"
-
-    menu:
-    
-        "That's one of the nicest things I've heard all week.":
-
-            $ add_relationship_points("Jess", 1)
-
-            MCname "The campus could use more people like you."
-
-            Jess "That's sweet."
-
-        "You're the mom friend, aren't you?":
-
-            $ add_relationship_points("Jess", 1)
-
-            MCname "You carry emergency coffee."
-            MCname "You help strangers."
-            MCname "You're absolutely the mom friend."
-
-            Jess "...I've been called worse."
-
-        "Must get exhausting always looking after everyone.":
-
-            $ add_relationship_points("Jess", 1)
-
-            Jess "Sometimes."
-            Jess "But everyone deserves someone looking out for them."
-    
-    Jess "I should get these delivered before Nick starts texting me dramatic complaints."
-
-    MCname "He does that?"
-
-    Jess "He once texted me..."
-    Jess "\"I've seen the light, Jess."
-    Jess "\"Unfortunately it was because I opened the fridge and there wasn't any coffee.\""
-
-    MCname "That sounds exactly like him."
-
-    Jess "Anyway..."
-
-    Jess "I'm glad we ran into each other."
-
-    MCname "Me too."
-
-    Jess "See you in class?"
-
-    MCname "Wouldn't miss it."
-
-    hide jess
-    with dissolve
-
-    MCname "(Jess is different.)"
-    MCname "(She's the kind of person who quietly makes everyone's day better... even if they don't always notice.)"
-
-    jump ep2_classroom_morning
-
-label ep2_nick_morning:
-
-    scene dorm_morning
-    with dissolve
-
-    $ add_relationship_points("Nick", 5)
-
-    show nick grin at center
-    with dissolve
-
-    Nick "Changed your mind already?"
-
-    MCname "About what?"
-
-    Nick "Going out."
-    Nick "You were halfway out the door."
-
-    MCname "Figured I'd hang around for a bit."
-
-    Nick "Good."
-    Nick "I'd hate to drink this terrible instant coffee alone."
-
-    MCname "That... smells illegal."
-
-    Nick "Pain builds character."
-
-    MCname "Pretty sure that's just burnt coffee."
-
-    Nick "Probably."
-
-    MCname "So..."
-    MCname "How'd you end up here?"
-
-    Nick "Scholarship."
-    Nick "A little luck."
-    Nick "A lot of paperwork."
-
-    MCname "That's less exciting than I expected."
-
-    Nick "What?"
-    Nick "You thought I was recruited because I'm devastatingly handsome?"
-
-    MCname "The thought crossed my mind."
-
-    Nick "Correct answer."
-
-    Nick "You settling in okay?"
-
-    MCname "Trying to."
-
-    Nick "First week always feels weird."
-    Nick "Then one day you'll be walking across campus wondering where the semester went."
-
-    MCname "Easy for you to say."
-
-    Nick "Nah."
-    Nick "I was exactly where you are last year."
-
-    Nick "Have you seen the guys with the blue and gold shirts around campus?"
-
-    MCname "Yeah."
-
-    Nick "That's Alpha Delta."
-    Nick "One of the fraternities."
-
-    MCname "You thinking about joining?"
-
-    Nick "Thinking?"
-    Nick "I've been planning to rush since senior year."
-
-    MCname "Really?"
-
-    Nick "My cousin was an Alpha."
-    Nick "Best years of his life, according to him."
-
-    MCname "I always figured fraternities were just parties."
-
-    Nick "That's what everybody thinks."
-    Nick "Yeah, they throw parties."
-    Nick "But they also have alumni connections, intramurals, charity events..."
-    Nick "...and a built-in group of people who always have your back."
-
-    MCname "Sounds nice."
-
-    Nick "College's a lot easier when you've got people in your corner."
-
-    MCname "(He's got a point.)"
-
-    menu:
-    
-        "Maybe I'll rush too.":
-
-            MCname "Could be fun."
-
-            Nick "Hell yeah."
-            Nick "Imagine us getting in together."
-
-        "I'm not really the frat type.":
-
-            MCname "At least... I don't think I am."
-
-            Nick "Neither do half the guys who end up joining."
-
-        "I'll keep an open mind.":
-
-            MCname "Depends on what they're actually like."
-
-            Nick "That's the right attitude."
-    
-    Nick "Rush week isn't for a while anyway."
-    Nick "You'll meet the different houses."
-    Nick "Figure out who you click with."
-
-    MCname "Plural?"
-
-    Nick "Oh yeah."
-    Nick "Every house thinks they're the best."
-
-    MCname "Because Alpha Delta?"
-
-    Nick "Now you're catching on."
-
-    MCname "You've never even been a member."
-
-    Nick "Details."
-
-    Nick "...Yep."
-
-    MCname "What?"
-
-    Nick "We're gonna be late if we don't leave now."
-
-    MCname "Whose fault is that?"
-
-    Nick "Definitely yours."
-
-    MCname "How?"
-
-    Nick "I haven't figured that part out yet."
-
-    MCname "(I'm starting to think living with Nick is never going to be boring.)"
-
-    hide nick
-    with dissolve
-
-    jump ep2_classroom_morning
-
-label ep2_classroom_morning:
-
-    scene classroom_morning
-    with dissolve
-
-    MCname "(Made it in one piece.)"
-    MCname "(That's becoming my morning goal.)"
-
-    scene classroom_morning
-
-    show kaia casual smile at left
-    show tiff casual neutral at right
-
-    Kaia "Hey!"
-    Kaia "Over here."
-
-    MCname "Mind if I sit here?"
-
-    Kaia "Only if you're planning on stealing my notes."
-
-    MCname "Bold of you to assume I'd understand them."
-
-    #Kaia laughs.
-    #Tiff smirks.
-
-    Tiff "At least he's honest."
-
-    MCname "(Guess these two adopted me.)"
-
-    show professor_hart happy at center
-    with dissolve
-
-    ProfessorHart "Good morning, everyone."
-    ProfessorHart "I'm Professor Hart."
-    ProfessorHart "And before anyone asks..."
-
-    #ProfessorHart raises a travel mug.
-
-    ProfessorHart "...yes, this is coffee."
-    ProfessorHart "...and no, you can't have any."
-
-    #The class chuckles.
-
-    ProfessorHart "Let's try this again."
-    ProfessorHart "How many of you got at least eight hours of sleep?"
-
-    #Three students raise their hands.
-
-    ProfessorHart "Excellent."
-    ProfessorHart "Liars usually reveal themselves early."
-
-    #The room laughs.
-
-    ProfessorHart "It's only the second day."
-    ProfessorHart "You're still figuring this place out."
-
-    # Frat guys enter
-    show fratguy1 grin
-    show fratguy2 grin
-    show fratguy3 smile
-
-    FratGuy1 "Morning, Professor."
-
-    ProfessorHart "You're two minutes late."
-
-    FratGuy2 "Technically we're all here now."
-
-    ProfessorHart "And technically..."
-    ProfessorHart "...you're still late."
-
-    #The class laughs.
-
-    ProfessorHart "Sit down before I start charging admission."
-
-    FratGuy3 "Worth a shot."
-
-    #Kaia leans toward you.
-
-    Kaia "Those guys think they're celebrities."
-
-    Tiff "Half the campus agrees."
-
-    MCname "Who are they?"
-
-    Kaia "Upperclassmen."
-    Kaia "They're in Pi Kappa Alpha."
-
-    Tiff "You'll know the fraternity guys."
-    Tiff "They make sure everyone does."
-
-    #ProfessorHart claps once.
-
-    ProfessorHart "Eyes up here."
-
-    ProfessorHart "Yesterday we covered the syllabus."
-    ProfessorHart "Today we're talking about something much more important."
-
-    #ProfessorHart writes on the board:
-
-    ProfessorHart "Your degree matters."
-    ProfessorHart "But so do the people sitting around you."
-
-    ProfessorHart "Some of you will meet lifelong friends here."
-    ProfessorHart "Some of you will discover careers you never considered."
-    ProfessorHart "Some of you..."
-    ProfessorHart "...will probably date someone in this room."
-
-    #The class laughs.
-
-    Kaia "Well this just got interesting."
-
-    #Tiff rolls her eyes.
-    #MCname laughs.
-
-    ProfessorHart "Don't hide in your dorm."
-    ProfessorHart "Join clubs."
-    ProfessorHart "Go to campus events."
-    ProfessorHart "Meet people who aren't exactly like you."
-
-    #ProfessorHart points toward the quad.
-
-    ProfessorHart "Tomorrow afternoon the student organization fair opens."
-    ProfessorHart "Clubs."
-    ProfessorHart "Volunteer organizations."
-    ProfessorHart "Sports."
-    ProfessorHart "...and yes..."
-
-    #ProfessorHart glances at the fraternity guys.
-
-    ProfessorHart "...the fraternities and sororities."
-
-    #FratGuy1 gives a smug grin.
-
-    ProfessorHart "Mr. Carter."
-
-    FratGuy1 "Yes?"
-
-    ProfessorHart "If I hear the phrase..."
-    ProfessorHart "'Best house on campus'..."
-    ProfessorHart "...before lunch..."
-    ProfessorHart "...I'm assigning extra reading."
-
-    #The frat guys laugh.
-
-    FratGuy1 "Message received."
-
-    #bell
-
-    ProfessorHart "That's enough excitement for one morning."
-    ProfessorHart "Enjoy the rest of your day."
-    ProfessorHart "College is what you make of it."
-
-    hide professor_hart
-    with dissolve
-
-    Kaia "You guys wanna hang at the Flaunt house tomorrow?"
-
-    Tiff "I'm game."
-
-    Kaia "You should come too."
-
-    #FratGuy2 passes by with a confident grin.
-
-    FratGuy2 "We'll see you there, freshman."
-
-    MCname "(Looks like tomorrow just got a lot more interesting.)"
-
-    jump ep2_after_class
-
-label ep2_after_class:
 
     
 

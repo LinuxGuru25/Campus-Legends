@@ -2,8 +2,14 @@
 
 # Declare characters used by this game.
 
-default player_name = ""
+default player_name = "Emanuel"
 default met_sienna_jess = False
+default rush_obj_blowie = "inactive"
+default rush_obj_handjob = "inactive"
+default rush_obj_kiss = "inactive"
+default rush_obj_panties = "inactive"
+default rush_obj_drink_5_shots = "inactive"
+default rush_obj_have_sex = "inactive"
 
 define e = Character("Eileen")
 define prof = Character(_("prof"), color="#c8c8c8")
@@ -18,6 +24,8 @@ define Tiffany = Character("Tiff")
 define Misty = Character("Misty")
 define Kaia = Character("Kaia")
 define Aubrey = Character("Aubrey")
+define Kai = Character("Kai", color="#50C878")
+
 
 image sienna_smile = "sienna_smile.webp"
 image Sienna_1 = "Sienna_1.webp"

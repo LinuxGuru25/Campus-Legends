@@ -520,7 +520,7 @@ label campus_after_class:
 
     scene campus_path with dissolve
 
-    MCname "{i}(Class wasn’t bad… might as well look around before heading out.){/i}"
+    MCname "{i}(Class wasn't bad… might as well look around before heading out.){/i}"
     MCname "{i}(Looks like a few people are still hanging around.){/i}"
 
     call screen hallway_free_roam
@@ -657,7 +657,7 @@ label fr_sienna_jess:
     MCname "There's a difference?"
 
     Sienna "Huge difference."
-    Sienna "I don't create the chaos."
+    Sienna "I don't create the fear."
 
     "Sienna grins."
 
@@ -668,7 +668,7 @@ label fr_sienna_jess:
     "Jess notices your expression."
 
     Jess "Don't worry."
-    Jess "She's actually nicer than she pretends."
+    Jess "She's actually nicer than she pretends to be."
 
     "Sienna gasps dramatically."
 
@@ -1123,21 +1123,25 @@ label fr_norah:
     MCname "Yeah... sure."
 
     "Norah shakes her head."
-    Norah "Animal shelter."
+    Norah "My bad...im just in a hurry and have alot on my mind."
 
     MCname "{i}(...Wasn't expecting that.){/i}"
 
-    MCname "Huh?"
+    MCname "Understandable we all have stuff that weighs on us, no harm no foul, I'm [MCname]"
 
-    Norah "If you wanna help out, I volunteer at the local animal shelter on weekends."
+    Norah "Norah."
 
-    MCname "That's actually really cool of you."
+    MCname "Pleasure to meet you Norah"
+
+    MCname "I'll let you be on your way, maybe i'll see you around."
 
     "Norah shrugs."
-    Norah "I love animals and I'd be glad to help out if I can."
+    Norah "You going to the Mixer friday?"
 
     "MCname smiles."
-    MCname "That's... actually a pretty good reason."
+    MCname "Yeah Sienna kinda didnt leave me a choice."
+
+    Norah "hahah Sounds like her"
 
     show norah casual soft
     MCname "{i}(I think that's the first time she's smiled.){/i}"
@@ -1145,23 +1149,6 @@ label fr_norah:
     # Freshman drops papers
     show norah casual neutral
     $ renpy.pause(0.2)
-
-    "A freshman hurries past, accidentally dropping a folder. Papers scatter everywhere."
-    "Before the student can react—"
-
-    show norah casual kneel with dissolve
-    "Norah is already kneeling, collecting pages."
-
-    Freshman "Oh my gosh, thank you."
-
-    show norah casual neutral
-    Norah "Try holding it from the bottom."
-
-    Freshman "Right. Thanks."
-
-    "The student rushes away."
-    "MCname watches."
-    "Norah brushes dust from her hands."
 
 
     menu:
@@ -1173,13 +1160,11 @@ label fr_norah:
             $ add_personality("Caring", 1)
             $ walkthrough("Caring +1")
 
-            MCname "You're nicer than you let on."
+            MCname "You have a beautiful smile."
 
             # show norah casual raisedbrow
-            Norah "Who said I was trying to hide it?"
+            Norah "....Thanks"
 
-            "MCname laughs."
-            MCname "Fair enough."
 
         "Tease her.":
 
@@ -1200,31 +1185,15 @@ label fr_norah:
             show norah casual smirk
             "A beat later, the corner of her mouth curls into a tiny smile."
 
-        "Ask about the shelter.":
-
-            $ relationship_api.add_affection("Norah", 3)
-            $ walkthrough("Norah +3")
-
-            MCname "What's it like?"
-
-            show norah casual soft
-            Norah "Loud."
-            Norah "Messy."
-            Norah "Worth it."
-
-            MCname "Sounds like you enjoy it."
-
-            Norah "I do."
-
     # Exit
     show norah casual neutral
     "Norah checks her phone."
 
     Norah "I should get going."
 
-    MCname "Volunteer shift?"
+    MCname "Duty calls!!"
 
-    Norah "Tomorrow."
+    Norah "Doesn't it always"
 
     show norah casual walk
     "Norah starts walking."
@@ -1234,7 +1203,7 @@ label fr_norah:
     show norah casual back
     "After a few steps, she stops."
 
-    Norah "Welcome to campus."
+    Norah "Welcome to SSU."
 
     MCname "Thanks."
 
@@ -1263,8 +1232,8 @@ label fr_Malik:
 
     show Malik grin at center
 
-    MCname "{i}(Malik's leaning against one of the lockers, absentmindedly spinning a basketball on his finger.){/i}"
-    MCname "{i}(He's somehow making standing in a hallway look like a scheduled activity.){/i}"
+    MCname "{i}(Malik's talking to some swoll ass dude..maybe a linebacker..){/i}"
+    MCname "{i}(Let's see whats up.){/i}"
 
     "Before you can say anything—"
 
@@ -1284,11 +1253,9 @@ label fr_Malik:
 
     MCname "Comforting."
 
-    "Malik lets the basketball bounce once before catching it."
-
     Malik "So."
     Malik "Scale of one to ten."
-    Malik "How lost are you?"
+    Malik "How's your first day so far??"
 
     menu:
 
@@ -1327,7 +1294,6 @@ label fr_Malik:
             "Malik bursts out laughing."
             Malik "That's literally what I did."
 
-    "Malik spins the basketball again."
 
     Malik "Little secret."
     "Malik leans closer."
@@ -1381,79 +1347,56 @@ label fr_Malik:
 
     "Both laugh."
 
-    "Malik bounces the basketball again."
-
     Malik "Speaking of..."
     "Malik points toward you."
-    Malik "You're my roommate."
+    Malik "This here is Brad,he's the frat pres."
 
-    MCname "Guess you're stuck with me."
+    MCname "Sup bro."
 
-    "Malik sighs dramatically."
-    Malik "Yeah."
-    Malik "Housing really dropped the ball."
+    Brad "Sup man, Malik tells me yall are roomies"
 
-    MCname "You seem devastated."
+    MCname "Yup!!"
 
-    "Malik smiles."
-    Malik "I'm coping."
-    Malik "Barely."
+    Brad "You going for a bid this year?"
 
-    "They both laugh."
+    MCname "Bid?"
 
-    Malik "Seriously though..."
-    "Malik's tone softens."
-    Malik "I'm glad they paired us."
+    Brad "Joining a frat basically"
 
-    "MCname looks surprised."
+    MCname "Idk man. like i told Malik its a bit to soon to make a decison on that."
 
-    "Malik shrugs."
-    Malik "Starting college's a lot easier when you've got somebody in your corner."
+    Brad "I hear you man but its rush week so how about you come to our party tomorrow night."
 
-    "MCname smiles."
-    MCname "Yeah."
-    MCname "I appreciate that."
+    MCname "...Maybe"
 
-    "Malik nods."
-    Malik "Besides..."
-    "Malik smirks."
-    Malik "If you're gonna embarrass yourself..."
-    Malik "I'd rather have front-row seats."
+    Brad "No pressure man just drinks and chicks to party with"
 
-    "MCname laughs."
-    MCname "There it is."
+    "{i}(Ok i can get behind that....){/i}"
 
-    Malik "Had to end on brand."
+    MCname "You know what fuck it i'll be there"
 
-    "Malik's phone buzzes."
-    "Malik checks it."
+    Brad "Awesome just look for me when you get there"
 
-    Malik "Crap."
-    Malik "I've gotta run."
+    Brad "Alright i gotta bounce Malik i'll holla at you later"
 
-    "Malik starts walking backward."
-    Malik "Don't disappear."
+    Malik "Dueces"
 
-    MCname "I wasn't planning on it."
+    Malik "My man!!! Making new friends!!!"
 
-    "Malik points at you."
-    Malik "Good."
-    Malik "We've got a whole year of bad decisions ahead of us."
+    MCname "Hardly..that felt more like a recruitment pitch"
 
-    "MCname laughs."
-    MCname "That somehow sounded reassuring."
+    Malik "Hey its free booze and hot chicks,recruitment pitch or not its a win"
 
-    "Malik grins."
-    Malik "It was."
-    Malik "See you back at the dorm."
+    MCname "Andddd the lie detector determined that...you're telling the truth!!"
 
-    hide Malik with dissolve
+    Malik "Haha"
 
-    $ relationship_api.add_affection("Malik", 2)
-    $ walkthrough("Malik +2")
+    Malik "Alright bro-ham i gotta bounce i'll see you back at the dorm homie."
 
-    MCname "{i}(He's ridiculously easy to talk to.){/i}"
-    MCname "{i}(If this is what college friendships are supposed to feel like... maybe I'm gonna be alright.){/i}"
+    MCname "Alright man stay outta trouble"
+
+    Malik "haha i'll try"
+
 
     call screen hallway_free_roam
     return
@@ -1470,11 +1413,11 @@ label aubrey_hallway_scene:
 
     stop ambience fadeout 1.0
 
-    MCname "{i}(I should probably head back before I get lost again.){/i}"
+    MCname "{i}(I should probably head back im done with classes for today.){/i}"
 
     play sound "footsteps.ogg"
 
-    MCname "{i}(...Someone's coming.){/i}"
+    MCname "{i}(...huh?){/i}"
 
     show aubrey neutral at right with dissolve
 
@@ -1488,20 +1431,21 @@ label aubrey_hallway_scene:
     "..."
     "Then stops."
 
-    Aubrey "You're standing in front of the campus map."
+    Aubrey "Tall,dark and handsome."
 
     "MCname looks behind himself."
-    MCname "...I am."
+    MCname "...what?."
 
-    Aubrey "People might actually need it."
+    #Aubrey steps closer 
 
-    "MCname quickly steps aside."
-    MCname "Right."
-    MCname "Sorry."
+    Aubrey "What's your name handsome?"
 
-    "Aubrey walks over, glances at the map for barely a second, then starts to leave again."
+    MCname "...[MCname]"
+    MCname "And you?"
 
-    MCname "{i}(That's it?){/i}"
+    MCname "{i}(She seems oddly fimiliar..){/i}"
+
+    Aubrey "Aubrey"
 
     MCname "Wait."
 
@@ -1509,85 +1453,21 @@ label aubrey_hallway_scene:
 
     MCname "Can I ask you something?"
 
-    "She turns just enough to acknowledge you."
-
     Aubrey "Depends."
 
-    MCname "Is this campus really as confusing as it feels..."
-    MCname "...or am I just having a rough first day?"
+    MCname "Do i know you from somewhere?"
 
-    "Aubrey studies you for a moment."
+    Aubrey "I dount it pretty boy"
 
-    Aubrey "First day?"
+    #Aubrey's phone rings
 
-    "MCname nods."
+    Aubrey "wtf does she want...."
 
-    Aubrey "That explains it."
+    #Aubrey walks away talking on her phone
 
-    MCname "Explains what?"
+    "{i}(Ok wtf was that...){/i}"
 
-    Aubrey "You still stop every time you hear a bell."
-
-    "MCname blinks."
-
-    Aubrey "You'll stop doing that."
-
-    "MCname laughs."
-    MCname "You noticed?"
-
-    Aubrey "I notice a lot."
-
-    "A beat passes."
-
-    MCname "So..."
-    MCname "Any advice?"
-
-    "Aubrey considers the question."
-
-    Aubrey "Don't spend all your time trying to impress people."
-    Aubrey "Most of them are too busy trying to impress each other."
-
-    "MCname nods slowly."
-    MCname "That's... actually good advice."
-
-    show aubrey soft
-    Aubrey "I know."
-
-    "Her phone buzzes. She glances at the screen."
-
-    Aubrey "I've got to go."
-
-    MCname "Thanks."
-
-    "Aubrey starts walking."
-
-    "After a few steps—"
-
-    Aubrey "Oh."
-
-    MCname "Yeah?"
-
-    "Aubrey looks back over her shoulder."
-
-    Aubrey "The Arts Building?"
-
-    MCname "What about it?"
-
-    Aubrey "Third floor."
-
-    "MCname frowns."
-    MCname "I didn't ask where it was."
-
-    Aubrey "No."
-    Aubrey "But you were going to."
-
-    "She walks away before you can answer."
-
-    hide aubrey with dissolve
-
-    MCname "{i}(...Okay.){/i}"
-    MCname "{i}She somehow answered a question I hadn't asked yet.{/i}"
-    MCname "{i}(I still don't know her name... but I have a feeling she won't stay a stranger for long.){/i}"
+    "{i}(Alright lets get back to the dorm im kinda tired){/i}"
 
     jump end_of_day_transition
 
@@ -1606,7 +1486,7 @@ label end_of_day_transition:
 
     "And tomorrow?"
 
-    "Your first real day."
+    "Day 2..."
 
     jump episode_2_start
 

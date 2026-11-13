@@ -5,7 +5,6 @@
 
 default characters = {}
 
-
 default relationship_points = {
     "Sienna": 0,
     "Jess": 0,
@@ -19,21 +18,21 @@ default relationship_points = {
 default romance_threshold = {
     "Sienna": 50,
     "Jess": 50,
-    "Aubrey": 59,
-    "Norah": 59,
+    "Aubrey": 50,
+    "Norah": 50,
     "Misty": 50,
     "Kaia": 50,
     "Tiff": 50,
 }
 
 default romance_personality_bonus = {
-    "Sienna": "confident",
-    "Jess": "caring",
-    "Aubrey": "selfish",
-    "Norah": "caring",
-    "Misty": "caring",
-    "Kaia": "confident",
-    "Tiff": "confident",
+    "Sienna": "Confident",
+    "Jess": "Caring",
+    "Aubrey": "Selfish",
+    "Norah": "Caring",
+    "Misty": "Caring",
+    "Kaia": "Confident",
+    "Tiff": "Confident",
 }
 
 default girlfriend = {
@@ -46,14 +45,24 @@ default girlfriend = {
     "Tiff": False,
 }
 
+default romance_unlocked = {
+    "Sienna": False,
+    "Jess": False,
+    "Aubrey": False,
+    "Norah": False,
+    "Misty": False,
+    "Kaia": False,
+    "Tiff": False,
+}
+
 default girlfriend_bonuses = {
-    "Sienna": {"confident": 1},
-    "Jess": {"caring": 1},
-    "Aubrey": {"selfish": 1},
-    "Norah": {"caring": 1},
-    "Misty": {"caring": 1},
-    "Kaia": {"confident": 1},
-    "Tiff": {"confident": 1},
+    "Sienna": {"Confident": 1},
+    "Jess": {"Caring": 1},
+    "Aubrey": {"Selfish": 1},
+    "Norah": {"Caring": 1},
+    "Misty": {"Caring": 1},
+    "Kaia": {"Confident": 1},
+    "Tiff": {"Confident": 1},
 }
 
 init -10 python:
@@ -79,7 +88,7 @@ init -10 python:
         def ensure(self, name):
             if name not in store.characters:
                 store.characters[name] = {
-                    "caring": 0,
+                    "Caring": 0,
                     "name_as": name,
                     "relationship_state": "stable",
                     "status": "single",
@@ -94,9 +103,9 @@ init -10 python:
                     "affection": 0,
                     "cheated_on": False,
                     "personality": {
-                        "confident": 0,
-                        "caring": 0,
-                        "selfish": 0,
+                        "Confident": 0,
+                        "Caring": 0,
+                        "Selfish": 0,
                     },
                     "evolution": {
                         "stage": 0,
@@ -189,38 +198,29 @@ init -10 python:
         ## TRUST / AFFECTION
         ############################################################
 
-        TRUST_PERSONALITY_MODIFIERS = {
-            "soft":        {"gain": +2, "loss": -1},
-            "warm":        {"gain": +1, "loss": -1},
-            "balanced":    {"gain": 0,  "loss": 0},
-            "guarded":     {"gain": -1, "loss": +1},
-            "volatile":    {"gain": -2, "loss": +2},
-        }
+        def add_trust(self, name, amount, apply_personality=True):
 
-        def _get_personality_label(self, name):
-            meta = self.get_metadata(name)
-            return meta.get("personality", "balanced")
-
-        def add_trust(self, name, amount):
             c = self.ensure(name)
+
+            if amount > 0 and apply_personality:
+                amount = personality_bonus(name, amount)
+
             c["trust"] += amount
             c["trust"] = max(-100, min(100, c["trust"]))
+
             self.update_relationship_state(name)
+
             return c["trust"]
 
         def add_trust_raw(self, name, amount):
-            return self.add_trust(name, amount)
 
-        def add_trust_scaled(self, name, amount):
-            personality = self._get_personality_label(name)
-            p_mod = self.TRUST_PERSONALITY_MODIFIERS.get(
-                personality, self.TRUST_PERSONALITY_MODIFIERS["balanced"]
+            return self.add_trust(
+                name,
+                amount,
+                apply_personality=False
             )
 
-            if amount > 0:
-                amount += p_mod["gain"]
-            elif amount < 0:
-                amount += p_mod["loss"]
+        def add_trust_scaled(self, name, amount):
 
             return self.add_trust(name, amount)
 
@@ -239,12 +239,19 @@ init -10 python:
         def add_trust_event_repair(self, name, intensity=1):
             return self.add_trust_scaled(name, +3 * intensity)
 
-        def add_affection(self, name, amount):
+        def add_affection(self, name, amount, apply_personality=True):
+
             c = self.ensure(name)
+
+            if amount > 0 and apply_personality:
+                amount = personality_bonus(name, amount)
+
             c["affection"] += amount
             c["affection"] = max(-100, min(100, c["affection"]))
+
             self.check_affection_milestones(name)
             self.update_route_state(name)
+
             return c["affection"]
 
         ############################################################
@@ -252,21 +259,31 @@ init -10 python:
         ############################################################
 
         def set_dating(self, name, value=True):
+
             c = self.ensure(name)
             c["dating"] = value
+
             if value:
                 c["status"] = "dating"
+
+            elif c["status"] == "dating":
+                c["status"] = "single"
+
             self.update_relationship_state(name)
 
         def set_exclusive(self, name):
+
             c = self.ensure(name)
             c["status"] = "exclusive"
 
         def set_broken_up(self, name, value=True):
+
             c = self.ensure(name)
             c["broken_up"] = value
+
             if value:
                 c["status"] = "broken_up"
+
             self.update_relationship_state(name)
 
         ############################################################
@@ -274,47 +291,107 @@ init -10 python:
         ############################################################
 
         def add_points(self, name, amount):
+
             if name not in store.relationship_points:
                 store.relationship_points[name] = 0
 
             store.relationship_points[name] += amount
-            store.relationship_points[name] = max(0, store.relationship_points[name])
+
+            store.relationship_points[name] = max(
+                0,
+                store.relationship_points[name]
+            )
 
             self.check_romance_unlock(name)
+
             return store.relationship_points[name]
 
         def set_girlfriend(self, name):
-            girlfriend[name] = True
-            self.set_dating(name, True)
 
-            if name in girlfriend_bonuses:
-                for trait, bonus in girlfriend_bonuses[name].items():
-                    if trait in store.mc_personality:
-                        store.mc_personality[trait] += bonus
+            # Prevent committing to the same character twice.
+            if store.girlfriend.get(name, False):
+                return False
 
-            for other in girlfriend:
+            # Only one official girlfriend at a time.
+            if any(store.girlfriend.values()):
+                return False
+
+            # Require dating and at least 50 affection.
+            if not self.can_commit(name):
+                return False
+
+            store.girlfriend[name] = True
+
+            self.set_exclusive(name)
+
+            # Award personality bonus once.
+            bonuses = store.girlfriend_bonuses.get(name, {})
+
+            for trait, bonus in bonuses.items():
+                add_personality(trait, bonus)
+
+            # Lock all other romance routes.
+            for other in store.girlfriend:
                 if other != name:
                     self.lock_route(other)
 
+            return True
+
         def check_romance_unlock(self, name):
-            if girlfriend.get(name, False):
+
+            if name not in store.romance_unlocked:
                 return False
 
-            points = store.relationship_points.get(name, 0)
-            threshold = romance_threshold[name]
+            if store.girlfriend.get(name, False):
+                return False
 
-            preferred_trait = romance_personality_bonus.get(name, None)
-            if preferred_trait and store.mc_personality.get(preferred_trait, 0) >= 3:
-                threshold -= 2
+            if store.romance_unlocked[name]:
+                return False
 
             if self.get_status(name) == "locked":
                 return False
 
+            points = store.relationship_points.get(name, 0)
+            threshold = store.romance_threshold.get(name, 50)
+
             if points >= threshold:
-                self.set_girlfriend(name)
+                store.romance_unlocked[name] = True
                 return True
 
             return False
+
+        ############################################################
+        ## DATING / COMMITMENT
+        ############################################################
+
+        def can_start_dating(self, name):
+
+            return (
+                store.romance_unlocked.get(name, False)
+                and not store.girlfriend.get(name, False)
+                and self.get_status(name) != "locked"
+                and not self.ensure(name)["dating"]
+            )
+
+        def start_dating(self, name):
+
+            if not self.can_start_dating(name):
+                return False
+
+            self.set_dating(name, True)
+
+            return True
+
+        def can_commit(self, name):
+
+            c = self.ensure(name)
+
+            return (
+                c["dating"]
+                and not store.girlfriend.get(name, False)
+                and c["status"] != "locked"
+                and c["affection"] >= 50
+            )
 
         ############################################################
         ## PERSONALITY‑ADJUSTED SEVERITY
@@ -325,15 +402,15 @@ init -10 python:
             p = c["personality"]
             severity = base_severity
 
-            if p["confident"] >= 5:
+            if p["Confident"] >= 5:
                 if base_severity in [1, 2]:
                     severity -= 1
 
-            if p["caring"] >= 5:
+            if p["Caring"] >= 5:
                 if base_severity in [1, 2, 3]:
                     severity += 1
 
-            if p["selfish"] >= 5:
+            if p["Selfish"] >= 5:
                 if base_severity in [2, 3]:
                     severity += 1
 
@@ -352,16 +429,16 @@ init -10 python:
             c = self.ensure(name)
             p = c["personality"]
 
-            if p["confident"] >= 5 and p["selfish"] < 5:
+            if p["Confident"] >= 5 and p["Selfish"] < 5:
                 return "cold"
 
-            if p["caring"] >= 5 and p["selfish"] < 5:
+            if p["Caring"] >= 5 and p["Selfish"] < 5:
                 return "emotional"
 
-            if p["selfish"] >= 5:
+            if p["Selfish"] >= 5:
                 return "explosive"
 
-            if p["caring"] >= 3 and p["confident"] <= 3:
+            if p["Caring"] >= 3 and p["Confident"] <= 3:
                 return "passive"
 
             return "avoidant"
@@ -384,17 +461,17 @@ init -10 python:
 
             emotion = base_map.get(severity, "broken")
 
-            if p["confident"] >= 5:
+            if p["Confident"] >= 5:
                 if emotion == "broken":
                     emotion = "confront"
                 elif emotion == "confront":
                     emotion = "distant"
 
-            if p["caring"] >= 5:
+            if p["Caring"] >= 5:
                 if emotion == "distant":
                     emotion = "confront"
 
-            if p["selfish"] >= 5:
+            if p["Selfish"] >= 5:
                 if emotion in ["hurt", "distant"]:
                     emotion = "confront"
 
@@ -479,13 +556,13 @@ init -10 python:
             if c["trust"] < -25:
                 base += 1
 
-            if p["caring"] >= 5:
+            if p["Caring"] >= 5:
                 base += 1
 
-            if p["confident"] >= 5:
+            if p["Confident"] >= 5:
                 base -= 1
 
-            if p["selfish"] >= 5 and c["severity"] >= 2:
+            if p["Selfish"] >= 5 and c["severity"] >= 2:
                 base += 1
 
             tier = c.get("breakup_severity_tier", "soft")
@@ -766,8 +843,8 @@ init -10 python:
             return self.get_status(name) in ("dating", "exclusive")
 
         def lock_if_cheated_too_much(self, name):
-            sev = self.get_severity(name)
-            if sev >= 80:
+
+            if self.get_severity(name) >= 4:
                 self.lock_route(name)
 
         def unlock_if_reconciled(self, name):
@@ -790,15 +867,15 @@ init -10 python:
                 meta["affection_milestones_triggered"] = milestones
                 self.set_metadata(name, meta)
 
-            if aff >= 10 and "10" not in milestones:
+            if aff >= 10 and "10" not in milestones and renpy.has_label("affection_milestone_10"):
                 renpy.call_in_new_context("affection_milestone_10", name)
                 mark("10")
 
-            if aff >= 20 and "20" not in milestones:
+            if aff >= 20 and "20" not in milestones and renpy.has_label("affection_milestone_20"):
                 renpy.call_in_new_context("affection_milestone_20", name)
                 mark("20")
 
-            if aff >= 30 and "30" not in milestones:
+            if aff >= 30 and "30" not in milestones and renpy.has_label("affection_milestone_30"):
                 renpy.call_in_new_context("affection_milestone_30", name)
                 mark("30")
 
@@ -820,33 +897,38 @@ init -10 python:
             })
             chaos = rep["chaos"]
 
-            if chaos >= 10 and chaos < 25:
+            if chaos >= 10 and chaos < 25 and renpy.has_label("cheating_rumors"):
                 renpy.call_in_new_context("cheating_rumors", name)
 
             if chaos >= 25:
-                renpy.call_in_new_context("cheating_rumors", name)
-                renpy.call_in_new_context("world_reacts_to_breakup", name)
+                if renpy.has_label("cheating_rumors"):
+                    renpy.call_in_new_context("cheating_rumors", name)
+                if renpy.has_label("world_reacts_to_breakup"):
+                    renpy.call_in_new_context("world_reacts_to_breakup", name)
 
         def check_dynamic_jealousy(self, primary, others):
             primary_aff = self.get_affection(primary)
 
             for other in others:
                 other_aff = self.get_affection(other)
-                if other_aff >= primary_aff - 2:
+                if other_aff >= primary_aff - 2 and renpy.has_label("jealousy_scene"):
                     renpy.call_in_new_context("jealousy_scene", primary, other)
 
         def update_route_state(self, name):
-            self.ensure(name)
 
-            aff = self.get_affection(name)
-            tr = self.get_trust(name)
-            sev = self.get_severity(name)
-            status = self.get_status(name)
+            c = self.ensure(name)
 
-            if sev >= 80:
-                self.set_broken_up(name, True)
-                self.lock_route(name)
+            # Catastrophic severity can lock a route.
+            if c["severity"] >= 4:
+
+                if c["status"] != "locked":
+                    self.set_broken_up(name, True)
+                    self.lock_route(name)
+
                 return
+
+            # Dating and exclusivity are now player-controlled.
+            return
 
             if aff >= 10 and tr >= 5 and status in ("single", "neutral", "friends"):
                 self.set_dating(name, True)
@@ -897,15 +979,3 @@ init -10 python:
 init -10 python:
     relationship_api = RelationshipAPI()
     relationship_api.register_default_hooks()
-
-    
-
-
-
-
-
-
-
-
-
-

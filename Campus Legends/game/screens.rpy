@@ -28,18 +28,6 @@ transform cl_choice_glow:
 
 init offset = -1
 
-default persistent.qm_back = True
-default persistent.qm_history = True
-default persistent.qm_skip = True
-default persistent.qm_auto = True
-default persistent.qm_save = True
-default persistent.qm_qsave = True
-default persistent.qm_qload = True
-default persistent.qm_prefs = True
-
-init python:
-    def quick_menu_enabled():
-        return persistent.qm_back or persistent.qm_history or persistent.qm_skip or persistent.qm_auto or persistent.qm_save or persistent.qm_qsave or persistent.qm_qload or persistent.qm_prefs
 
 style default:
     properties gui.text_properties()
@@ -113,16 +101,13 @@ screen say(who, what):
     window:
         id "window"
 
-        background Transform(style.window.background, alpha=persistent.dialogueBoxOpacity)
-
         if who is not None:
             window:
                 id "namebox"
                 style "namebox"
-                text who id "who" outlines [(absolute(persistent.text_outline), persistent.text_outline_color, absolute(0), absolute(0))]:
-                    kerning 5.0
+                text who id "who"
 
-        text what id "what" size persistent.pref_text_size outlines [ (absolute(persistent.text_outline), persistent.text_outline_color, absolute(0), absolute(0)) ]
+        text what id "what"
 
     if not renpy.variant("small"):
         add SideImage() xalign 0.0 yalign 1.0
@@ -224,35 +209,20 @@ screen quick_menu():
 
     zorder 100
 
-    if quick_menu_enabled():
+    if quick_menu:
 
         hbox:
             style_prefix "quick"
             style "quick_menu"
 
-            if persistent.qm_back:
-                textbutton _("Back") action Rollback()
-            
-            if persistent.qm_history:
-                textbutton _("History") action ShowMenu('history')
-            
-            if persistent.qm_skip:
-                textbutton _("Skip") action Skip() alternate Skip(fast=True, confirm=True)
-            
-            if persistent.qm_auto:
-                textbutton _("Auto") action Preference("auto-forward", "toggle")
-            
-            if persistent.qm_save:
-                textbutton _("Save") action ShowMenu('save')
-            
-            if persistent.qm_qsave:
-                textbutton _("Q.Save") action QuickSave()
-            
-            if persistent.qm_qload:
-                textbutton _("Q.Load") action QuickLoad()
-            
-            if persistent.qm_prefs:
-                textbutton _("Prefs") action ShowMenu('preferences')
+            textbutton _("Back") action Rollback()
+            textbutton _("History") action ShowMenu('history')
+            textbutton _("Skip") action Skip() alternate Skip(fast=True, confirm=True)
+            textbutton _("Auto") action Preference("auto-forward", "toggle")
+            textbutton _("Save") action ShowMenu('save')
+            textbutton _("Q.Save") action QuickSave()
+            textbutton _("Q.Load") action QuickLoad()
+            textbutton _("Prefs") action ShowMenu('preferences')
 
 init python:
     config.overlay_screens.append("quick_menu")
@@ -775,198 +745,84 @@ screen preferences():
 
     use game_menu(_("Preferences"), scroll="viewport"):
 
-        default pref_tab = 0
+        vbox:
 
-        frame:
-            align (0.0, 0.0)
-            background None
+            hbox:
+                box_wrap True
 
-            has hbox
+                if renpy.variant("pc") or renpy.variant("web"):
 
-            spacing 35
+                    vbox:
+                        style_prefix "radio"
+                        label _("Display")
+                        textbutton _("Window") action Preference("display", "window")
+                        textbutton _("Fullscreen") action Preference("display", "fullscreen")
 
-            for i in range(2):
-                textbutton "Tab":
-                    action SetScreenVariable("pref_tab", i)
+                vbox:
+                    style_prefix "check"
+                    label _("Skip")
+                    textbutton _("Unseen Text") action Preference("skip", "toggle")
+                    textbutton _("After Choices") action Preference("after choices", "toggle")
+                    textbutton _("Transitions") action InvertSelected(Preference("transitions", "toggle"))
 
-        $ title_size = "+10"
-        $ text_size = "+5"
+                vbox:
+                    style_prefix "check"
+                    label _("Persistence")
+                    textbutton _("Clear Persistence") action Show("warning_screen")
 
-        frame:
-            align (0.5, 0.5)
-            background None
+                ## Additional vboxes of type "radio_pref" or "check_pref" can be
+                ## added here, to add additional creator-defined preferences.
 
-            if pref_tab == 0:
+            null height (4 * gui.pref_spacing)
+
+            hbox:
+                style_prefix "slider"
+                box_wrap True
+
                 vbox:
 
-                    hbox:
-                        box_wrap True
+                    label _("Text Speed")
 
-                        if renpy.variant("pc") or renpy.variant("web"):
+                    bar value Preference("text speed")
 
-                            vbox:
-                                style_prefix "radio"
-                                label _("Display")
-                                textbutton _("Window") action Preference("display", "window")
-                                textbutton _("Fullscreen") action Preference("display", "fullscreen")
+                    label _("Auto-Forward Time")
 
-                        vbox:
-                            style_prefix "check"
-                            label _("Skip")
-                            textbutton _("Unseen Text") action Preference("skip", "toggle")
-                            textbutton _("After Choices") action Preference("after choices", "toggle")
-                            textbutton _("Transitions") action InvertSelected(Preference("transitions", "toggle"))
+                    bar value Preference("auto-forward time")
 
-                        vbox:
-                            style_prefix "check"
-                            label _("Persistence")
-                            textbutton _("Clear Persistence") action Show("warning_screen")
+                vbox:
 
-                        ## Additional vboxes of type "radio_pref" or "check_pref" can be
-                        ## added here, to add additional creator-defined preferences.
+                    if config.has_music:
+                        label _("Music Volume")
 
-                    null height (4 * gui.pref_spacing)
+                        hbox:
+                            bar value Preference("music volume")
 
-                    hbox:
-                        style_prefix "slider"
-                        box_wrap True
+                    if config.has_sound:
+
+                        label _("Sound Volume")
+
+                        hbox:
+                            bar value Preference("sound volume")
+
+                            if config.sample_sound:
+                                textbutton _("Test") action Play("sound", config.sample_sound)
 
 
-                        vbox:
+                    if config.has_voice:
+                        label _("Voice Volume")
 
-                            if config.has_music:
-                                label _("Music Volume")
+                        hbox:
+                            bar value Preference("voice volume")
 
-                                hbox:
-                                    bar value Preference("music volume")
+                            if config.sample_voice:
+                                textbutton _("Test") action Play("voice", config.sample_voice)
 
-                            if config.has_sound:
+                    if config.has_music or config.has_sound or config.has_voice:
+                        null height gui.pref_spacing
 
-                                label _("Sound Volume")
-
-                                hbox:
-                                    bar value Preference("sound volume")
-
-                                    if config.sample_sound:
-                                        textbutton _("Test") action Play("sound", config.sample_sound)
-
-
-                            if config.has_voice:
-                                label _("Voice Volume")
-
-                                hbox:
-                                    bar value Preference("voice volume")
-
-                                    if config.sample_voice:
-                                        textbutton _("Test") action Play("voice", config.sample_voice)
-
-                            if config.has_music or config.has_sound or config.has_voice:
-                                null height gui.pref_spacing
-
-                                textbutton _("Mute All"):
-                                    action Preference("all mute", "toggle")
-                                    style "mute_all_button"
-
-                        vbox:
-                            spacing 30
-
-                            vbox:
-                                style_prefix "check"
-                                label _("{size=[title_size]} Quick Menu{/size}")
-                                
-                                vpgrid:
-                                    xsize 400
-                                    cols 2
-                                    xspacing 45
-
-                                    textbutton _("{size=[text_size]} Back{/size}") action (ToggleVariable("persistent.qm_back"))
-                                        
-                                    textbutton _("{size=[text_size]} History{/size}") action (ToggleVariable("persistent.qm_history"))
-
-                                    textbutton _("{size=[text_size]} Skip{/size}") action (ToggleVariable("persistent.qm_skip"))
-
-                                    textbutton _("{size=[text_size]} Auto{/size}") action (ToggleVariable("persistent.qm_auto"))
-
-                                    textbutton _("{size=[text_size]} Save{/size}") action (ToggleVariable("persistent.qm_save"))
-
-                                    textbutton _("{size=[text_size]} Q.Save{/size}") action (ToggleVariable("persistent.qm_qsave"))
-
-                                    textbutton _("{size=[text_size]} Q.Load{/size}") action (ToggleVariable("persistent.qm_qload"))
-
-                                    textbutton _("{size=[text_size]} Prefs{/size}") action (ToggleVariable("persistent.qm_prefs"))
-
-
-
-
-            elif pref_tab == 1:
-                hbox:
-                    xfill True
-                    spacing 20
-                    
-                    vbox:
-                        style_prefix "check"
-                        spacing 20
-
-                        vbox:
-                            label _("{size=[title_size]} Fonts{/size}")
-                            hbox:
-                                textbutton "{size=[text_size]} Montserrat{/size}" action [gui.SetPreference("textFont", "Montserrat-VariableFont_wght.ttf"), gui.SetPreference("nameTextFont", "Montserrat-VariableFont_wght.ttf"), gui.SetPreference("interfaceTextFont", "Montserrat-VariableFont_wght.ttf")]
-                            hbox:
-                                textbutton "{size=[text_size]} Pirata One{/size}" action [gui.SetPreference("textFont", "PirataOne-Regular.ttf"), gui.SetPreference("nameTextFont", "PirataOne-Regular.ttf"), gui.SetPreference("interfaceTextFont", "PirataOne-Regular.ttf")]
-                            hbox:
-                                textbutton "{size=[text_size]} DejaVuSans{/size}" action [gui.SetPreference("textFont", "DejaVuSans.ttf"), gui.SetPreference("nameTextFont", "DejaVuSans.ttf"), gui.SetPreference("interfaceTextFont", "DejaVuSans.ttf")]     
-
-                        vbox:
-                            label _("{size=[title_size]} Outline Color{/size}")
-
-                            hbox:
-                                textbutton _("{size=[text_size]} White{/size}") action [SetField(persistent, "text_outline_color", "#ffffff")]
-                                
-                                null width 100
-
-                                textbutton _("{size=[text_size]} Black{/size}") action [SetField(persistent, "text_outline_color", "#000000")]
-            
-                            hbox:
-                                textbutton _("{size=[text_size]} Gray{/size}") action [SetField(persistent, "text_outline_color", "#c8b68e")]          
-
-                    
-                    vbox:
-                        style_prefix "slider"
-
-                        label _("{size=[title_size]} Text Speed{/size}")
-                        bar value Preference("text speed")
-
-                        label _("{size=[title_size]} Auto-Forward Time{/size}")
-                        bar value Preference("auto-forward time")
-
-                        label _("{size=[title_size]} Text Box Opacity: %s %%{/size}" % (int(persistent.dialogueBoxOpacity * 100)))
-                        bar value FieldValue(object=persistent, field='dialogueBoxOpacity', range=1.0, max_is_zero=False, style=u'slider', offset=0, step=.01)
-
-                        label _("{size=[title_size]} Text Size: %s{/size}" % (persistent.pref_text_size))
-                        bar value FieldValue(object=persistent, field='pref_text_size', range=(gui.text_size * 2), max_is_zero=False, style=u'slider', offset=0, step=1)
-
-                        label _("{size=[title_size]} Text Outline: [persistent.text_outline]{/size}")
-                        bar value FieldValue(object=persistent, field="text_outline", range=4, max_is_zero=False, style=u'slider', offset=0, step=1)
-
-                            
-                        null height 10
-                        textbutton _("{size=[text_size]} Default{/size}"):
-                            hover_sound "audio/sfx/hover.ogg"
-                            activate_sound "audio/sfx/click.ogg"
+                        textbutton _("Mute All"):
+                            action Preference("all mute", "toggle")
                             style "mute_all_button"
-                            selected (
-                                abs(persistent.dialogueBoxOpacity - 0.3) < 0.01 and
-                                persistent.pref_text_size == gui.text_size and
-                                persistent.text_outline == 1
-                            )
-                            action [
-                                SetField(persistent, "dialogueBoxOpacity", 0.3),
-                                SetField(persistent, "pref_text_size", gui.text_size),
-                                SetField(persistent, "text_outline", 1)
-                            ]
-
-
-
 
 
 screen warning_screen():
@@ -1809,7 +1665,7 @@ screen rush_objectives():
         xalign 0.02
         yalign 0.05
         background "#0008"
-        padding 15
+        padding (15, 15)
 
         vbox:
             text "Rush Week Objectives" size 28 color "#ffffff"
@@ -1824,11 +1680,11 @@ screen rush_objectives():
 
             # Get a handjob
             if rush_obj_handjob == "done":
-                text "✔ rush_obj_handjob" color "#00ff00"
+                text "✔ Get a handjob" color "#00ff00"
             elif rush_obj_handjob == "active":
-                text "• rush_obj_handjob" color "#ffffff"
+                text "• Get a handjob" color "#ffffff"
             else:
-                text "✘ rush_obj_handjob" color "#ff4444"
+                text "✘ Get a handjob" color "#ff4444"
 
             # Get a kiss
             if rush_obj_kiss == "done":

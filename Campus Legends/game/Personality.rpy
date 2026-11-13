@@ -1,205 +1,224 @@
+# ============================================================
+# CAMPUS LEGENDS - PERSONALITY MANAGER
+# ============================================================
 
-## PERSONALITY SYSTEM (API-BASED)
-## Campus Legends — Option 1 Upgrade
-## Traits: Confident, Caring, Selfish
+# ------------------------------------------------------------
+# MC PERSONALITY
+# ------------------------------------------------------------
 
-default mc_personality = "Neutral"
+default mc_personality = {
+    "Confident": 3,
+    "Caring": 0,
+    "Selfish": 0,
+}
+
+default dominant_personality = "Neutral"
+
+# ------------------------------------------------------------
+# PERSONALITY SETTINGS
+# ------------------------------------------------------------
 
 init python:
 
-    # ---------------------------------------------------------
-    # 1. PERSONALITY STORAGE (API METADATA)
-    # ---------------------------------------------------------
+    PERSONALITY_THRESHOLD = 10
+    PERSONALITY_EVOLUTION_THRESHOLD = 30
 
-    def get_personality_data():
-        """
-        Returns the MC personality dictionary stored in API metadata.
-        Creates it if missing.
-        """
-        meta = relationship_api.get_global_metadata()
+    PERSONALITY_DEFAULTS = {
+        "Confident": 3,
+        "Caring": 0,
+        "Selfish": 0,
+    }
 
-        if "personality" not in meta:
-            meta["personality"] = {
-                "Confident": 0,
-                "Caring": 0,
-                "Selfish": 0,
-            }
-            relationship_api.set_global_metadata(meta)
+    PERSONALITY_TRAITS = [
+        "Confident",
+        "Caring",
+        "Selfish",
+    ]
 
-        return meta["personality"]
-
-
-    def save_personality_data(data):
-        """
-        Saves the updated personality dictionary back into API metadata.
-        """
-        meta = relationship_api.get_global_metadata()
-        meta["personality"] = data
-        relationship_api.set_global_metadata(meta)
-
-
-    # ---------------------------------------------------------
-    # 2. ADD PERSONALITY POINTS
-    # ---------------------------------------------------------
-
-    def add_personality(trait, amount=1):
-        """
-        Adds personality points and updates MC dominant trait.
-        Also triggers personality drift and evolution checks.
-        """
-        data = get_personality_data()
-
-        if trait not in data:
-            return
-
-        data[trait] += amount
-        save_personality_data(data)
-
-        update_mc_dominant_trait()
-        apply_personality_drift()
-        return data[trait]
-
-
-    # ---------------------------------------------------------
-    # 3. DOMINANT PERSONALITY CALCULATION
-    # ---------------------------------------------------------
-
-    def update_mc_dominant_trait():
-        """
-        Updates the MC's dominant personality string.
-        """
-        data = get_personality_data()
-
-        highest = max(data, key=data.get)
-        value = data[highest]
-
-        if value < 10:
-            store.mc_personality = "Neutral"
-        else:
-            store.mc_personality = highest
-
-
-    # ---------------------------------------------------------
-    # 4. PERSONALITY DRIFT (Optional but AAA-feel)
-    # ---------------------------------------------------------
-
-    def apply_personality_drift():
-        """
-        Slowly shifts MC personality toward the dominant trait.
-        Prevents the MC from becoming 'everything at once'.
-        """
-        data = get_personality_data()
-        dominant = store.mc_personality
-
-        if dominant == "Neutral":
-            return
-
-        for trait in data:
-            if trait != dominant and data[trait] > 0:
-                data[trait] -= 0.1
-
-        save_personality_data(data)
-
-
-    # ---------------------------------------------------------
-    # 5. PREFERRED PERSONALITY PER GIRL
-    # ---------------------------------------------------------
-
+    # Each girl's preferred MC personality traits.
     preferred_personality = {
         "sienna": ["Confident", "Caring"],
         "jess": ["Caring"],
-        "aubrey": ["Confident"],
+        "aubrey": ["Selfish"],
+        "norah": ["Caring"],
+        "misty": ["Caring"],
         "kaia": ["Caring", "Confident"],
+        "tiff": ["Confident"],
     }
 
+    # --------------------------------------------------------
+    # PERSONALITY POINTS
+    # --------------------------------------------------------
 
-    # ---------------------------------------------------------
-    # 6. PERSONALITY MATCH BONUS
-    # ---------------------------------------------------------
+    def _ensure_personality_data():
+        data = store.mc_personality
+
+        if isinstance(data, dict):
+            return data
+
+        migrated = PERSONALITY_DEFAULTS.copy()
+
+        if isinstance(data, str):
+            legacy_trait = next(
+                (trait for trait in PERSONALITY_TRAITS
+                 if trait.lower() == data.strip().lower()),
+                None
+            )
+
+            if legacy_trait:
+                migrated[legacy_trait] = PERSONALITY_THRESHOLD
+            elif data.strip().lower() not in ("", "neutral"):
+                renpy.log(
+                    "Unrecognized legacy mc_personality value: {!r}".format(data)
+                )
+        else:
+            renpy.log(
+                "Invalid mc_personality value of type {}; restoring defaults.".format(
+                    type(data).__name__
+                )
+            )
+
+        store.mc_personality = migrated
+        return migrated
+
+    def get_personality_data():
+        return _ensure_personality_data()
+
+    def save_personality_data(data):
+        if not isinstance(data, dict):
+            raise TypeError("Personality data must be a dictionary.")
+        store.mc_personality = data
+        update_mc_dominant_trait()
+
+    def get_points(trait):
+        return _ensure_personality_data().get(trait, 0)
+
+    def add_personality(trait, amount=1):
+
+        if trait not in PERSONALITY_TRAITS:
+            raise ValueError(
+                "Unknown personality trait: {}".format(trait)
+            )
+
+        personality = _ensure_personality_data()
+        personality[trait] = personality.get(trait, 0) + amount
+
+        update_mc_dominant_trait()
+
+        return personality[trait]
+
+    # --------------------------------------------------------
+    # DOMINANT PERSONALITY
+    # --------------------------------------------------------
+
+    def update_mc_dominant_trait():
+
+        personality = _ensure_personality_data()
+
+        if not personality:
+            store.dominant_personality = "Neutral"
+            return
+
+        highest_trait = max(
+            PERSONALITY_TRAITS,
+            key=lambda trait: personality.get(trait, 0)
+        )
+
+        highest_value = personality.get(highest_trait, 0)
+
+        if highest_value < PERSONALITY_THRESHOLD:
+            store.dominant_personality = "Neutral"
+        else:
+            store.dominant_personality = highest_trait
+
+    def get_dominant_personality():
+        return store.dominant_personality
+
+    # --------------------------------------------------------
+    # GIRL PERSONALITY PREFERENCES
+    # --------------------------------------------------------
+
+    def get_preferred_traits(girl):
+
+        return preferred_personality.get(
+            girl.lower(),
+            []
+        )
+
+    # --------------------------------------------------------
+    # PERSONALITY BONUSES
+    # --------------------------------------------------------
 
     def personality_bonus(girl, base_amount):
-        """
-        Returns base_amount + bonus if MC matches girl's preferred traits.
-        """
-        data = get_personality_data()
-        prefs = preferred_personality.get(girl, [])
+
+        # Bonuses only apply to positive relationship gains.
+        if base_amount <= 0:
+            return base_amount
 
         bonus = 0
-        for trait in prefs:
-            if data.get(trait, 0) >= 20:
+
+        for trait in get_preferred_traits(girl):
+
+            if get_points(trait) >= PERSONALITY_THRESHOLD:
                 bonus += 1
 
         return base_amount + bonus
 
-
-    # ---------------------------------------------------------
-    # 7. PERSONALITY LOCK CHECK
-    # ---------------------------------------------------------
-
     def personality_locked(girl):
-        """
-        Returns True if MC does NOT meet any of the girl's preferred traits.
-        Used for personality-locked scenes.
-        """
-        data = get_personality_data()
-        prefs = preferred_personality.get(girl, [])
 
-        for trait in prefs:
-            if data.get(trait, 0) >= 20:
+        # Returns True when no preferred trait has reached 10.
+        for trait in get_preferred_traits(girl):
+
+            if get_points(trait) >= PERSONALITY_THRESHOLD:
                 return False
 
         return True
 
-
-    # ---------------------------------------------------------
-    # 8. INTEGRATION WITH AFFECTION/TRUST
-    # ---------------------------------------------------------
-
-    def add_affection_with_personality(girl, base_amount):
-        """
-        Adds affection but applies personality bonus automatically.
-        """
-        final = personality_bonus(girl, base_amount)
-        relationship_api.add_affection(girl, final)
-        return final
-
-
-    def add_trust_with_personality(girl, base_amount):
-        """
-        Adds trust but applies personality bonus automatically.
-        """
-        final = personality_bonus(girl, base_amount)
-        relationship_api.add_trust(girl, final)
-        return final
-
-
-    # ---------------------------------------------------------
-    # 9. EXCLUSIVE ROUTE INTEGRATION
-    # ---------------------------------------------------------
-
     def personality_allows_exclusive(girl):
-        """
-        Exclusive routes require at least one preferred trait at threshold.
-        """
+
         return not personality_locked(girl)
 
+    # --------------------------------------------------------
+    # RELATIONSHIP INTEGRATION
+    # --------------------------------------------------------
 
-    # ---------------------------------------------------------
-    # 10. GIRLFRIEND EVOLUTION INTEGRATION
-    # ---------------------------------------------------------
+    def add_affection_with_personality(girl, base_amount):
+
+        final_amount = personality_bonus(girl, base_amount)
+
+        relationship_api.add_affection(
+            girl,
+            final_amount,
+            apply_personality=False
+        )
+
+        return final_amount
+
+    def add_trust_with_personality(girl, base_amount):
+
+        final_amount = personality_bonus(girl, base_amount)
+
+        relationship_api.add_trust(
+            girl,
+            final_amount,
+            apply_personality=False
+        )
+
+        return final_amount
+
+    # --------------------------------------------------------
+    # PERSONALITY EVOLUTION
+    # --------------------------------------------------------
 
     def personality_evolution_modifier(girl):
-        """
-        Returns a modifier for girlfriend evolution thresholds.
-        Example: Caring MC makes forgiveness easier.
-        """
-        data = get_personality_data()
 
-        if data["Caring"] >= 30:
-            return -5  # easier evolution
-        if data["Selfish"] >= 30:
-            return +5  # harder evolution
+        caring = get_points("Caring")
+        selfish = get_points("Selfish")
+
+        if caring >= PERSONALITY_EVOLUTION_THRESHOLD:
+            return - 5
+
+        if selfish >= PERSONALITY_EVOLUTION_THRESHOLD:
+            return 5
 
         return 0
-
-

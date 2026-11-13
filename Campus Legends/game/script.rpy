@@ -4,12 +4,12 @@
 
 default player_name = "Emanuel"
 default met_sienna_jess = False
-default rush_obj_blowie = "inactive"
-default rush_obj_handjob = "inactive"
-default rush_obj_kiss = "inactive"
-default rush_obj_panties = "inactive"
-default rush_obj_drink_5_shots = "inactive"
-default rush_obj_have_sex = "inactive"
+default rush_obj_blowie = "False"
+default rush_obj_handjob = "False"
+default rush_obj_kiss = "False"
+default rush_obj_panties = "False"
+default rush_obj_drink_5_shots = "False"
+default rush_obj_have_sex = "False"
 
 define e = Character("Eileen")
 define prof = Character(_("prof"), color="#c8c8c8")
@@ -21,11 +21,15 @@ define mystery = Character("?????")
 define Jess = Character("Jessica")
 define Norah = Character("Norah")
 define Tiffany = Character("Tiff")
+define Tiff = Tiffany
 define Misty = Character("Misty")
 define Kaia = Character("Kaia")
 define Aubrey = Character("Aubrey")
 define Kai = Character("Kai", color="#50C878")
-
+define ProfessorHart = Character("Hart")
+define Ace = Character("Ace")
+define Brad = Character("Brad")
+define Chairman = Character("Chairman")
 
 image sienna_smile = "sienna_smile.webp"
 image Sienna_1 = "Sienna_1.webp"
@@ -403,39 +407,41 @@ label meet_sienna_jess:
     # SECOND MENU
     ########################################
 
-    menu:
-        "Ask Sienna about Flaunt.\n{color=#00ff00}{i}[Sienna +1 / Sienna Trust +1 / Confident +1]{/i}{/color}":
-            $ relationship_api.add_affection("Sienna", 1)
-            $ walkthrough("Sienna +1")
-            $ relationship_api.add_trust("Sienna", 1)
-            $ walkthrough("Sienna Trust +1")
+menu:
+    "Ask Sienna about Flaunt.\n{color=#00ff00}{i}[Sienna +1 / Sienna Trust +1 / Confident +1]{/i}{/color}":
+        $ relationship_api.add_affection("Sienna", 1)
+        $ walkthrough("Sienna +1")
+        $ relationship_api.add_trust("Sienna", 1)
+        $ walkthrough("Sienna Trust +1")
 
-            scene bg e1s1_7 with dissolve
-            Sienna "Why? You thinking about joining?"
-            Sienna "Maybe as our official janitor?"
-            MCname "Haha, i can barley keep up with my own cleaning duties."
-            Sienna "Shame, i hade a maid outfit and everything haha"
+        scene bg e1s1_7 with dissolve
+        Sienna "Why? You thinking about joining?"
+        Sienna "Maybe as our official janitor?"
+        MCname "Haha, I can barely keep up with my own cleaning duties."
+        Sienna "Shame, I had a maid outfit and everything. Haha."
 
-            $ add_personality("Confident", 1)
+        $ add_personality("Confident", 1)
 
-        "Ask Jess how long she’s been VP.\n{color=#00ff00}{i}[Jess +1]{/i}{/color}":
-            $ relationship_api.add_affection("Jess", 1)
-            $ walkthrough("Jess +1")
-            scene bg e1s1_8 with dissolve
-            Jess "I joined as a freshman and have been VP for around 2 years now give or take."
-            MCname "That’s impressive. You must be one hell of a VP."
-            Jess "I… try my best. It means a lot to hear that."
-            Jess "Tahnks"
+    "Ask Jess how long she's been VP.\n{color=#00ff00}{i}[Jess +1]{/i}{/color}":
+        $ relationship_api.add_affection("Jess", 1)
+        $ walkthrough("Jess +1")
 
-        "Talk to Malik.\n{color=#00ff00}{i}[Malik +1]{/i}{/color}":
-            $ relationship_api.add_affection("Malik", 1)
-            $ walkthrough("Malik +1")
-            MCname "Alright everyoen im tired and i need to get settled in before to late,so im gonna head out."
-            Malik "Alright bro i'll see you around!!!"
+        scene bg e1s1_8 with dissolve
+        Jess "I joined as a freshman and have been VP for around two years now, give or take."
+        MCname "That's impressive. You must be one hell of a VP."
+        Jess "I… try my best. It means a lot to hear that."
+        Jess "Thanks."
 
-    $ met_sienna_jess = True
+    "Talk to Malik.\n{color=#00ff00}{i}[Malik +1]{/i}{/color}":
+        $ relationship_api.add_affection("Malik", 1)
+        $ walkthrough("Malik +1")
 
-    jump dorm_arrival
+        MCname "Alright, everyone, I'm tired and I need to get settled in before it's too late, so I'm gonna head out."
+        Malik "Alright, bro. I'll see you around!"
+
+$ met_sienna_jess = True
+
+jump dorm_arrival
 
 ###############################################
 # DORM ARRIVAL
@@ -643,7 +649,6 @@ label dorm_questions_menu:
             with dissolve
             jump dorm_questions_menu
 
-
         "Ask about clubs and activities.":
             scene e1s2_7b
             with dissolve
@@ -690,7 +695,7 @@ label dorm_scene_end:
     Malik "Besides, you'll figure out most of this once the year gets rolling."
     scene e1s2_7c
     with dissolve
-   
+
     MCname "{i}(It's weird… I actually feel a little more prepared now.){/i}"
     scene e1s2_7b
     with dissolve
@@ -819,20 +824,20 @@ menu:
         scene e1s2_9d
         with dissolve
 
-        Malik "That's what I'm talking about."
+Malik "That's what I'm talking about."
 
-        $ add_confidence(1)
+$ add_personality("Confident", 1)
 
-        # First impressions → affection bumps
-        $ relationship_api.add_affection("Sienna", 1)
-        $ relationship_api.add_affection("Jess", 1)
+# First impressions → affection bumps
+$ relationship_api.add_affection("Sienna", 1)
+$ relationship_api.add_affection("Jess", 1)
 
-        if walkthrough_enabled:
-            $ walkthrough("Sienna +1 / Jess +1 / Confident +1")
+if walkthrough_enabled:
+    $ walkthrough("Sienna +1 / Jess +1 / Confident +1")
 
-        MCname "{i}(Okay… maybe this won't be so bad.){/i}"
+MCname "{i}(Okay… maybe this won't be so bad.){/i}"
 
-
+menu:
     "I'm not really a party person…\n{color=#00ff00}{i}[Jess +2 / Sienna -1]{/i}{/color}":
 
         MCname "I don't know if parties are really my thing."
@@ -846,7 +851,7 @@ menu:
         Malik "I'll keep you out of trouble."
 
         # First impressions
-        $ relationship_api.add_affection("Jess", 1)
+        $ relationship_api.add_affection("Jess", 2)
         $ relationship_api.add_affection("Sienna", -1)
 
         if walkthrough_enabled:
@@ -854,20 +859,19 @@ menu:
 
         MCname "{i}(Great… forced socializing. Just what I needed.){/i}"
 
-
     "Where is it?\n{color=#00ff00}{i}[Growth +1 / Jess +1]{/i}{/color}":
 
         Jess "Flaunt House."
         Jess "Friday at eight."
 
         Sienna "If you miss it, we'll come drag you out ourselves."
+
         MCname "{i}(Okay… at least I know where I'm going.){/i}"
 
         $ mc_adjust_growth(1)
 
         # First impressions
         $ relationship_api.add_affection("Jess", 1)
-        $ relationship_api.add_affection("Sienna", 0)
 
         if walkthrough_enabled:
             $ walkthrough("Growth +1 / Jess +1")
@@ -952,52 +956,63 @@ label dorm_monday_night:
 
 menu:
 
-    "Brush it off — pretend you’re fine.\n{color=#00ff00}{i}[Confident +1]{/i}{/color}":
+    "Brush it off — pretend you're fine.\n{color=#00ff00}{i}[Confident +1]{/i}{/color}":
+
         $ add_personality("Confident", 1)
+
         scene e1s2_14
         with dissolve
-        MCname "I’ll be fine. It’s just a mixer."
+        MCname "I'll be fine. It's just a mixer."
+
         scene e1s2_14a
         with dissolve
+
         scene e1s2_13
         with dissolve
-        Malik "That’s the spirit."
+        Malik "That's the spirit."
+
         scene e1s2_13a
         with dissolve
 
         if walkthrough_enabled:
             $ walkthrough("Confident +1")
 
+    "Admit you're anxious about it.\n{color=#00ff00}{i}[Anxiety +1]{/i}{/color}":
 
-    "Admit you’re anxious about it.\n{color=#00ff00}{i}[Anxiety +1]{/i}{/color}":
         $ mc_adjust_anxiety(1)
+
         scene e1s2_14
         with dissolve
-        MCname "I’m already overthinking it."
+        MCname "I'm already overthinking it."
+
         scene e1s2_14a
         with dissolve
 
         scene e1s2_13
         with dissolve
-        Malik "Hey, it’s days away. You’ve got time."
+        Malik "Hey, it's days away. You've got time."
+
         scene e1s2_13a
         with dissolve
 
         if walkthrough_enabled:
             $ walkthrough("Anxiety +1")
 
+    "Joke about it to hide your nerves.\n{color=#00ff00}{i}[Anxiety +1]{/i}{/color}":
 
-    "Joke about it to hide nerves.\n{color=#00ff00}{i}[Anxiety +1]{/i}{/color}":
         $ mc_adjust_anxiety(1)
+
         scene e1s2_14
         with dissolve
         MCname "If I pass out, just drag me to the courtyard."
+
         scene e1s2_14a
         with dissolve
 
         scene e1s2_13
         with dissolve
-        Malik "Bro, I’m not carrying you across campus."
+        Malik "Bro, I'm not carrying you across campus."
+
         scene e1s2_13a
         with dissolve
 

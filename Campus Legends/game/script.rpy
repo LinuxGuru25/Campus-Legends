@@ -126,6 +126,10 @@ label start:
 
         test.new_comment(owner=aubrey_profile, text="This is a comment")
         test.comment_chain(player_text="test", player_image="images/phone/jeff.png", npc_text="Malik was here")
+
+        add_entry(aubrey_bio, "Test entry")
+        add_entry(aubrey_bio, "Another test entry")
+
     Malik "Well, I should go say hi to those ladies over there."
 
     MCname "Yeah, sounds like a plan."
